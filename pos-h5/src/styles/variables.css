@@ -1,0 +1,57 @@
+:root {
+  --primary: #2CB5A0;
+  --primary-light: #ECF8F4;
+  --primary-dark: #1E9B88;
+  --primary-gradient: linear-gradient(135deg, #2CB5A0 0%, #3DD4BC 100%);
+
+  --secondary: #F5A0B5;
+  --secondary-light: #FEF0F4;
+
+  --accent: #E8A849;
+  --accent-light: #F8EFE1;
+
+  --bg-primary: #F7F8FA;
+  --bg-white: #FFFFFF;
+
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-placeholder: #CCCCCC;
+
+  --border: #E8E8E8;
+  --border-light: #F2F2F2;
+
+  --danger: #EA5252;
+  --success: #2CB5A0;
+  --warning: #E8A849;
+  --info: #5B9BD5;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-tab: 0 -2px 10px rgba(0, 0, 0, 0.04);
+
+  /* Vant theme overrides */
+  --van-primary-color: #2CB5A0;
+  --van-success-color: #2CB5A0;
+  --van-danger-color: #EA5252;
+  --van-warning-color: #E8A849;
+  --van-button-primary-background: #2CB5A0;
+  --van-button-primary-border-color: #2CB5A0;
+  --van-tabbar-item-active-color: #2CB5A0;
+  --van-nav-bar-icon-color: #333333;
+  --van-nav-bar-text-color: #333333;
+  --van-nav-bar-title-text-color: #333333;
+  --van-tab-active-text-color: #2CB5A0;
+  --van-tabs-bottom-bar-color: #2CB5A0;
+  --van-switch-on-background-color: #2CB5A0;
+  --van-slider-active-background: #2CB5A0;
+  --van-cascader-active-color: #2CB5A0;
+  --van-checkbox-checked-icon-color: #2CB5A0;
+  --van-radio-checked-icon-color: #2CB5A0;
+  --van-stepper-button-active-color: #2CB5A0;
+  --van-tag-primary-color: #2CB5A0;
+}

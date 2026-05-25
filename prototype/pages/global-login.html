@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>登录 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    .login-page {
+      min-height: 100vh;
+      background: var(--bg-white);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-header {
+      padding: 80px 32px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-header::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: -40px;
+      right: -40px;
+      height: 300px;
+      background: var(--primary-gradient);
+      border-radius: 0 0 50% 50%;
+      z-index: 0;
+    }
+
+    .logo-area {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: var(--bg-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto var(--space-lg);
+      box-shadow: 0 4px 20px rgba(44, 181, 160, 0.25);
+    }
+
+    .logo-name {
+      font: 700 24px / 1.3 var(--font-family);
+      color: var(--text-inverse);
+      margin-bottom: 4px;
+    }
+
+    .logo-subtitle {
+      font: 400 13px / 1 var(--font-family);
+      color: rgba(255,255,255,0.7);
+    }
+
+    .login-body {
+      flex: 1;
+      padding: var(--space-xxl) var(--space-xl);
+    }
+
+    .login-tabs {
+      display: flex;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-xl);
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: var(--space-sm);
+    }
+
+    .login-tab {
+      font: 500 15px / 1 var(--font-family);
+      color: var(--text-tertiary);
+      cursor: pointer;
+      padding-bottom: var(--space-sm);
+      position: relative;
+    }
+
+    .login-tab.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .login-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .form-group {
+      margin-bottom: var(--space-lg);
+    }
+
+    .form-label {
+      font: 500 13px / 1 var(--font-family);
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+
+    .input-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-group .input-field {
+      padding-right: 100px;
+    }
+
+    .input-suffix {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      padding-right: 4px;
+    }
+
+    .sms-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-light);
+      color: var(--primary);
+      font: 500 12px / 1 var(--font-family);
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .sms-btn.disabled {
+      background: var(--bg-primary);
+      color: var(--text-tertiary);
+    }
+
+    .phone-prefix {
+      position: absolute;
+      left: 14px;
+      font: 600 14px / 1 var(--font-family);
+      color: var(--text-primary);
+    }
+
+    .input-field.with-prefix {
+      padding-left: 48px;
+    }
+
+    .login-btn {
+      margin-top: var(--space-xl);
+    }
+
+    .login-footer {
+      text-align: center;
+      padding: var(--space-xl) var(--space-lg) var(--space-xxl);
+    }
+
+    .login-footer p {
+      font: 400 11px / 1.6 var(--font-family);
+      color: var(--text-tertiary);
+    }
+
+    .login-footer a {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin: var(--space-xl) 0;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider span {
+      font: 400 12px / 1 var(--font-family);
+      color: var(--text-tertiary);
+    }
+
+    /* WeChat login button */
+    .wx-login-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      background: #07C160;
+      color: white;
+      font: 600 15px / 1 var(--font-family);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .wx-login-btn:active {
+      background: #06AD56;
+    }
+
+    .wx-login-btn .wx-icon {
+      font-size: 20px;
+    }
+
+    .page-nav {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 100;
+      display: flex;
+      gap: 6px;
+    }
+
+    .page-nav a {
+      display: inline-flex;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family);
+      background: rgba(255,255,255,0.9);
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .page-nav a:hover, .page-nav a.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Role selector (shown after login) */
+    .role-select {
+      display: none;
+      margin-top: var(--space-xl);
+    }
+
+    .role-select.show { display: block; }
+
+    .role-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border);
+      margin-bottom: var(--space-md);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .role-card:active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .role-card .role-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .role-card .role-name {
+      font: 600 15px / 1 var(--font-family);
+      color: var(--text-primary);
+    }
+
+    .role-card .role-desc {
+      font: 400 12px / 1.3 var(--font-family);
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html">会员</a>
+    <a href="staff-home.html">员工</a>
+    <a href="admin-home.html">管理</a>
+    <a href="global-login.html" class="active">登录</a>
+  </div>
+
+  <div class="login-page">
+    <!-- Header -->
+    <div class="login-header">
+      <div class="logo-area animate-in">
+        <div class="logo-icon">🌿</div>
+        <div class="logo-name">丽德健康</div>
+        <div class="logo-subtitle">LIDE HEALTH MANAGEMENT</div>
+      </div>
+    </div>
+
+    <!-- Login body -->
+    <div class="login-body animate-in delay-1">
+      <div class="login-tabs">
+        <div class="login-tab active">验证码登录</div>
+        <div class="login-tab">密码登录</div>
+      </div>
+
+      <!-- SMS login form -->
+      <div class="form-group">
+        <label class="form-label">手机号</label>
+        <div class="input-group">
+          <span class="phone-prefix">+86</span>
+          <input class="input-field with-prefix" type="tel" placeholder="请输入手机号" maxlength="11">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">验证码</label>
+        <div class="input-group">
+          <input class="input-field" type="text" placeholder="请输入验证码" maxlength="6">
+          <div class="input-suffix">
+            <button class="sms-btn">获取验证码</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block login-btn">登 录</button>
+
+      <div class="divider"><span>其他登录方式</span></div>
+
+      <button class="wx-login-btn">
+        <span class="wx-icon">💬</span>
+        微信一键登录
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="login-footer">
+      <p>登录即表示同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a></p>
+    </div>
+  </div>
+</body>
+</html>

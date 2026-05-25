@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POS H5 高保真原型 - 导航</title>
+  <link rel="stylesheet" href="css/design-system.css">
+  <style>
+    body {
+      background: #1A1A2E;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .main-title {
+      font: 700 32px / 1.3 var(--font-family);
+      color: white;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .main-subtitle {
+      font: 400 14px / 1.4 var(--font-family);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .version-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(44, 181, 160, 0.2);
+      color: var(--primary);
+      font: 500 12px / 1 var(--font-family);
+      margin-bottom: 12px;
+    }
+
+    .sections {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .section-group {
+      margin-bottom: 40px;
+    }
+
+    .group-title {
+      font: 600 14px / 1 var(--font-family);
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      padding-left: 4px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .page-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: block;
+    }
+
+    .page-card:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .page-card .card-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .page-card .card-title {
+      font: 600 16px / 1.3 var(--font-family);
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .page-card .card-desc {
+      font: 400 12px / 1.4 var(--font-family);
+      color: rgba(255,255,255,0.4);
+    }
+
+    .page-card .card-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font: 500 10px / 1.2 var(--font-family);
+      margin-top: 8px;
+    }
+
+    .badge-done {
+      background: rgba(44, 181, 160, 0.2);
+      color: var(--primary);
+    }
+
+    .badge-wip {
+      background: rgba(232, 168, 73, 0.2);
+      color: var(--accent);
+    }
+
+    .badge-todo {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.3);
+    }
+
+    .info-bar {
+      margin-top: 48px;
+      padding: 20px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .info-bar h3 {
+      font: 600 14px / 1 var(--font-family);
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+    }
+
+    .info-bar p {
+      font: 400 12px / 1.6 var(--font-family);
+      color: rgba(255,255,255,0.3);
+    }
+
+    .color-preview {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .color-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="version-badge">v1.0 · Phase 1 Prototype</div>
+  <h1 class="main-title">🌿 POS H5 高保真原型</h1>
+  <p class="main-subtitle">丽德健康管理系统 · 三端移动原型 · 健康美业风格</p>
+
+  <div class="sections">
+    <!-- Global -->
+    <div class="section-group">
+      <div class="group-title">🌐 全局流程</div>
+      <div class="page-grid">
+        <a href="pages/global-login.html" class="page-card">
+          <div class="card-emoji">🔐</div>
+          <div class="card-title">登录 / 授权</div>
+          <div class="card-desc">手机验证码登录 + 微信一键登录</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Member -->
+    <div class="section-group">
+      <div class="group-title">👤 会员端 · 9个功能</div>
+      <div class="page-grid">
+        <a href="pages/member-home.html" class="page-card">
+          <div class="card-emoji">🏠</div>
+          <div class="card-title">会员首页</div>
+          <div class="card-desc">余额、积分、快捷操作、预约、消费记录</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <div class="page-card">
+          <div class="card-emoji">📋</div>
+          <div class="card-title">M1 余额查询</div>
+          <div class="card-desc">消费余额卡片 + 交易明细列表</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+        <div class="page-card">
+          <div class="card-emoji">📅</div>
+          <div class="card-title">M4 预约</div>
+          <div class="card-desc">选店→选项目→选时间→确认→我的预约</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+        <div class="page-card">
+          <div class="card-emoji">🎫</div>
+          <div class="card-title">M5 优惠券</div>
+          <div class="card-desc">优惠券列表→详情→使用</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+        <div class="page-card">
+          <div class="card-emoji">📍</div>
+          <div class="card-title">M6 门店查询</div>
+          <div class="card-desc">地图+列表+门店详情</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+        <div class="page-card">
+          <div class="card-emoji">📱</div>
+          <div class="card-title">M7 二维码</div>
+          <div class="card-desc">会员二维码展示</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+        <div class="page-card">
+          <div class="card-emoji">⭐</div>
+          <div class="card-title">M8-M9 积分</div>
+          <div class="card-desc">积分余额/明细 + 积分兑换商城</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Staff -->
+    <div class="section-group">
+      <div class="group-title">👨‍💼 员工端 · 7个功能</div>
+      <div class="page-grid">
+        <a href="pages/staff-home.html" class="page-card">
+          <div class="card-emoji">🏠</div>
+          <div class="card-title">员工首页</div>
+          <div class="card-desc">今日统计、工资、提醒、快捷入口</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <div class="page-card">
+          <div class="card-emoji">💰</div>
+          <div class="card-title">E1 工资查询</div>
+          <div class="card-desc">月度工资总览 + 明细</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+        <div class="page-card">
+          <div class="card-emoji">🔔</div>
+          <div class="card-title">E2-E3 会员提醒</div>
+          <div class="card-desc">修复/调理回访 + 生日提醒</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+        <div class="page-card">
+          <div class="card-emoji">💳</div>
+          <div class="card-title">E6 手机收银</div>
+          <div class="card-desc">选项目→购物车→结算→支付</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin -->
+    <div class="section-group">
+      <div class="group-title">📊 管理端 · 5个功能</div>
+      <div class="page-grid">
+        <a href="pages/admin-home.html" class="page-card">
+          <div class="card-emoji">🏠</div>
+          <div class="card-title">管理首页</div>
+          <div class="card-desc">数据看板、业绩趋势、排名</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <div class="page-card">
+          <div class="card-emoji">📈</div>
+          <div class="card-title">A1 业绩查询</div>
+          <div class="card-desc">门店/员工维度业绩数据</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+        <div class="page-card">
+          <div class="card-emoji">🏆</div>
+          <div class="card-title">A3-A5 排名</div>
+          <div class="card-desc">项目排名 + 员工业绩排名 + 工资排名</div>
+          <span class="card-badge badge-todo">待制作</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Design info -->
+  <div class="info-bar">
+    <h3>🎨 设计规范</h3>
+    <p>
+      主色: 薄荷绿 #2CB5A0 · 辅色: 玫瑰粉 #F5A0B5 · 强调: 琥珀金 #E8A849<br>
+      字体: 系统默认 (PingFang SC / Microsoft YaHei) · 圆角: 14px · 设备: iPhone 375×812<br>
+      技术栈: Vue3 + Vant 4 · 运行环境: 微信公众号 H5
+    </p>
+    <div class="color-preview">
+      <div class="color-dot" style="background: #2CB5A0;"></div>
+      <div class="color-dot" style="background: #F5A0B5;"></div>
+      <div class="color-dot" style="background: #E8A849;"></div>
+      <div class="color-dot" style="background: #F7F8FA;"></div>
+      <div class="color-dot" style="background: #333333;"></div>
+      <div class="color-dot" style="background: #EA5252;"></div>
+    </div>
+  </div>
+</body>
+</html>
