@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>E2-E3 会员提醒 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    /* ===== Tabs ===== */
+    .reminder-tabs {
+      display: flex;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .reminder-tab {
+      flex: 1; text-align: center;
+      padding: var(--space-md) 0;
+      font: 500 13px / 1 var(--font-family);
+      color: var(--text-tertiary);
+      position: relative; cursor: pointer;
+      transition: color 0.2s;
+    }
+    .reminder-tab.active {
+      color: #4A6CF7; font-weight: 600;
+    }
+    .reminder-tab.active::after {
+      content: '';
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 24px; height: 3px; background: #4A6CF7; border-radius: 2px;
+    }
+    .reminder-tab .tab-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 16px; height: 16px; border-radius: 8px;
+      background: var(--danger); color: white;
+      font: 600 9px / 1 var(--font-family);
+      margin-left: 2px; padding: 0 4px;
+    }
+
+    /* ===== Tab panels ===== */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ===== Stats bar ===== */
+    .stats-bar {
+      display: flex; gap: var(--space-sm);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .stats-item {
+      flex: 1; text-align: center;
+      padding: var(--space-sm) 0;
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+    }
+    .stats-item .sv {
+      font: 700 20px / 1.2 var(--font-family);
+    }
+    .stats-item .sl {
+      font: 400 10px / 1 var(--font-family);
+      color: var(--text-tertiary); margin-top: 2px;
+    }
+
+    /* ===== Visit reminder card ===== */
+    .remind-card {
+      margin: 0 var(--space-lg) var(--space-md);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .remind-card-header {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .remind-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .remind-user { flex: 1; }
+    .remind-user h4 {
+      font: 600 15px / 1.3 var(--font-family); color: var(--text-primary);
+    }
+    .remind-user p {
+      font: 400 12px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px;
+    }
+    .remind-tag {
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      font: 500 10px / 1 var(--font-family);
+    }
+    .remind-body {
+      padding: 0 var(--space-lg) var(--space-md);
+    }
+    .remind-info-row {
+      display: flex; gap: var(--space-lg);
+      padding: var(--space-xs) 0;
+    }
+    .remind-info-row .ri-label {
+      font: 400 12px / 1 var(--font-family); color: var(--text-tertiary);
+      min-width: 70px;
+    }
+    .remind-info-row .ri-value {
+      font: 500 12px / 1 var(--font-family); color: var(--text-primary);
+    }
+    .remind-actions {
+      display: flex; border-top: 1px solid var(--border-light);
+    }
+    .remind-action {
+      flex: 1; text-align: center;
+      padding: var(--space-md);
+      font: 500 13px / 1 var(--font-family);
+      color: var(--primary);
+      cursor: pointer;
+      transition: background 0.2s;
+      border-right: 1px solid var(--border-light);
+    }
+    .remind-action:last-child { border-right: none; }
+    .remind-action:active { background: var(--primary-light); }
+    .remind-action.done { color: var(--success); }
+
+    /* ===== Birthday card ===== */
+    .bd-card {
+      margin: 0 var(--space-lg) var(--space-md);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .bd-card-header {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-lg);
+    }
+    .bd-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .bd-user { flex: 1; }
+    .bd-user h4 {
+      font: 600 15px / 1.3 var(--font-family); color: var(--text-primary);
+    }
+    .bd-user p {
+      font: 400 12px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px;
+    }
+    .bd-date-badge {
+      padding: 4px 10px; border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family);
+    }
+    .bd-card-body {
+      padding: 0 var(--space-lg) var(--space-md);
+    }
+    .bd-info-row {
+      display: flex; gap: var(--space-lg);
+      padding: var(--space-xs) 0;
+    }
+    .bd-info-row .bi-label {
+      font: 400 12px / 1 var(--font-family); color: var(--text-tertiary);
+      min-width: 70px;
+    }
+    .bd-info-row .bi-value {
+      font: 500 12px / 1 var(--font-family); color: var(--text-primary);
+    }
+    .bd-card-actions {
+      display: flex; border-top: 1px solid var(--border-light);
+    }
+    .bd-action-btn {
+      flex: 1; text-align: center;
+      padding: var(--space-md);
+      font: 500 13px / 1 var(--font-family);
+      cursor: pointer;
+      transition: background 0.2s;
+      border-right: 1px solid var(--border-light);
+    }
+    .bd-action-btn:last-child { border-right: none; }
+    .bd-action-btn:active { background: var(--bg-primary); }
+    .bd-action-btn.primary { color: #4A6CF7; }
+    .bd-action-btn.pink { color: var(--secondary); }
+    .bd-action-btn.done { color: var(--success); }
+
+    /* ===== Empty state ===== */
+    .empty-tip {
+      text-align: center; padding: var(--space-xxl) var(--space-lg);
+      color: var(--text-tertiary);
+      font: 400 13px / 1.6 var(--font-family);
+    }
+
+    .page-nav {
+      position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
+    }
+    .page-nav a {
+      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
+      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .page-nav a:hover { background: var(--primary); color: white; }
+    .page-nav a.active { background: var(--primary); color: white; }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html">会员</a>
+    <a href="staff-home.html" class="active">员工</a>
+    <a href="admin-home.html">管理</a>
+    <a href="global-login.html">登录</a>
+  </div>
+
+  <div class="phone-frame">
+    <div class="status-bar">9:41</div>
+    <div class="nav-bar">
+      <div class="nav-back" onclick="history.back()">‹</div>
+      <span class="nav-title">会员提醒</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="reminder-tabs">
+      <div class="reminder-tab active" data-tab="visit" onclick="switchTab('visit')">
+        回访提醒 <span class="tab-count">5</span>
+      </div>
+      <div class="reminder-tab" data-tab="birthday" onclick="switchTab('birthday')">
+        生日提醒 <span class="tab-count">3</span>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ==================== 回访提醒面板 ==================== -->
+      <div class="tab-panel active" id="panel-visit">
+        <!-- Stats -->
+        <div class="stats-bar animate-in">
+          <div class="stats-item">
+            <div class="sv" style="color: var(--danger);">5</div>
+            <div class="sl">待处理</div>
+          </div>
+          <div class="stats-item">
+            <div class="sv" style="color: var(--accent);">3</div>
+            <div class="sl">今日到期</div>
+          </div>
+          <div class="stats-item">
+            <div class="sv" style="color: var(--success);">12</div>
+            <div class="sl">本月已处理</div>
+          </div>
+        </div>
+
+        <!-- 紧急 -->
+        <div class="remind-card animate-in delay-1">
+          <div class="remind-card-header">
+            <div class="remind-avatar" style="background: var(--secondary-light);">👩</div>
+            <div class="remind-user">
+              <h4>李女士</h4>
+              <p>VIP会员 · 肩颈调理</p>
+            </div>
+            <span class="remind-tag" style="background: #FFF0F0; color: var(--danger);">紧急</span>
+          </div>
+          <div class="remind-body">
+            <div class="remind-info-row">
+              <span class="ri-label">上次服务</span>
+              <span class="ri-value">2026-05-18 肩颈调理（张技师）</span>
+            </div>
+            <div class="remind-info-row">
+              <span class="ri-label">调理周期</span>
+              <span class="ri-value" style="color: var(--danger);">已超过建议周期 2 天</span>
+            </div>
+            <div class="remind-info-row">
+              <span class="ri-label">满意度</span>
+              <span class="ri-value">⭐ 4.8 / 5.0</span>
+            </div>
+          </div>
+          <div class="remind-actions">
+            <div class="remind-action">📞 电话回访</div>
+            <div class="remind-action">💬 发送消息</div>
+            <div class="remind-action done">✓ 已处理</div>
+          </div>
+        </div>
+
+        <!-- 今日到期 -->
+        <div class="remind-card animate-in delay-2">
+          <div class="remind-card-header">
+            <div class="remind-avatar" style="background: var(--primary-light);">👩</div>
+            <div class="remind-user">
+              <h4>陈女士</h4>
+              <p>普通会员 · 全身SPA</p>
+            </div>
+            <span class="remind-tag" style="background: var(--accent-light); color: var(--accent-dark);">今日</span>
+          </div>
+          <div class="remind-body">
+            <div class="remind-info-row">
+              <span class="ri-label">上次服务</span>
+              <span class="ri-value">2026-05-15 全身精油SPA</span>
+            </div>
+            <div class="remind-info-row">
+              <span class="ri-label">调理周期</span>
+              <span class="ri-value">今天是建议回访日</span>
+            </div>
+          </div>
+          <div class="remind-actions">
+            <div class="remind-action">📞 电话回访</div>
+            <div class="remind-action">💬 发送消息</div>
+            <div class="remind-action done">✓ 已处理</div>
+          </div>
+        </div>
+
+        <!-- 近期 -->
+        <div class="remind-card animate-in delay-3">
+          <div class="remind-card-header">
+            <div class="remind-avatar" style="background: #EBF0FF;">👩</div>
+            <div class="remind-user">
+              <h4>张女士</h4>
+              <p>金卡会员 · 面部护理</p>
+            </div>
+            <span class="remind-tag" style="background: #EBF3FB; color: var(--info);">3天后</span>
+          </div>
+          <div class="remind-body">
+            <div class="remind-info-row">
+              <span class="ri-label">上次服务</span>
+              <span class="ri-value">2026-05-16 面部精华护理</span>
+            </div>
+            <div class="remind-info-row">
+              <span class="ri-label">调理周期</span>
+              <span class="ri-value">建议6月1日回访</span>
+            </div>
+            <div class="remind-info-row">
+              <span class="ri-label">满意度</span>
+              <span class="ri-value">⭐ 4.6 / 5.0</span>
+            </div>
+          </div>
+          <div class="remind-actions">
+            <div class="remind-action">📞 电话回访</div>
+            <div class="remind-action">💬 发送消息</div>
+            <div class="remind-action done">✓ 已处理</div>
+          </div>
+        </div>
+
+        <div class="remind-card">
+          <div class="remind-card-header">
+            <div class="remind-avatar" style="background: var(--accent-light);">👩</div>
+            <div class="remind-user">
+              <h4>赵女士</h4>
+              <p>银卡会员 · 足疗保健</p>
+            </div>
+            <span class="remind-tag" style="background: #EBF3FB; color: var(--info);">5天后</span>
+          </div>
+          <div class="remind-body">
+            <div class="remind-info-row">
+              <span class="ri-label">上次服务</span>
+              <span class="ri-value">2026-05-17 足疗保健</span>
+            </div>
+            <div class="remind-info-row">
+              <span class="ri-label">调理周期</span>
+              <span class="ri-value">建议6月3日回访</span>
+            </div>
+          </div>
+          <div class="remind-actions">
+            <div class="remind-action">📞 电话回访</div>
+            <div class="remind-action">💬 发送消息</div>
+            <div class="remind-action done">✓ 已处理</div>
+          </div>
+        </div>
+
+        <div class="remind-card">
+          <div class="remind-card-header">
+            <div class="remind-avatar" style="background: #F0E8F8;">👩</div>
+            <div class="remind-user">
+              <h4>周女士</h4>
+              <p>普通会员 · 全身SPA</p>
+            </div>
+            <span class="remind-tag" style="background: #EBF3FB; color: var(--info);">7天后</span>
+          </div>
+          <div class="remind-body">
+            <div class="remind-info-row">
+              <span class="ri-label">上次服务</span>
+              <span class="ri-value">2026-05-20 全身精油SPA</span>
+            </div>
+            <div class="remind-info-row">
+              <span class="ri-label">调理周期</span>
+              <span class="ri-value">建议6月5日回访</span>
+            </div>
+          </div>
+          <div class="remind-actions">
+            <div class="remind-action">📞 电话回访</div>
+            <div class="remind-action">💬 发送消息</div>
+            <div class="remind-action done">✓ 已处理</div>
+          </div>
+        </div>
+
+        <div style="height: 24px;"></div>
+      </div>
+
+      <!-- ==================== 生日提醒面板 ==================== -->
+      <div class="tab-panel" id="panel-birthday">
+        <!-- Stats -->
+        <div class="stats-bar animate-in">
+          <div class="stats-item">
+            <div class="sv" style="color: var(--secondary);">3</div>
+            <div class="sl">近7天生日</div>
+          </div>
+          <div class="stats-item">
+            <div class="sv" style="color: var(--accent);">2</div>
+            <div class="sl">已送祝福</div>
+          </div>
+          <div class="stats-item">
+            <div class="sv" style="color: var(--success);">1</div>
+            <div class="sl">已发券</div>
+          </div>
+        </div>
+
+        <!-- 今天 -->
+        <div class="section animate-in delay-1">
+          <div class="section-header">
+            <span class="section-title">🎂 今天</span>
+          </div>
+        </div>
+
+        <div class="bd-card animate-in delay-1">
+          <div class="bd-card-header">
+            <div class="bd-avatar" style="background: var(--secondary-light);">👩</div>
+            <div class="bd-user">
+              <h4>吴女士 🎂</h4>
+              <p>金卡会员 · 累计消费 ¥32,800</p>
+            </div>
+            <span class="bd-date-badge" style="background: var(--secondary-light); color: var(--secondary-dark);">今天</span>
+          </div>
+          <div class="bd-card-body">
+            <div class="bd-info-row">
+              <span class="bi-label">会员等级</span>
+              <span class="bi-value">金卡会员 · 入会 2 年</span>
+            </div>
+            <div class="bd-info-row">
+              <span class="bi-label">常用项目</span>
+              <span class="bi-value">肩颈调理 · 全身SPA</span>
+            </div>
+          </div>
+          <div class="bd-card-actions">
+            <div class="bd-action-btn primary">🎂 送祝福</div>
+            <div class="bd-action-btn pink">🎫 送优惠券</div>
+            <div class="bd-action-btn done">✓ 已处理</div>
+          </div>
+        </div>
+
+        <!-- 明天 -->
+        <div class="section animate-in delay-2">
+          <div class="section-header">
+            <span class="section-title">📅 明天</span>
+          </div>
+        </div>
+
+        <div class="bd-card animate-in delay-2">
+          <div class="bd-card-header">
+            <div class="bd-avatar" style="background: var(--primary-light);">👩</div>
+            <div class="bd-user">
+              <h4>王女士</h4>
+              <p>VIP会员 · 累计消费 ¥28,600</p>
+            </div>
+            <span class="bd-date-badge" style="background: var(--accent-light); color: var(--accent-dark);">明天</span>
+          </div>
+          <div class="bd-card-body">
+            <div class="bd-info-row">
+              <span class="bi-label">会员等级</span>
+              <span class="bi-value">VIP会员 · 入会 3 年</span>
+            </div>
+            <div class="bd-info-row">
+              <span class="bi-label">常用项目</span>
+              <span class="bi-value">肩颈深度调理 · 面部护理</span>
+            </div>
+            <div class="bd-info-row">
+              <span class="bi-label">上次到店</span>
+              <span class="bi-value">2026-05-20</span>
+            </div>
+          </div>
+          <div class="bd-card-actions">
+            <div class="bd-action-btn primary">🎂 送祝福</div>
+            <div class="bd-action-btn pink">🎫 送优惠券</div>
+            <div class="bd-action-btn done">✓ 已处理</div>
+          </div>
+        </div>
+
+        <!-- 后天 -->
+        <div class="section animate-in delay-3">
+          <div class="section-header">
+            <span class="section-title">📅 5月31日</span>
+          </div>
+        </div>
+
+        <div class="bd-card animate-in delay-3">
+          <div class="bd-card-header">
+            <div class="bd-avatar" style="background: var(--accent-light);">👩</div>
+            <div class="bd-user">
+              <h4>赵女士</h4>
+              <p>银卡会员 · 累计消费 ¥8,400</p>
+            </div>
+            <span class="bd-date-badge" style="background: #EBF3FB; color: var(--info);">后天</span>
+          </div>
+          <div class="bd-card-body">
+            <div class="bd-info-row">
+              <span class="bi-label">会员等级</span>
+              <span class="bi-value">银卡会员 · 入会 1 年</span>
+            </div>
+            <div class="bd-info-row">
+              <span class="bi-label">常用项目</span>
+              <span class="bi-value">足疗保健 · 身体护理</span>
+            </div>
+          </div>
+          <div class="bd-card-actions">
+            <div class="bd-action-btn primary">🎂 送祝福</div>
+            <div class="bd-action-btn pink">🎫 送优惠券</div>
+            <div class="bd-action-btn done">✓ 已处理</div>
+          </div>
+        </div>
+
+        <div style="height: 24px;"></div>
+      </div>
+
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <div class="tab-item" onclick="location.href='staff-home.html'">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">工作台</span>
+      </div>
+      <div class="tab-item" onclick="location.href='staff-member-record.html'">
+        <span class="tab-icon">👥</span>
+        <span class="tab-label">会员</span>
+      </div>
+      <div class="tab-item active">
+        <span class="tab-icon">🔔</span>
+        <span class="tab-label">提醒</span>
+      </div>
+      <div class="tab-item">
+        <span class="tab-icon">👤</span>
+        <span class="tab-label">我的</span>
+      </div>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+
+  <script src="../js/prototype.js"></script>
+  <script>
+    function switchTab(name) {
+      // 切换 tab 高亮
+      document.querySelectorAll('.reminder-tab').forEach(function (t) {
+        t.classList.toggle('active', t.dataset.tab === name);
+      });
+      // 切换面板
+      document.querySelectorAll('.tab-panel').forEach(function (p) {
+        p.classList.toggle('active', p.id === 'panel-' + name);
+      });
+    }
+  </script>
+</body>
+</html>

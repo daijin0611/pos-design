@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>A1 业绩查询 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    .header-area {
+      background: linear-gradient(135deg, #1A1A2E 0%, #2D2D44 100%);
+      padding: 0 var(--space-lg) var(--space-xl);
+      position: relative;
+    }
+    .header-area::after {
+      content: '';
+      position: absolute; bottom: -20px; left: 0; right: 0;
+      height: 40px; background: var(--bg-primary); border-radius: 24px 24px 0 0;
+    }
+    .header-top {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: var(--space-sm) 0 var(--space-md);
+    }
+    /* Period selector */
+    .period-tabs {
+      display: flex; gap: var(--space-sm); padding: var(--space-md) var(--space-lg);
+    }
+    .period-tab {
+      padding: 6px 16px; border-radius: var(--radius-pill);
+      font: 500 12px / 1 var(--font-family);
+      background: var(--bg-white); color: var(--text-secondary);
+      border: 1px solid var(--border); cursor: pointer;
+    }
+    .period-tab.active {
+      background: #1A1A2E; color: white; border-color: #1A1A2E;
+    }
+    /* Summary cards */
+    .summary-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: var(--space-md); padding: 0 var(--space-lg);
+    }
+    .summary-card {
+      background: var(--bg-white); border-radius: var(--radius-lg);
+      padding: var(--space-lg); box-shadow: var(--shadow-card);
+    }
+    .summary-card .sc-label {
+      font: 400 12px / 1 var(--font-family); color: var(--text-tertiary);
+    }
+    .summary-card .sc-value {
+      font: 700 24px / 1.2 var(--font-family); margin-top: 8px;
+    }
+    .summary-card .sc-change {
+      font: 500 11px / 1 var(--font-family); margin-top: 4px;
+    }
+    .sc-change.up { color: var(--success); }
+    .sc-change.down { color: var(--danger); }
+    /* Chart placeholder */
+    .chart-card {
+      margin: var(--space-md) var(--space-lg);
+      background: var(--bg-white); border-radius: var(--radius-lg);
+      padding: var(--space-lg); box-shadow: var(--shadow-card);
+    }
+    .chart-card .chart-title {
+      font: 600 14px / 1 var(--font-family); margin-bottom: var(--space-md);
+    }
+    .bar-chart {
+      display: flex; align-items: flex-end; gap: 6px; height: 120px; padding-top: var(--space-md);
+    }
+    .bar-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+    }
+    .bar {
+      width: 100%; border-radius: 4px 4px 0 0; background: #1A1A2E;
+      opacity: 0.6; transition: opacity 0.2s;
+    }
+    .bar.highlight { opacity: 1; background: var(--primary); }
+    .bar-label {
+      font: 400 9px / 1 var(--font-family); color: var(--text-tertiary);
+      margin-top: 4px; white-space: nowrap;
+    }
+    /* Staff performance list */
+    .perf-item {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white); border-radius: var(--radius-md);
+      margin: 0 var(--space-lg) var(--space-sm); box-shadow: var(--shadow-card);
+    }
+    .perf-rank {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font: 700 12px / 1 var(--font-family); color: white; flex-shrink: 0;
+    }
+    .perf-rank.gold { background: linear-gradient(135deg, #F5D060, #E8A849); }
+    .perf-rank.silver { background: linear-gradient(135deg, #C0C0C0, #A0A0A0); }
+    .perf-rank.bronze { background: linear-gradient(135deg, #CD7F32, #B8860B); }
+    .perf-rank.normal { background: var(--bg-primary); color: var(--text-tertiary); }
+    .perf-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .perf-info { flex: 1; }
+    .perf-info h4 { font: 500 14px / 1.3 var(--font-family); }
+    .perf-info p { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+    .perf-value {
+      font: 700 15px / 1 var(--font-family); color: #1A1A2E;
+    }
+
+    .page-nav {
+      position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
+    }
+    .page-nav a {
+      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
+      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .page-nav a:hover { background: var(--primary); color: white; }
+    .page-nav a.active { background: var(--primary); color: white; }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html">会员</a>
+    <a href="staff-home.html">员工</a>
+    <a href="admin-home.html" class="active">管理</a>
+    <a href="global-login.html">登录</a>
+  </div>
+
+  <div class="phone-frame">
+    <div class="status-bar light">9:41</div>
+    <div class="page-content">
+      <div class="header-area">
+        <div class="header-top">
+          <div class="nav-back" onclick="history.back()" style="color:white;">‹</div>
+          <span style="font:600 17px/1 var(--font-family); color:white; position:absolute; left:50%; transform:translateX(-50%);">业绩查询</span>
+          <div class="store-selector" style="display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:var(--radius-pill);background:rgba(255,255,255,0.1);font:500 12px/1 var(--font-family);color:rgba(255,255,255,0.8);cursor:pointer;">万达店 ▾</div>
+        </div>
+      </div>
+
+      <!-- Period selector -->
+      <div class="period-tabs animate-in" style="margin-top: 8px;">
+        <div class="period-tab">今日</div>
+        <div class="period-tab active">本月</div>
+        <div class="period-tab">上月</div>
+        <div class="period-tab">自定义</div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-grid animate-in delay-1">
+        <div class="summary-card">
+          <div class="sc-label">💰 总营业额</div>
+          <div class="sc-value" style="color: #1A1A2E;">¥86.4K</div>
+          <div class="sc-change up">↑ 15.2% 环比</div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-label">👥 总客流量</div>
+          <div class="sc-value" style="color: #1A1A2E;">628</div>
+          <div class="sc-change up">↑ 8.5% 环比</div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-label">⭐ 平均客单价</div>
+          <div class="sc-value" style="color: var(--accent);">¥137.6</div>
+          <div class="sc-change up">↑ 6.2%</div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-label">🎯 目标达成率</div>
+          <div class="sc-value" style="color: var(--success);">73%</div>
+          <div class="sc-change">目标 ¥120K</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-card animate-in delay-2">
+        <div class="chart-title">📈 每日营业额趋势</div>
+        <div class="bar-chart">
+          <div class="bar-item"><div class="bar" style="height: 35%;"></div><div class="bar-label">5/23</div></div>
+          <div class="bar-item"><div class="bar" style="height: 55%;"></div><div class="bar-label">5/24</div></div>
+          <div class="bar-item"><div class="bar" style="height: 48%;"></div><div class="bar-label">5/25</div></div>
+          <div class="bar-item"><div class="bar" style="height: 72%;"></div><div class="bar-label">5/26</div></div>
+          <div class="bar-item"><div class="bar" style="height: 65%;"></div><div class="bar-label">5/27</div></div>
+          <div class="bar-item"><div class="bar highlight" style="height: 88%;"></div><div class="bar-label">5/28</div></div>
+          <div class="bar-item"><div class="bar" style="height: 60%;"></div><div class="bar-label">5/29</div></div>
+        </div>
+      </div>
+
+      <!-- Staff performance -->
+      <div class="section animate-in delay-3">
+        <div class="section-header">
+          <span class="section-title">员工业绩排行</span>
+          <span class="section-more">查看全部 ›</span>
+        </div>
+      </div>
+      <div class="perf-item animate-in delay-3">
+        <div class="perf-rank gold">1</div>
+        <div class="perf-avatar" style="background: var(--primary-light);">👩</div>
+        <div class="perf-info">
+          <h4>张技师</h4>
+          <p>服务 42 次 · 好评率 98%</p>
+        </div>
+        <div class="perf-value">¥18,600</div>
+      </div>
+      <div class="perf-item">
+        <div class="perf-rank silver">2</div>
+        <div class="perf-avatar" style="background: var(--secondary-light);">👩</div>
+        <div class="perf-info">
+          <h4>李技师</h4>
+          <p>服务 35 次 · 好评率 96%</p>
+        </div>
+        <div class="perf-value">¥15,200</div>
+      </div>
+      <div class="perf-item">
+        <div class="perf-rank bronze">3</div>
+        <div class="perf-avatar" style="background: var(--accent-light);">👩</div>
+        <div class="perf-info">
+          <h4>王技师</h4>
+          <p>服务 28 次 · 好评率 95%</p>
+        </div>
+        <div class="perf-value">¥12,800</div>
+      </div>
+      <div class="perf-item">
+        <div class="perf-rank normal">4</div>
+        <div class="perf-avatar" style="background: #E8F4FD;">👩</div>
+        <div class="perf-info">
+          <h4>赵技师</h4>
+          <p>服务 22 次 · 好评率 94%</p>
+        </div>
+        <div class="perf-value">¥10,400</div>
+      </div>
+
+      <div style="height: 24px;"></div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item" onclick="location.href='admin-home.html'">
+        <span class="tab-icon">📊</span>
+        <span class="tab-label">数据</span>
+      </div>
+      <div class="tab-item">
+        <span class="tab-icon">🏆</span>
+        <span class="tab-label">排名</span>
+      </div>
+      <div class="tab-item">
+        <span class="tab-icon">💰</span>
+        <span class="tab-label">工资</span>
+      </div>
+      <div class="tab-item">
+        <span class="tab-icon">⚙️</span>
+        <span class="tab-label">设置</span>
+      </div>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+
+  <script src="../js/prototype.js"></script>
+</body>
+</html>

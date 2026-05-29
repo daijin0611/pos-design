@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>E1 满意度 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    /* ===== Header ===== */
+    .header-area {
+      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
+      padding: 0 var(--space-lg) var(--space-xxl);
+      position: relative;
+    }
+    .header-area::after {
+      content: '';
+      position: absolute; bottom: -20px; left: 0; right: 0;
+      height: 40px; background: var(--bg-primary); border-radius: 24px 24px 0 0;
+    }
+    .header-top {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: var(--space-sm) 0 var(--space-md);
+    }
+
+    /* ===== Score hero ===== */
+    .score-hero {
+      display: flex; align-items: center; gap: var(--space-xl);
+      padding: var(--space-md) 0;
+      position: relative; z-index: 1;
+    }
+    .score-circle {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .score-circle .sc-num {
+      font: 700 34px / 1 var(--font-family); color: white;
+    }
+    .score-circle .sc-label {
+      font: 400 10px / 1 var(--font-family); color: rgba(255,255,255,0.7); margin-top: 2px;
+    }
+    .score-meta { flex: 1; }
+    .score-meta .sm-stars {
+      font-size: 16px; line-height: 1; letter-spacing: 2px;
+    }
+    .score-meta .sm-text {
+      font: 500 14px / 1.4 var(--font-family); color: rgba(255,255,255,0.9); margin-top: 6px;
+    }
+    .score-meta .sm-change {
+      font: 400 12px / 1 var(--font-family); color: rgba(255,255,255,0.6); margin-top: 4px;
+    }
+    .score-meta .sm-change .up { color: #7BFFC9; font-weight: 600; }
+    .score-meta .sm-change .down { color: #FFB0B0; font-weight: 600; }
+
+    /* ===== Stats row ===== */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-sm);
+      position: relative; z-index: 1;
+      margin-top: var(--space-md);
+    }
+    .stat-pill {
+      background: rgba(255,255,255,0.12);
+      border-radius: var(--radius-md);
+      padding: var(--space-sm) 0;
+      text-align: center;
+    }
+    .stat-pill .sp-val {
+      font: 700 17px / 1.2 var(--font-family); color: white;
+    }
+    .stat-pill .sp-lbl {
+      font: 400 10px / 1 var(--font-family); color: rgba(255,255,255,0.6); margin-top: 3px;
+    }
+
+    /* ===== Star distribution ===== */
+    .dist-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-card);
+      margin: 0 var(--space-lg);
+    }
+    .dist-title {
+      font: 600 14px / 1 var(--font-family); color: var(--text-primary);
+      margin-bottom: var(--space-md);
+    }
+    .dist-row {
+      display: flex; align-items: center; gap: var(--space-sm);
+      margin-bottom: 8px;
+    }
+    .dist-row:last-child { margin-bottom: 0; }
+    .dist-row .dr-star {
+      font: 500 12px / 1 var(--font-family); color: var(--text-secondary);
+      width: 32px; flex-shrink: 0;
+    }
+    .dist-bar-wrap {
+      flex: 1; height: 8px; background: var(--bg-primary);
+      border-radius: 4px; overflow: hidden;
+    }
+    .dist-bar {
+      height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, #E8A849, #FFD166);
+      transition: width 0.6s ease;
+    }
+    .dist-row .dr-count {
+      font: 400 11px / 1 var(--font-family); color: var(--text-tertiary);
+      width: 28px; text-align: right; flex-shrink: 0;
+    }
+
+    /* ===== Period tabs ===== */
+    .period-bar {
+      display: flex; gap: var(--space-sm);
+      padding: var(--space-lg) var(--space-lg) 0;
+    }
+    .period-tab {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font: 500 12px / 1 var(--font-family);
+      color: var(--text-tertiary);
+      background: var(--bg-white);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .period-tab.active {
+      background: #4A6CF7;
+      color: white;
+    }
+
+    /* ===== Trend bar chart ===== */
+    .trend-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-card);
+      margin: var(--space-md) var(--space-lg) 0;
+    }
+    .trend-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: var(--space-md);
+    }
+    .trend-title {
+      font: 600 14px / 1 var(--font-family); color: var(--text-primary);
+    }
+    .trend-avg {
+      font: 600 15px / 1 var(--font-family); color: #4A6CF7;
+    }
+    .chart-row {
+      display: flex; align-items: flex-end; gap: 6px;
+      height: 100px;
+    }
+    .chart-col {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 4px; height: 100%;
+    }
+    .chart-val {
+      font: 500 9px / 1 var(--font-family); color: var(--text-tertiary);
+    }
+    .chart-bar {
+      width: 100%; border-radius: 4px 4px 0 0;
+      background: linear-gradient(180deg, #4A6CF7 0%, #6B8AFF 100%);
+      transition: height 0.4s ease;
+      min-height: 4px;
+    }
+    .chart-label {
+      font: 400 10px / 1 var(--font-family); color: var(--text-placeholder);
+    }
+
+    /* ===== Review list ===== */
+    .review-section {
+      padding: var(--space-lg) 0 0;
+    }
+    .review-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 var(--space-lg);
+      margin-bottom: var(--space-md);
+    }
+    .review-title {
+      font: 600 14px / 1 var(--font-family); color: var(--text-primary);
+    }
+    .review-count {
+      font: 400 12px / 1 var(--font-family); color: var(--text-tertiary);
+    }
+
+    .review-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      margin: 0 var(--space-lg) var(--space-sm);
+      box-shadow: var(--shadow-card);
+    }
+    .rc-top {
+      display: flex; align-items: center; gap: var(--space-md);
+    }
+    .rc-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .rc-info { flex: 1; min-width: 0; }
+    .rc-name {
+      font: 500 14px / 1.3 var(--font-family); color: var(--text-primary);
+    }
+    .rc-service {
+      font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px;
+    }
+    .rc-date {
+      font: 400 11px / 1 var(--font-family); color: var(--text-placeholder);
+      flex-shrink: 0;
+    }
+    .rc-stars {
+      margin: var(--space-sm) 0;
+      font-size: 14px; line-height: 1; letter-spacing: 1px;
+    }
+    .rc-comment {
+      font: 400 13px / 1.6 var(--font-family); color: var(--text-secondary);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--bg-primary);
+      border-radius: var(--radius-md);
+      margin-top: var(--space-sm);
+    }
+    .rc-tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: var(--space-sm);
+    }
+    .rc-tag {
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font: 400 10px / 1.2 var(--font-family);
+    }
+    .rc-tag.good {
+      background: var(--primary-light);
+      color: var(--success);
+    }
+    .rc-tag.bad {
+      background: #FFF0F0;
+      color: var(--danger);
+    }
+
+    /* ===== Service ranking ===== */
+    .rank-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-card);
+      margin: var(--space-md) var(--space-lg) 0;
+    }
+    .rank-title {
+      font: 600 14px / 1 var(--font-family); color: var(--text-primary);
+      margin-bottom: var(--space-md);
+    }
+    .rank-item {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-sm) 0;
+    }
+    .rank-item + .rank-item {
+      border-top: 1px solid var(--border-light);
+    }
+    .rank-num {
+      width: 24px; height: 24px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font: 700 12px / 1 var(--font-family); color: white; flex-shrink: 0;
+    }
+    .rank-num.gold { background: #E8A849; }
+    .rank-num.silver { background: #B0B8C8; }
+    .rank-num.bronze { background: #CD8B62; }
+    .rank-num.normal { background: var(--bg-primary); color: var(--text-tertiary); }
+    .rank-info { flex: 1; min-width: 0; }
+    .rank-name {
+      font: 500 13px / 1.3 var(--font-family); color: var(--text-primary);
+    }
+    .rank-count {
+      font: 400 11px / 1 var(--font-family); color: var(--text-tertiary); margin-top: 2px;
+    }
+    .rank-score {
+      font: 700 16px / 1 var(--font-family); color: #4A6CF7; flex-shrink: 0;
+    }
+
+    .page-nav {
+      position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
+    }
+    .page-nav a {
+      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
+      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .page-nav a:hover { background: var(--primary); color: white; }
+    .page-nav a.active { background: var(--primary); color: white; }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html">会员</a>
+    <a href="staff-home.html" class="active">员工</a>
+    <a href="admin-home.html">管理</a>
+    <a href="global-login.html">登录</a>
+  </div>
+
+  <div class="phone-frame">
+    <div class="status-bar light">9:41</div>
+
+    <div class="page-content">
+      <!-- Header -->
+      <div class="header-area">
+        <div class="header-top">
+          <div class="nav-back" onclick="history.back()" style="color:white;">‹</div>
+          <span style="font:600 17px/1 var(--font-family); color:white; position:absolute; left:50%; transform:translateX(-50%);">客户满意度</span>
+        </div>
+
+        <!-- Score hero -->
+        <div class="score-hero animate-in">
+          <div class="score-circle">
+            <div class="sc-num">4.8</div>
+            <div class="sc-label">综合评分</div>
+          </div>
+          <div class="score-meta">
+            <div class="sm-stars">⭐⭐⭐⭐⭐</div>
+            <div class="sm-text">本月整体表现优秀</div>
+            <div class="sm-change">
+              较上月 <span class="up">↑ 0.2</span> · 共 <b style="color:white;">186</b> 条评价
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="stats-row animate-in delay-1">
+          <div class="stat-pill">
+            <div class="sp-val">98%</div>
+            <div class="sp-lbl">好评率</div>
+          </div>
+          <div class="stat-pill">
+            <div class="sp-val">15</div>
+            <div class="sp-lbl">条新评价</div>
+          </div>
+          <div class="stat-pill">
+            <div class="sp-val">2</div>
+            <div class="sp-lbl">待回复</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Star distribution -->
+      <div class="section animate-in delay-1">
+        <div class="dist-card">
+          <div class="dist-title">评分分布</div>
+          <div class="dist-row">
+            <span class="dr-star">5 星</span>
+            <div class="dist-bar-wrap"><div class="dist-bar" style="width: 72%;"></div></div>
+            <span class="dr-count">134</span>
+          </div>
+          <div class="dist-row">
+            <span class="dr-star">4 星</span>
+            <div class="dist-bar-wrap"><div class="dist-bar" style="width: 20%;"></div></div>
+            <span class="dr-count">37</span>
+          </div>
+          <div class="dist-row">
+            <span class="dr-star">3 星</span>
+            <div class="dist-bar-wrap"><div class="dist-bar" style="width: 5%;"></div></div>
+            <span class="dr-count">10</span>
+          </div>
+          <div class="dist-row">
+            <span class="dr-star">2 星</span>
+            <div class="dist-bar-wrap"><div class="dist-bar" style="width: 2%;"></div></div>
+            <span class="dr-count">3</span>
+          </div>
+          <div class="dist-row">
+            <span class="dr-star">1 星</span>
+            <div class="dist-bar-wrap"><div class="dist-bar" style="width: 1%;"></div></div>
+            <span class="dr-count">2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Period tabs -->
+      <div class="period-bar">
+        <div class="period-tab active" data-period="week">近7天</div>
+        <div class="period-tab" data-period="month">本月</div>
+        <div class="period-tab" data-period="quarter">近3月</div>
+      </div>
+
+      <!-- Trend chart -->
+      <div class="trend-card animate-in delay-2">
+        <div class="trend-header">
+          <span class="trend-title">满意度趋势</span>
+          <span class="trend-avg">均值 4.7</span>
+        </div>
+        <div class="chart-row">
+          <div class="chart-col">
+            <span class="chart-val">4.6</span>
+            <div class="chart-bar" style="height: 72%;"></div>
+            <span class="chart-label">5/23</span>
+          </div>
+          <div class="chart-col">
+            <span class="chart-val">4.7</span>
+            <div class="chart-bar" style="height: 78%;"></div>
+            <span class="chart-label">5/24</span>
+          </div>
+          <div class="chart-col">
+            <span class="chart-val">4.9</span>
+            <div class="chart-bar" style="height: 92%;"></div>
+            <span class="chart-label">5/25</span>
+          </div>
+          <div class="chart-col">
+            <span class="chart-val">4.5</span>
+            <div class="chart-bar" style="height: 62%;"></div>
+            <span class="chart-label">5/26</span>
+          </div>
+          <div class="chart-col">
+            <span class="chart-val">4.8</span>
+            <div class="chart-bar" style="height: 85%;"></div>
+            <span class="chart-label">5/27</span>
+          </div>
+          <div class="chart-col">
+            <span class="chart-val">4.9</span>
+            <div class="chart-bar" style="height: 92%;"></div>
+            <span class="chart-label">5/28</span>
+          </div>
+          <div class="chart-col">
+            <span class="chart-val">4.8</span>
+            <div class="chart-bar" style="height: 85%; opacity: 0.5;"></div>
+            <span class="chart-label">今天</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service ranking -->
+      <div class="rank-card animate-in delay-2">
+        <div class="rank-title">服务项目评分排行</div>
+        <div class="rank-item">
+          <div class="rank-num gold">1</div>
+          <div class="rank-info">
+            <div class="rank-name">全身精油SPA</div>
+            <div class="rank-count">48 条评价</div>
+          </div>
+          <div class="rank-score">4.9</div>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num silver">2</div>
+          <div class="rank-info">
+            <div class="rank-name">肩颈深度调理</div>
+            <div class="rank-count">62 条评价</div>
+          </div>
+          <div class="rank-score">4.8</div>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num bronze">3</div>
+          <div class="rank-info">
+            <div class="rank-name">面部精华护理</div>
+            <div class="rank-count">35 条评价</div>
+          </div>
+          <div class="rank-score">4.7</div>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num normal">4</div>
+          <div class="rank-info">
+            <div class="rank-name">足疗保健</div>
+            <div class="rank-count">28 条评价</div>
+          </div>
+          <div class="rank-score">4.6</div>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num normal">5</div>
+          <div class="rank-info">
+            <div class="rank-name">头部放松理疗</div>
+            <div class="rank-count">13 条评价</div>
+          </div>
+          <div class="rank-score">4.5</div>
+        </div>
+      </div>
+
+      <!-- Recent reviews -->
+      <div class="review-section">
+        <div class="review-header">
+          <span class="review-title">最新评价</span>
+          <span class="review-count">共 186 条</span>
+        </div>
+
+        <!-- Review 1 -->
+        <div class="review-card animate-in delay-2">
+          <div class="rc-top">
+            <div class="rc-avatar" style="background: var(--primary-light);">👩</div>
+            <div class="rc-info">
+              <div class="rc-name">李女士</div>
+              <div class="rc-service">肩颈深度调理 · 万达店</div>
+            </div>
+            <div class="rc-date">今天</div>
+          </div>
+          <div class="rc-stars">⭐⭐⭐⭐⭐</div>
+          <div class="rc-comment">
+            张技师手法非常专业，全程很舒服，做完之后肩膀轻松了很多。环境也很好，下次还会来！
+          </div>
+          <div class="rc-tags">
+            <span class="rc-tag good">手法专业</span>
+            <span class="rc-tag good">服务热情</span>
+            <span class="rc-tag good">环境舒适</span>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="review-card">
+          <div class="rc-top">
+            <div class="rc-avatar" style="background: var(--secondary-light);">👩</div>
+            <div class="rc-info">
+              <div class="rc-name">王女士</div>
+              <div class="rc-service">全身精油SPA · 万达店</div>
+            </div>
+            <div class="rc-date">昨天</div>
+          </div>
+          <div class="rc-stars">⭐⭐⭐⭐⭐</div>
+          <div class="rc-comment">
+            超级满意！精油味道很好闻，整个过程非常放松。张技师还会根据我的体质推荐适合的精油。
+          </div>
+          <div class="rc-tags">
+            <span class="rc-tag good">推荐精准</span>
+            <span class="rc-tag good">细心周到</span>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="review-card">
+          <div class="rc-top">
+            <div class="rc-avatar" style="background: var(--accent-light);">👩</div>
+            <div class="rc-info">
+              <div class="rc-name">赵女士</div>
+              <div class="rc-service">面部精华护理 · 万达店</div>
+            </div>
+            <div class="rc-date">5月27日</div>
+          </div>
+          <div class="rc-stars">⭐⭐⭐⭐</div>
+          <div class="rc-comment">
+            整体还不错，就是等了一会儿才开始。护理效果挺好的，皮肤明显水润了。
+          </div>
+          <div class="rc-tags">
+            <span class="rc-tag good">效果明显</span>
+            <span class="rc-tag bad">等待较久</span>
+          </div>
+        </div>
+
+        <!-- Review 4 -->
+        <div class="review-card">
+          <div class="rc-top">
+            <div class="rc-avatar" style="background: #EBF0FF;">👩</div>
+            <div class="rc-info">
+              <div class="rc-name">孙女士</div>
+              <div class="rc-service">足疗保健 · 万达店</div>
+            </div>
+            <div class="rc-date">5月26日</div>
+          </div>
+          <div class="rc-stars">⭐⭐⭐⭐⭐</div>
+          <div class="rc-comment">
+            第三次找张技师做足疗了，每次都很满意。力度刚刚好，还会提醒我日常足部保养注意事项。
+          </div>
+          <div class="rc-tags">
+            <span class="rc-tag good">回头客</span>
+            <span class="rc-tag good">力度合适</span>
+            <span class="rc-tag good">专业建议</span>
+          </div>
+        </div>
+
+        <!-- Review 5 -->
+        <div class="review-card">
+          <div class="rc-top">
+            <div class="rc-avatar" style="background: var(--primary-light);">👩</div>
+            <div class="rc-info">
+              <div class="rc-name">周女士</div>
+              <div class="rc-service">肩颈深度调理 · 万达店</div>
+            </div>
+            <div class="rc-date">5月25日</div>
+          </div>
+          <div class="rc-stars">⭐⭐⭐⭐⭐</div>
+          <div class="rc-comment">
+            非常满意，张技师手法比上次又有进步。全程没有推销，感觉很舒服。
+          </div>
+          <div class="rc-tags">
+            <span class="rc-tag good">手法进步</span>
+            <span class="rc-tag good">无推销</span>
+          </div>
+        </div>
+
+        <div style="height: 24px;"></div>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <div class="tab-item" onclick="location.href='staff-home.html'">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">工作台</span>
+      </div>
+      <div class="tab-item" onclick="location.href='staff-member-record.html'">
+        <span class="tab-icon">👥</span>
+        <span class="tab-label">会员</span>
+      </div>
+      <div class="tab-item" onclick="location.href='staff-reminder.html'">
+        <span class="tab-icon">🔔</span>
+        <span class="tab-label">提醒</span>
+      </div>
+      <div class="tab-item">
+        <span class="tab-icon">👤</span>
+        <span class="tab-label">我的</span>
+      </div>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+
+  <script src="../js/prototype.js"></script>
+  <script>
+    /* Period tab switching */
+    document.querySelectorAll('.period-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.period-tab').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

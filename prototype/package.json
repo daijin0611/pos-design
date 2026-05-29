@@ -1,0 +1,12 @@
+{
+  "name": "pos-h5-prototype",
+  "version": "1.0.0",
+  "description": "POS H5 高保真原型服务器 - 丽德健康管理系统",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

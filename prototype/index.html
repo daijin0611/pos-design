@@ -150,10 +150,35 @@
       height: 28px;
       border-radius: 8px;
     }
+
+    /* Server info */
+    .server-info {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: rgba(44, 181, 160, 0.1);
+      border: 1px solid rgba(44, 181, 160, 0.2);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .server-info h3 {
+      font: 600 14px / 1 var(--font-family);
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .server-info code {
+      display: block;
+      background: rgba(0,0,0,0.3);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font: 500 13px / 1.6 'Consolas', monospace;
+      color: rgba(255,255,255,0.7);
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
-  <div class="version-badge">v1.0 · Phase 1 Prototype</div>
+  <div class="version-badge">v2.0 · 全功能原型</div>
   <h1 class="main-title">🌿 POS H5 高保真原型</h1>
   <p class="main-subtitle">丽德健康管理系统 · 三端移动原型 · 健康美业风格</p>
 
@@ -165,7 +190,7 @@
         <a href="pages/global-login.html" class="page-card">
           <div class="card-emoji">🔐</div>
           <div class="card-title">登录 / 授权</div>
-          <div class="card-desc">手机验证码登录 + 微信一键登录</div>
+          <div class="card-desc">手机验证码登录 + 微信一键登录 + 角色选择</div>
           <span class="card-badge badge-done">已完成</span>
         </a>
       </div>
@@ -181,48 +206,48 @@
           <div class="card-desc">余额、积分、快捷操作、预约、消费记录</div>
           <span class="card-badge badge-done">已完成</span>
         </a>
-        <div class="page-card">
+        <a href="pages/member-balance.html" class="page-card">
           <div class="card-emoji">📋</div>
           <div class="card-title">M1 余额查询</div>
-          <div class="card-desc">消费余额卡片 + 交易明细列表</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
-        <div class="page-card">
+          <div class="card-desc">消费余额卡片 + 交易明细列表 + 筛选</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/member-appointment.html" class="page-card">
           <div class="card-emoji">📅</div>
           <div class="card-title">M4 预约</div>
-          <div class="card-desc">选店→选项目→选时间→确认→我的预约</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
-        <div class="page-card">
+          <div class="card-desc">选店→选项目→选时间→选技师→确认</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/member-coupon.html" class="page-card">
           <div class="card-emoji">🎫</div>
           <div class="card-title">M5 优惠券</div>
-          <div class="card-desc">优惠券列表→详情→使用</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
-        <div class="page-card">
+          <div class="card-desc">可使用/已使用/已过期 + 优惠券详情</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/member-store.html" class="page-card">
           <div class="card-emoji">📍</div>
           <div class="card-title">M6 门店查询</div>
-          <div class="card-desc">地图+列表+门店详情</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
-        <div class="page-card">
+          <div class="card-desc">地图+列表+门店详情+导航</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/member-qrcode.html" class="page-card">
           <div class="card-emoji">📱</div>
           <div class="card-title">M7 二维码</div>
-          <div class="card-desc">会员二维码展示</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
-        <div class="page-card">
+          <div class="card-desc">会员二维码展示 + 会员信息</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/member-points.html" class="page-card">
           <div class="card-emoji">⭐</div>
           <div class="card-title">M8-M9 积分</div>
           <div class="card-desc">积分余额/明细 + 积分兑换商城</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
       </div>
     </div>
 
     <!-- Staff -->
     <div class="section-group">
-      <div class="group-title">👨‍💼 员工端 · 7个功能</div>
+      <div class="group-title">👨‍💼 员工端 · 8个功能</div>
       <div class="page-grid">
         <a href="pages/staff-home.html" class="page-card">
           <div class="card-emoji">🏠</div>
@@ -230,24 +255,36 @@
           <div class="card-desc">今日统计、工资、提醒、快捷入口</div>
           <span class="card-badge badge-done">已完成</span>
         </a>
-        <div class="page-card">
+        <a href="pages/staff-salary.html" class="page-card">
           <div class="card-emoji">💰</div>
           <div class="card-title">E1 工资查询</div>
-          <div class="card-desc">月度工资总览 + 明细</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
-        <div class="page-card">
+          <div class="card-desc">月度工资总览 + 详细明细 + 历史记录</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/staff-reminder.html" class="page-card">
           <div class="card-emoji">🔔</div>
           <div class="card-title">E2-E3 会员提醒</div>
-          <div class="card-desc">修复/调理回访 + 生日提醒</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
-        <div class="page-card">
+          <div class="card-desc">修复/调理回访提醒 + 生日提醒 + 操作</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/staff-checkout.html" class="page-card">
           <div class="card-emoji">💳</div>
           <div class="card-title">E6 手机收银</div>
-          <div class="card-desc">选项目→购物车→结算→支付</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
+          <div class="card-desc">选会员→选项目→购物车→优惠券→结算</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/staff-satisfaction.html" class="page-card">
+          <div class="card-emoji">⭐</div>
+          <div class="card-title">满意度查询</div>
+          <div class="card-desc">综合评分 + 评分分布 + 趋势图 + 项目排行 + 最新评价</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/staff-member-record.html" class="page-card">
+          <div class="card-emoji">📝</div>
+          <div class="card-title">会员修复调理记录</div>
+          <div class="card-desc">搜索选择会员 + 选择服务项目 + 回访安排 + 上传详情</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
       </div>
     </div>
 
@@ -261,18 +298,18 @@
           <div class="card-desc">数据看板、业绩趋势、排名</div>
           <span class="card-badge badge-done">已完成</span>
         </a>
-        <div class="page-card">
+        <a href="pages/admin-performance.html" class="page-card">
           <div class="card-emoji">📈</div>
           <div class="card-title">A1 业绩查询</div>
-          <div class="card-desc">门店/员工维度业绩数据</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
-        <div class="page-card">
+          <div class="card-desc">门店/员工维度业绩数据 + 图表</div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
+        <a href="pages/admin-ranking.html" class="page-card">
           <div class="card-emoji">🏆</div>
           <div class="card-title">A3-A5 排名</div>
           <div class="card-desc">项目排名 + 员工业绩排名 + 工资排名</div>
-          <span class="card-badge badge-todo">待制作</span>
-        </div>
+          <span class="card-badge badge-done">已完成</span>
+        </a>
       </div>
     </div>
   </div>
@@ -282,6 +319,7 @@
     <h3>🎨 设计规范</h3>
     <p>
       主色: 薄荷绿 #2CB5A0 · 辅色: 玫瑰粉 #F5A0B5 · 强调: 琥珀金 #E8A849<br>
+      员工主色: 靛蓝 #4A6CF7 · 管理主色: 深蓝 #1A1A2E<br>
       字体: 系统默认 (PingFang SC / Microsoft YaHei) · 圆角: 14px · 设备: iPhone 375×812<br>
       技术栈: Vue3 + Vant 4 · 运行环境: 微信公众号 H5
     </p>
@@ -289,10 +327,21 @@
       <div class="color-dot" style="background: #2CB5A0;"></div>
       <div class="color-dot" style="background: #F5A0B5;"></div>
       <div class="color-dot" style="background: #E8A849;"></div>
+      <div class="color-dot" style="background: #4A6CF7;"></div>
+      <div class="color-dot" style="background: #1A1A2E;"></div>
       <div class="color-dot" style="background: #F7F8FA;"></div>
-      <div class="color-dot" style="background: #333333;"></div>
       <div class="color-dot" style="background: #EA5252;"></div>
     </div>
+  </div>
+
+  <!-- Server info -->
+  <div class="server-info">
+    <h3>🚀 启动服务器</h3>
+    <p style="font: 400 12px/1.4 var(--font-family); color: rgba(255,255,255,0.5);">
+      已配置独立 Express 服务器，运行以下命令启动：
+    </p>
+    <code>cd prototype && npm start</code>
+    <code>访问 http://localhost:3000</code>
   </div>
 </body>
 </html>

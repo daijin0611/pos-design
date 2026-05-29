@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>M7 二维码 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    .qr-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background: var(--primary-gradient);
+      padding: var(--space-xxl) var(--space-lg);
+    }
+    .qr-header {
+      text-align: center;
+      margin-bottom: var(--space-xxl);
+    }
+    .qr-header h2 {
+      font: 700 24px / 1.3 var(--font-family);
+      color: white;
+    }
+    .qr-header p {
+      font: 400 13px / 1.4 var(--font-family);
+      color: rgba(255,255,255,0.7);
+      margin-top: 4px;
+    }
+    .qr-card {
+      width: 100%;
+      max-width: 300px;
+      background: var(--bg-white);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xxl);
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+      animation: fadeInUp 0.6s ease-out;
+    }
+    .qr-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto var(--space-md);
+    }
+    .qr-name {
+      font: 600 18px / 1.3 var(--font-family);
+      color: var(--text-primary);
+    }
+    .qr-level {
+      display: inline-flex;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      font: 500 11px / 1 var(--font-family);
+      margin-top: var(--space-sm);
+    }
+    .qr-image {
+      width: 200px;
+      height: 200px;
+      margin: var(--space-xl) auto;
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* QR code pattern simulation */
+    .qr-image::before {
+      content: '';
+      position: absolute;
+      inset: 16px;
+      background:
+        linear-gradient(90deg, var(--text-primary) 2px, transparent 2px),
+        linear-gradient(var(--text-primary) 2px, transparent 2px);
+      background-size: 8px 8px;
+      opacity: 0.15;
+    }
+    .qr-image::after {
+      content: '扫码识别会员';
+      position: absolute;
+      font: 500 12px / 1 var(--font-family);
+      color: var(--text-tertiary);
+    }
+    .qr-center-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--bg-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+    .qr-id {
+      font: 400 12px / 1 var(--font-family);
+      color: var(--text-tertiary);
+      margin-top: var(--space-md);
+    }
+    .qr-tip {
+      margin-top: var(--space-xxl);
+      padding: var(--space-md) var(--space-xl);
+      background: rgba(255,255,255,0.15);
+      border-radius: var(--radius-lg);
+      text-align: center;
+    }
+    .qr-tip p {
+      font: 400 12px / 1.6 var(--font-family);
+      color: rgba(255,255,255,0.7);
+    }
+    .qr-actions {
+      display: flex;
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .qr-action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .qr-action-btn .action-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .qr-action-btn .action-text {
+      font: 400 10px / 1 var(--font-family);
+      color: rgba(255,255,255,0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="qr-page">
+    <div class="qr-header animate-in">
+      <h2>我的会员码</h2>
+      <p>出示二维码，享受会员权益</p>
+    </div>
+
+    <div class="qr-card">
+      <div class="qr-avatar">👤</div>
+      <div class="qr-name">张小姐</div>
+      <div class="qr-level">⭐ 金卡会员</div>
+
+      <div class="qr-image">
+        <div class="qr-center-logo">🌿</div>
+      </div>
+
+      <div class="qr-id">会员编号: VIP20240318001</div>
+    </div>
+
+    <div class="qr-actions animate-in delay-1">
+      <div class="qr-action-btn">
+        <div class="action-circle">🔄</div>
+        <span class="action-text">刷新</span>
+      </div>
+      <div class="qr-action-btn">
+        <div class="action-circle">📸</div>
+        <span class="action-text">保存图片</span>
+      </div>
+    </div>
+
+    <div class="qr-tip animate-in delay-2">
+      <p>💡 二维码每60秒自动刷新，请在收银台出示</p>
+      <p style="margin-top: 4px;">当前余额: ¥3,280.00 · 积分: 1,560</p>
+    </div>
+  </div>
+</body>
+</html>

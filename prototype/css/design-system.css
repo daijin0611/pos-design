@@ -89,36 +89,78 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html {
+  height: 100%;
+}
+
+body {
   font: var(--font-body);
   color: var(--text-primary);
   background: var(--bg-primary);
   overflow-x: hidden;
+  min-height: 100%;
+  min-height: 100dvh;
 }
 
 a { text-decoration: none; color: inherit; }
 
-/* Page container */
+/* Page container — 默认全屏适配移动端 */
 .phone-frame {
-  width: var(--page-width);
-  height: var(--page-height);
-  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg-primary);
   position: relative;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+/* 桌面端：还原居中手机框架效果 */
+@media (min-width: 431px) {
+  body {
+    background: #1A1A2E;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+
+  .phone-frame {
+    width: var(--page-width);
+    min-height: var(--page-height);
+    max-width: var(--page-width);
+    border-radius: 24px;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+  }
+}
+
+/* 移动端隐藏右上角浮动导航 */
+@media (max-width: 430px) {
+  .page-nav {
+    display: none !important;
+  }
 }
 
 /* Status bar */
 .status-bar {
   height: var(--safe-top);
+  padding-top: env(safe-area-inset-top, 0px);
   display: flex;
   align-items: center;
   justify-content: center;
   font: 600 14px / 1 var(--font-family);
   color: var(--text-primary);
   flex-shrink: 0;
+}
+
+/* 移动端隐藏模拟状态栏，使用真实安全区 */
+@media (max-width: 430px) {
+  .status-bar {
+    height: auto;
+    min-height: env(safe-area-inset-top, 12px);
+    padding-top: env(safe-area-inset-top, 12px);
+  }
 }
 
 .status-bar.light { color: var(--text-inverse); }
@@ -198,8 +240,17 @@ a { text-decoration: none; color: inherit; }
 /* Safe area bottom */
 .safe-bottom {
   height: var(--safe-bottom);
+  height: calc(env(safe-area-inset-bottom, 0px) + 6px);
   background: var(--bg-white);
   flex-shrink: 0;
+}
+
+/* 移动端：safe-bottom 使用真实安全区 */
+@media (max-width: 430px) {
+  .safe-bottom {
+    height: env(safe-area-inset-bottom, 6px);
+    background: var(--bg-white);
+  }
 }
 
 /* Page content */
