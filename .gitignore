@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Claude Code
+.claude/
+
+# Superpowers
+.superpowers/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temp files
+*.log
+*.tmp
