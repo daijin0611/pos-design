@@ -272,7 +272,7 @@
       <div class="header-area">
         <div class="header-top">
           <div class="greeting">
-            <h2>张技师，早上好 ☀️</h2>
+            <h2>张技师，早上好</h2>
             <p>今天是你在丽德的第 386 天</p>
           </div>
           <div class="header-badge">高级技师</div>
@@ -281,6 +281,7 @@
 
       <!-- Today stats -->
       <div class="section">
+        <a href="staff-appointment.html" style="text-decoration:none; display:block;">
         <div class="today-stats animate-in">
           <div class="stat-card highlight">
             <div class="stat-value">6</div>
@@ -295,40 +296,41 @@
             <div class="stat-label">待跟进</div>
           </div>
         </div>
+        </a>
       </div>
 
       <!-- Quick entries -->
       <div class="quick-entries animate-in delay-1">
         <a href="staff-salary.html" class="entry-item" style="text-decoration:none;">
-          <div class="entry-icon" style="background: #EBF0FF;">💰</div>
+          <div class="entry-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-gold-coin-o" style="color: #4A6CF7;"></i></div>
           <span class="entry-label">工资查询</span>
         </a>
         <a href="staff-reminder.html" class="entry-item" style="text-decoration:none;">
-          <div class="entry-icon" style="background: var(--primary-light);">🔔</div>
+          <div class="entry-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-bell" style="color: #2CB5A0;"></i></div>
           <span class="entry-label">会员提醒</span>
         </a>
         <a href="staff-reminder.html" class="entry-item" style="text-decoration:none;">
-          <div class="entry-icon" style="background: var(--secondary-light);">🎂</div>
+          <div class="entry-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-cake-o" style="color: #F5A0B5;"></i></div>
           <span class="entry-label">生日提醒</span>
         </a>
         <a href="#" class="entry-item" style="text-decoration:none;">
-          <div class="entry-icon" style="background: #E8F4FD;">🔍</div>
+          <div class="entry-icon" style="background: #E8F4FD;"><i class="van-icon van-icon-search" style="color: #5B9BD5;"></i></div>
           <span class="entry-label">会员查询</span>
         </a>
         <a href="staff-satisfaction.html" class="entry-item" style="text-decoration:none;">
-          <div class="entry-icon" style="background: var(--accent-light);">⭐</div>
+          <div class="entry-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-star-o" style="color: #E8A849;"></i></div>
           <span class="entry-label">满意度</span>
         </a>
         <a href="staff-checkout.html" class="entry-item" style="text-decoration:none;">
-          <div class="entry-icon" style="background: #F0E8F8;">💳</div>
+          <div class="entry-icon" style="background: #F0E8F8;"><i class="van-icon van-icon-card" style="color: #8B5CF6;"></i></div>
           <span class="entry-label">手机收银</span>
         </a>
         <div class="entry-item">
-          <div class="entry-icon" style="background: var(--primary-light);">📊</div>
+          <div class="entry-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-bar-chart-o" style="color: #2CB5A0;"></i></div>
           <span class="entry-label">我的业绩</span>
         </div>
         <div class="entry-item">
-          <div class="entry-icon" style="background: #E8F4FD;">⚙️</div>
+          <div class="entry-icon" style="background: #E8F4FD;"><i class="van-icon van-icon-setting-o" style="color: #5B9BD5;"></i></div>
           <span class="entry-label">设置</span>
         </div>
       </div>
@@ -356,7 +358,7 @@
         </div>
 
         <div class="reminder-card animate-in delay-2">
-          <div class="reminder-avatar" style="background: var(--secondary-light);">👩</div>
+          <div class="reminder-avatar" style="background: var(--secondary-light);"><i class="van-icon van-icon-contact" style="color: #F5A0B5;"></i></div>
           <div class="reminder-info">
             <h4>李女士 — 肩颈调理回访</h4>
             <p>上次服务：5月18日 · 建议调理周期已到</p>
@@ -365,7 +367,7 @@
         </div>
 
         <div class="reminder-card animate-in delay-3">
-          <div class="reminder-avatar" style="background: var(--accent-light);">🎂</div>
+          <div class="reminder-avatar" style="background: var(--accent-light);"><i class="van-icon van-icon-cake-o" style="color: #E8A849;"></i></div>
           <div class="reminder-info">
             <h4>王女士 — 明天生日</h4>
             <p>VIP会员 · 可发送生日优惠券</p>
@@ -374,7 +376,7 @@
         </div>
 
         <div class="reminder-card">
-          <div class="reminder-avatar" style="background: var(--primary-light);">👩</div>
+          <div class="reminder-avatar" style="background: var(--primary-light);"><i class="van-icon van-icon-contact" style="color: #2CB5A0;"></i></div>
           <div class="reminder-info">
             <h4>陈女士 — 全身SPA回访</h4>
             <p>上次服务：5月15日 · 满意度4.8分</p>
@@ -387,21 +389,21 @@
     </div>
 
     <!-- Tab Bar (Staff) -->
-    <div class="tab-bar">
+    <div class="tab-bar staff-tab-bar">
       <div class="tab-item active">
-        <span class="tab-icon">🏠</span>
+        <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
         <span class="tab-label">工作台</span>
       </div>
       <div class="tab-item" onclick="location.href='staff-member-record.html'">
-        <span class="tab-icon">👥</span>
+        <span class="tab-icon"><i class="van-icon van-icon-friends-o"></i></span>
         <span class="tab-label">会员</span>
       </div>
       <div class="tab-item">
-        <span class="tab-icon">🔔</span>
+        <span class="tab-icon"><i class="van-icon van-icon-bell"></i></span>
         <span class="tab-label">提醒</span>
       </div>
       <div class="tab-item">
-        <span class="tab-icon">👤</span>
+        <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
         <span class="tab-label">我的</span>
       </div>
     </div>

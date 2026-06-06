@@ -3,6 +3,9 @@
    Colors: Mint Green / Rose Pink / Amber Gold
    ============================================ */
 
+/* Vant 图标字体（离线） */
+@import url('./vant/index.css');
+
 :root {
   /* Primary */
   --primary: #2CB5A0;
@@ -422,3 +425,74 @@ a { text-decoration: none; color: inherit; }
 .delay-1 { animation-delay: 0.1s; }
 .delay-2 { animation-delay: 0.2s; }
 .delay-3 { animation-delay: 0.3s; }
+
+/* Vant 图标适配 */
+.van-icon { line-height: 1; display: inline-block; }
+
+/* Tab Bar 图标 — 24px，未选中灰/选中主题色 */
+.tab-item .tab-icon .van-icon {
+  font-size: 24px;
+  color: #C8C9CC;
+  transition: color 0.2s;
+}
+.tab-item.active .tab-icon .van-icon { color: var(--primary); }
+
+/* 员工端 Tab 主题色 */
+.staff-tab-bar .tab-item .tab-icon .van-icon { color: #C8C9CC; }
+.staff-tab-bar .tab-item.active .tab-icon .van-icon { color: #4A6CF7; }
+
+/* 快捷入口图标 — 32px，彩色 */
+.entry-icon .van-icon,
+.entry-icon,
+.action-icon .van-icon,
+.action-icon {
+  font-size: 32px;
+}
+
+/* 卡片头像 — 24px，柔和深色 */
+.reminder-avatar .van-icon,
+.rc-avatar .van-icon,
+.ac-avatar .van-icon,
+.tech-avatar .van-icon,
+.rl-avatar .van-icon,
+.perf-avatar .van-icon,
+.pd-icon .van-icon {
+  font-size: 24px;
+}
+
+/* 业务类型小图标 */
+.di-type .van-icon { font-size: 24px; }
+
+/* 排名奖牌图标 */
+.rank-num .van-icon { font-size: 14px; }
+
+/* 评分星星 — 金色 */
+.rc-stars .van-icon { font-size: 18px; color: #E8A849; }
+.score-meta .van-icon,
+.sm-stars .van-icon { font-size: 18px; color: #E8A849; }
+
+/* 导航主页卡片图标 — 32px */
+.card-emoji .van-icon { font-size: 32px; }
+
+/* 分组标题图标 */
+.group-title .van-icon { font-size: 14px; color: rgba(255,255,255,0.4); vertical-align: middle; }
+
+/* Dashboard 图标 */
+.admin-action .van-icon { font-size: 32px; }
+
+/* 操作按钮内图标 */
+.ac-meta-item .van-icon { font-size: 14px; color: var(--text-tertiary); }
+.ac-note .van-icon { font-size: 13px; color: var(--text-tertiary); }
+
+/* 登录页图标 */
+.logo-icon .van-icon { font-size: 40px; color: var(--primary); }
+.wx-icon .van-icon { font-size: 24px; color: #07C160; }
+
+/* 二维码中心图标 */
+.qr-center-logo .van-icon { font-size: 28px; color: var(--primary); }
+
+/* 交易类型图标 */
+.tx-icon .van-icon { font-size: 24px; }
+
+/* 步骤圆点图标 */
+.step-dot .van-icon { font-size: 12px; color: white; }

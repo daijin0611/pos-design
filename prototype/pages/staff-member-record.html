@@ -302,13 +302,13 @@
       <!-- Step 1: Search member -->
       <div class="search-area">
         <div class="search-box">
-          <span class="s-icon">🔍</span>
+          <span class="s-icon"><i class="van-icon van-icon-search" style="color: var(--text-tertiary);"></i></span>
           <input class="s-input" type="text" placeholder="搜索会员姓名 / 手机号" id="memberSearch">
         </div>
       </div>
       <div class="search-results" id="searchResults">
         <div class="sr-item" onclick="selectMember(this)">
-          <div class="sr-avatar" style="background: var(--primary-light);">👩</div>
+          <div class="sr-avatar" style="background: var(--primary-light);"><i class="van-icon van-icon-contact" style="color: #2CB5A0;"></i></div>
           <div class="sr-info">
             <h4>李女士</h4>
             <p>138****6789 · 金卡会员</p>
@@ -316,7 +316,7 @@
           <span class="sr-tag" style="background: var(--accent-light); color: var(--accent-dark);">金卡</span>
         </div>
         <div class="sr-item" onclick="selectMember(this)">
-          <div class="sr-avatar" style="background: var(--secondary-light);">👩</div>
+          <div class="sr-avatar" style="background: var(--secondary-light);"><i class="van-icon van-icon-contact" style="color: #F5A0B5;"></i></div>
           <div class="sr-info">
             <h4>王女士</h4>
             <p>139****1234 · 银卡会员</p>
@@ -324,7 +324,7 @@
           <span class="sr-tag" style="background: #E8E8E8; color: var(--text-secondary);">银卡</span>
         </div>
         <div class="sr-item" onclick="selectMember(this)">
-          <div class="sr-avatar" style="background: #E8F4FD;">👩</div>
+          <div class="sr-avatar" style="background: #E8F4FD;"><i class="van-icon van-icon-contact" style="color: #5B9BD5;"></i></div>
           <div class="sr-info">
             <h4>张女士</h4>
             <p>137****5678 · 普通会员</p>
@@ -332,7 +332,7 @@
           <span class="sr-tag" style="background: var(--bg-primary); color: var(--text-tertiary);">普通</span>
         </div>
         <div class="sr-item" onclick="selectMember(this)">
-          <div class="sr-avatar" style="background: var(--accent-light);">👩</div>
+          <div class="sr-avatar" style="background: var(--accent-light);"><i class="van-icon van-icon-contact" style="color: #E8A849;"></i></div>
           <div class="sr-info">
             <h4>赵女士</h4>
             <p>136****9012 · 银卡会员</p>
@@ -344,7 +344,7 @@
       <!-- Step 2: Member info (auto-filled) -->
       <div class="member-card animate-in" id="memberCard">
         <div class="mc-header">
-          <div class="mc-avatar" style="background: var(--primary-light);">👩</div>
+          <div class="mc-avatar" style="background: var(--primary-light);"><i class="van-icon van-icon-contact" style="color: #2CB5A0;"></i></div>
           <div class="mc-user">
             <h4>李女士</h4>
             <p>138****6789 · 金卡会员 · 累计消费 ¥28,600</p>
@@ -373,36 +373,36 @@
       <div class="form-section show" id="formSection">
 
         <!-- Select service -->
-        <div class="fs-title">💆 服务项目</div>
+        <div class="fs-title"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i> 服务项目</div>
         <div class="service-list">
           <div class="svc-item selected" onclick="toggleService(this)">
-            <div class="svc-icon" style="background: #EBF0FF;">💆</div>
+            <div class="svc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
             <div class="svc-info">
               <h4>肩颈深度调理</h4>
               <p>60分钟 · 针对肩颈劳损、僵硬</p>
             </div>
-            <div class="svc-check">✓</div>
+            <div class="svc-check"><i class="van-icon van-icon-success" style="color: white;"></i></div>
           </div>
           <div class="svc-item" onclick="toggleService(this)">
-            <div class="svc-icon" style="background: var(--primary-light);">💆</div>
+            <div class="svc-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-service-o" style="color: #2CB5A0;"></i></div>
             <div class="svc-info">
               <h4>全身精油SPA</h4>
               <p>90分钟 · 全身放松舒缓</p>
             </div>
-            <div class="svc-check">✓</div>
+            <div class="svc-check"><i class="van-icon van-icon-success" style="color: white;"></i></div>
           </div>
           <div class="svc-item" onclick="toggleService(this)">
-            <div class="svc-icon" style="background: var(--secondary-light);">💆</div>
+            <div class="svc-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-service-o" style="color: #F5A0B5;"></i></div>
             <div class="svc-info">
               <h4>面部精华护理</h4>
               <p>45分钟 · 深层补水修护</p>
             </div>
-            <div class="svc-check">✓</div>
+            <div class="svc-check"><i class="van-icon van-icon-success" style="color: white;"></i></div>
           </div>
         </div>
 
         <!-- Follow-up date & session -->
-        <div class="fs-title">📅 回访安排</div>
+        <div class="fs-title"><i class="van-icon van-icon-edit" style="color: #2CB5A0;"></i> 回访安排</div>
         <div class="form-row">
           <div class="form-field">
             <label>计划回访日期</label>
@@ -419,20 +419,20 @@
         </div>
 
         <!-- Description -->
-        <div class="fs-title">📝 修复调理详情</div>
+        <div class="fs-title"><i class="van-icon van-icon-edit" style="color: #2CB5A0;"></i> 修复调理详情</div>
         <textarea class="textarea-field" placeholder="请描述本次调理的详细情况，如客户状况、调理手法、改善情况、注意事项等…">客户肩颈僵硬情况较上次有明显改善，颈椎两侧肌肉紧张度降低。本次重点做了深层筋膜松解和热石理疗，客户反馈舒适度很好。
 
 建议：下次调理可增加颈部牵引动作，同时客户日常注意减少低头使用手机时间。</textarea>
 
         <!-- Photos -->
-        <div class="fs-title">📷 现场照片（选填）</div>
+        <div class="fs-title"><i class="van-icon van-icon-edit" style="color: #2CB5A0;"></i> 现场照片（选填）</div>
         <div class="photo-grid">
           <div class="photo-item">
-            <div class="photo-placeholder" style="background: var(--primary-light);">🌿</div>
+            <div class="photo-placeholder" style="background: var(--primary-light);"></div>
             <div class="photo-remove">×</div>
           </div>
           <div class="photo-item">
-            <div class="photo-placeholder" style="background: #EBF0FF;">📋</div>
+            <div class="photo-placeholder" style="background: #EBF0FF;"></div>
             <div class="photo-remove">×</div>
           </div>
           <div class="photo-add">
@@ -450,21 +450,21 @@
     </div>
 
     <!-- Tab Bar -->
-    <div class="tab-bar">
+    <div class="tab-bar staff-tab-bar">
       <div class="tab-item" onclick="location.href='staff-home.html'">
-        <span class="tab-icon">🏠</span>
+        <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
         <span class="tab-label">工作台</span>
       </div>
       <div class="tab-item active">
-        <span class="tab-icon">👥</span>
+        <span class="tab-icon"><i class="van-icon van-icon-friends-o"></i></span>
         <span class="tab-label">会员</span>
       </div>
       <div class="tab-item">
-        <span class="tab-icon">🔔</span>
+        <span class="tab-icon"><i class="van-icon van-icon-bell"></i></span>
         <span class="tab-label">提醒</span>
       </div>
       <div class="tab-item">
-        <span class="tab-icon">👤</span>
+        <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
         <span class="tab-label">我的</span>
       </div>
     </div>
