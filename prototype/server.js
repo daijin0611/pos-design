@@ -18,9 +18,9 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, () => {
   console.log('');
-  console.log('  🌿 POS H5 高保真原型服务器已启动');
-  console.log(`  📍 访问地址: http://localhost:${PORT}`);
-  console.log(`  📱 手机访问: http://<你的IP>:${PORT}`);
-  console.log('  ⏹  按 Ctrl+C 停止服务器');
+  console.log('  POS H5 高保真原型服务器已启动');
+  console.log(`  访问地址: http://localhost:${PORT}`);
+  console.log(`  手机访问: http://<你的IP>:${PORT}`);
+  console.log('  按 Ctrl+C 停止服务器');
   console.log('');
 });

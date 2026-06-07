@@ -7,6 +7,7 @@ import {
   remindersData,
   birthdaysData,
   memberProfiles,
+  todayOverviewData,
 } from '../mock/staff'
 
 export const useStaffStore = defineStore('staff', () => {
@@ -80,6 +81,8 @@ export const useStaffStore = defineStore('staff', () => {
 
   const todayDoneCount = computed(() => completedReminders.value.length)
 
+  const todayOverview = ref(todayOverviewData.metrics)
+
   return {
     info,
     currentMonth,
@@ -99,5 +102,6 @@ export const useStaffStore = defineStore('staff', () => {
     getMemberProfile,
     todayTodoCount,
     todayDoneCount,
+    todayOverview,
   }
 })

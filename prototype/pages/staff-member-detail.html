@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>会员详情 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    /* ===== Nav ===== */
+    .nav-bar {
+      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
+    }
+    .nav-bar .nav-title { color: white; }
+    .nav-bar .nav-back { color: white; }
+    .nav-bar .nav-right { color: white; font-size: 13px; cursor: pointer; }
+
+    /* ===== Header area ===== */
+    .header-area {
+      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
+      padding: 0 var(--space-lg) var(--space-xxl);
+      position: relative;
+    }
+    .header-area::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: 0; right: 0;
+      height: 40px;
+      background: var(--bg-primary);
+      border-radius: 24px 24px 0 0;
+    }
+
+    .member-header {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) 0;
+    }
+    .mh-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; flex-shrink: 0;
+    }
+    .mh-info { flex: 1; }
+    .mh-name { font: 600 20px / 1.3 var(--font-family); color: white; }
+    .mh-meta { font: 400 12px / 1.4 var(--font-family); color: rgba(255,255,255,0.7); margin-top: 2px; }
+    .mh-level {
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.2);
+      font: 500 11px / 1 var(--font-family); color: white;
+      display: inline-block; margin-top: 4px;
+    }
+
+    /* ===== Stats card ===== */
+    .stats-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-xl);
+      padding: var(--space-lg) var(--space-sm);
+      display: flex; justify-content: space-around;
+      position: relative; z-index: 1;
+      margin: -24px var(--space-lg) 0;
+      box-shadow: 0 4px 24px rgba(74, 108, 247, 0.15);
+    }
+    .stats-item { text-align: center; flex: 1; }
+    .stats-value { font: 700 16px / 1.2 var(--font-family); }
+    .stats-label { font: 400 10px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+
+    /* ===== Tags ===== */
+    .section {
+      padding: var(--space-lg) var(--space-lg) 0;
+    }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: var(--space-md);
+    }
+    .section-title {
+      font: 600 14px / 1 var(--font-family); color: var(--text-primary);
+    }
+    .section-more {
+      font: 400 12px / 1 var(--font-family); color: var(--text-tertiary); cursor: pointer;
+    }
+    .tags-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag-item {
+      padding: 4px 12px; border-radius: var(--radius-pill);
+      font: 500 11px / 1.2 var(--font-family);
+    }
+
+    /* ===== Record list ===== */
+    .record-card {
+      display: flex; gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-sm);
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .record-card:active { background: var(--bg-primary); }
+    .rc-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .rc-info { flex: 1; min-width: 0; }
+    .rc-title { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
+    .rc-meta { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+    .rc-note { font: 400 12px / 1.4 var(--font-family); color: var(--text-secondary); margin-top: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rc-right { flex-shrink: 0; text-align: right; }
+    .rc-date { font: 400 11px / 1 var(--font-family); color: var(--text-tertiary); }
+    .rc-session { font: 500 11px / 1 var(--font-family); color: #4A6CF7; margin-top: 2px; }
+
+    /* ===== Submit ===== */
+    .submit-area { padding: var(--space-lg) var(--space-lg) var(--space-xxl); }
+    .submit-btn {
+      width: 100%; padding: 14px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
+      color: white; font: 600 16px / 1 var(--font-family);
+      border: none; cursor: pointer; transition: opacity 0.2s;
+      text-decoration: none; display: block; text-align: center;
+    }
+    .submit-btn:active { opacity: 0.85; }
+
+    .page-nav {
+      position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
+    }
+    .page-nav a {
+      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
+      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .page-nav a:hover { background: var(--primary); color: white; }
+    .page-nav a.active { background: var(--primary); color: white; }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html">会员</a>
+    <a href="staff-home.html" class="active">员工</a>
+    <a href="admin-home.html">管理</a>
+    <a href="global-login.html">登录</a>
+  </div>
+
+  <div class="phone-frame">
+    <div class="status-bar light">9:41</div>
+
+    <!-- Nav bar -->
+    <div class="nav-bar">
+      <div class="nav-back" onclick="history.back()">‹</div>
+      <span class="nav-title">会员详情</span>
+      <div class="nav-right"><i class="van-icon van-icon-edit"></i> 编辑</div>
+    </div>
+
+    <div class="page-content">
+      <!-- Header -->
+      <div class="header-area">
+        <div class="member-header">
+          <div class="mh-avatar"><i class="van-icon van-icon-contact" style="color: white;"></i></div>
+          <div class="mh-info">
+            <div class="mh-name">李女士</div>
+            <div class="mh-meta">138****6789 · LD20260008</div>
+            <span class="mh-level">金卡会员</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-card animate-in">
+        <div class="stats-item">
+          <div class="stats-value" style="color: #2CB5A0;">¥3,280</div>
+          <div class="stats-label">余额</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-value" style="color: #E8A849;">1,560</div>
+          <div class="stats-label">积分</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-value" style="color: #4A6CF7;">42</div>
+          <div class="stats-label">到店次数</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-value" style="color: #8B5CF6;">¥28,600</div>
+          <div class="stats-label">累计消费</div>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="section animate-in delay-1">
+        <div class="section-header">
+          <span class="section-title">健康标签</span>
+        </div>
+        <div class="tags-wrap">
+          <span class="tag-item" style="background: #EBF0FF; color: #4A6CF7;">肩颈问题</span>
+          <span class="tag-item" style="background: var(--secondary-light); color: var(--secondary-dark);">过敏体质</span>
+          <span class="tag-item" style="background: var(--accent-light); color: var(--accent-dark);">偏好轻柔手法</span>
+        </div>
+      </div>
+
+      <!-- Treatment records -->
+      <div class="section animate-in delay-2">
+        <div class="section-header">
+          <span class="section-title">调理记录 (12次)</span>
+          <span class="section-more">查看全部 ›</span>
+        </div>
+
+        <div class="record-card">
+          <div class="rc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
+          <div class="rc-info">
+            <div class="rc-title">肩颈深度调理</div>
+            <div class="rc-meta">张技师 · 60分钟</div>
+            <div class="rc-note">肩颈僵硬明显改善，做了深层筋膜松解和热石理疗</div>
+          </div>
+          <div class="rc-right">
+            <div class="rc-date">05-18</div>
+            <div class="rc-session">第4次</div>
+          </div>
+        </div>
+
+        <div class="record-card">
+          <div class="rc-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-service-o" style="color: #2CB5A0;"></i></div>
+          <div class="rc-info">
+            <div class="rc-title">肩颈深度调理</div>
+            <div class="rc-meta">张技师 · 60分钟</div>
+            <div class="rc-note">颈椎两侧肌肉紧张，重点松解斜方肌</div>
+          </div>
+          <div class="rc-right">
+            <div class="rc-date">05-08</div>
+            <div class="rc-session">第3次</div>
+          </div>
+        </div>
+
+        <div class="record-card">
+          <div class="rc-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-service-o" style="color: #F5A0B5;"></i></div>
+          <div class="rc-info">
+            <div class="rc-title">面部精华护理</div>
+            <div class="rc-meta">李技师 · 45分钟</div>
+            <div class="rc-note">深层补水修护，客户反馈良好</div>
+          </div>
+          <div class="rc-right">
+            <div class="rc-date">04-28</div>
+            <div class="rc-session">第2次</div>
+          </div>
+        </div>
+
+        <div class="record-card">
+          <div class="rc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
+          <div class="rc-info">
+            <div class="rc-title">肩颈深度调理</div>
+            <div class="rc-meta">张技师 · 60分钟</div>
+            <div class="rc-note">初次调理，客户肩颈劳损较严重</div>
+          </div>
+          <div class="rc-right">
+            <div class="rc-date">04-18</div>
+            <div class="rc-session">第1次</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add record button -->
+      <div class="submit-area animate-in delay-3">
+        <a href="staff-member-record.html" class="submit-btn">+ 新增调理记录</a>
+      </div>
+
+      <div style="height: 8px;"></div>
+    </div>
+
+    <!-- Tab Bar (Staff) -->
+    <div class="tab-bar staff-tab-bar">
+      <div class="tab-item" onclick="location.href='staff-home.html'">
+        <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
+        <span class="tab-label">工作台</span>
+      </div>
+      <div class="tab-item active">
+        <span class="tab-icon"><i class="van-icon van-icon-friends-o"></i></span>
+        <span class="tab-label">会员</span>
+      </div>
+      <div class="tab-item" onclick="location.href='staff-reminder.html'">
+        <span class="tab-icon"><i class="van-icon van-icon-bell"></i></span>
+        <span class="tab-label">提醒</span>
+      </div>
+      <div class="tab-item" onclick="location.href='staff-profile.html'">
+        <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
+        <span class="tab-label">我的</span>
+      </div>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+
+  <script src="../js/prototype.js"></script>
+</body>
+</html>

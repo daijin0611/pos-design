@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我的 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    /* Header */
+    .header-area {
+      background: var(--primary-gradient);
+      padding: 0 var(--space-lg) var(--space-xxl);
+      position: relative;
+      text-align: center;
+    }
+
+    .header-area::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: var(--bg-primary);
+      border-radius: 24px 24px 0 0;
+    }
+
+    .profile-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      margin: 0 auto var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+
+    .profile-name {
+      font: 600 20px / 1.3 var(--font-family);
+      color: var(--text-inverse);
+    }
+
+    .profile-meta {
+      font: 400 12px / 1.4 var(--font-family);
+      color: rgba(255,255,255,0.75);
+      margin-top: 4px;
+    }
+
+    /* Stats card */
+    .stats-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-xl);
+      padding: var(--space-lg) var(--space-sm);
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+      z-index: 1;
+      margin: -24px var(--space-lg) 0;
+      box-shadow: 0 4px 24px rgba(44, 181, 160, 0.15);
+    }
+
+    .stats-item {
+      text-align: center;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .stats-item .stats-value {
+      font: 700 18px / 1.2 var(--font-family);
+    }
+
+    .stats-item .stats-label {
+      font: 400 10px / 1.3 var(--font-family);
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+
+    .stats-item.balance .stats-value { color: var(--primary); }
+    .stats-item.coupons .stats-value { color: var(--secondary); }
+    .stats-item.orders .stats-value { color: var(--text-secondary); }
+
+    /* Member cards */
+    .cards-section {
+      margin: var(--space-lg) var(--space-lg) 0;
+    }
+    .cards-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+    .cards-header .ch-title {
+      font: 600 15px / 1 var(--font-family);
+      color: var(--text-primary);
+    }
+    .cards-header .ch-count {
+      font: 400 12px / 1 var(--font-family);
+      color: var(--text-placeholder);
+    }
+    .member-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      margin-bottom: var(--space-md);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .member-card:active { transform: scale(0.98); }
+    .mc-banner {
+      padding: var(--space-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    .mc-banner::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+    }
+    .mc-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      right: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .mc-banner.gold { background: linear-gradient(135deg, #C9A96E 0%, #E8C878 50%, #D4A94E 100%); }
+    .mc-banner.silver { background: linear-gradient(135deg, #8E9AAF 0%, #B8C4D0 50%, #9EAAB8 100%); }
+    .mc-banner.platinum { background: linear-gradient(135deg, #2CB5A0 0%, #3DD1BA 50%, #25A090 100%); }
+    .mc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      z-index: 1;
+    }
+    .mc-type {
+      font: 600 14px / 1 var(--font-family);
+      color: white;
+      background: rgba(255,255,255,0.2);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .mc-store {
+      font: 400 12px / 1 var(--font-family);
+      color: rgba(255,255,255,0.85);
+      margin-top: 6px;
+    }
+    .mc-no {
+      font: 400 11px / 1 var(--font-family);
+      color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+    }
+    .mc-discount {
+      text-align: right;
+    }
+    .mc-discount-value {
+      font: 700 24px / 1 var(--font-family);
+      color: white;
+    }
+    .mc-discount-label {
+      font: 400 10px / 1 var(--font-family);
+      color: rgba(255,255,255,0.7);
+      margin-top: 2px;
+    }
+    .mc-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white);
+    }
+    .mc-balance-label {
+      font: 400 11px / 1 var(--font-family);
+      color: var(--text-tertiary);
+    }
+    .mc-balance-value {
+      font: 700 20px / 1.2 var(--font-family);
+      color: var(--primary);
+      margin-top: 2px;
+    }
+    .mc-balance-value::before {
+      content: '¥';
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .mc-action {
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      font: 500 12px / 1 var(--font-family);
+      color: var(--primary);
+      background: var(--primary-light);
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Menu list */
+    .menu-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      margin: var(--space-lg) var(--space-lg) var(--space-sm);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: var(--space-md) var(--space-lg);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .menu-item:active {
+      background: var(--border-light);
+    }
+
+    .menu-item + .menu-item {
+      border-top: 1px solid var(--border-light);
+    }
+
+    .menu-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-right: var(--space-md);
+      flex-shrink: 0;
+    }
+
+    .menu-text {
+      flex: 1;
+      font: 500 14px / 1.3 var(--font-family);
+      color: var(--text-primary);
+    }
+
+    .menu-arrow {
+      color: var(--text-placeholder);
+      font-size: 14px;
+    }
+
+    /* Page nav */
+    .page-nav {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 100;
+      display: flex;
+      gap: 6px;
+    }
+
+    .page-nav a {
+      display: inline-flex;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family);
+      background: rgba(255,255,255,0.9);
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .page-nav a:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .page-nav a.active {
+      background: var(--primary);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html">会员</a>
+    <a href="member-profile.html" class="active">我的</a>
+    <a href="staff-home.html">员工</a>
+    <a href="admin-home.html">管理</a>
+    <a href="global-login.html">登录</a>
+  </div>
+
+  <div class="phone-frame">
+    <!-- Status bar -->
+    <div class="status-bar light">9:41</div>
+
+    <!-- Scrollable content -->
+    <div class="page-content">
+      <!-- Header with gradient -->
+      <div class="header-area">
+        <div style="padding-top: var(--space-md);"></div>
+        <div class="profile-avatar"><i class="van-icon van-icon-user-o" style="color: white;"></i></div>
+        <div class="profile-name">张小姐</div>
+        <div class="profile-meta">金卡会员 · LD20260001</div>
+      </div>
+
+      <!-- Stats row -->
+      <div class="stats-card animate-in">
+        <a href="member-balance.html" class="stats-item balance" style="text-decoration:none;">
+          <div class="stats-value">¥3,280</div>
+          <div class="stats-label">余额</div>
+        </a>
+        <a href="member-coupon.html" class="stats-item coupons" style="text-decoration:none;">
+          <div class="stats-value">3</div>
+          <div class="stats-label">优惠券</div>
+        </a>
+        <div class="stats-item orders">
+          <div class="stats-value">28</div>
+          <div class="stats-label">消费</div>
+        </div>
+      </div>
+
+      <!-- Member cards -->
+      <div class="cards-section animate-in delay-1">
+        <div class="cards-header">
+          <span class="ch-title">我的会员卡</span>
+          <span class="ch-count">共 3 张</span>
+        </div>
+
+        <!-- Card 1: Gold — Wanda -->
+        <div class="member-card">
+          <div class="mc-banner gold">
+            <div class="mc-top">
+              <div>
+                <div class="mc-type">金卡</div>
+                <div class="mc-store">万达店</div>
+                <div class="mc-no">LD20260001</div>
+              </div>
+              <div class="mc-discount">
+                <div class="mc-discount-value">8折</div>
+                <div class="mc-discount-label">专属折扣</div>
+              </div>
+            </div>
+          </div>
+          <div class="mc-bottom">
+            <div>
+              <div class="mc-balance-label">卡内余额</div>
+              <div class="mc-balance-value">3,280.00</div>
+            </div>
+            <button class="mc-action">查看详情</button>
+          </div>
+        </div>
+
+        <!-- Card 2: Silver — Yintai -->
+        <div class="member-card">
+          <div class="mc-banner silver">
+            <div class="mc-top">
+              <div>
+                <div class="mc-type">银卡</div>
+                <div class="mc-store">银泰店</div>
+                <div class="mc-no">LD20260042</div>
+              </div>
+              <div class="mc-discount">
+                <div class="mc-discount-value">9折</div>
+                <div class="mc-discount-label">专属折扣</div>
+              </div>
+            </div>
+          </div>
+          <div class="mc-bottom">
+            <div>
+              <div class="mc-balance-label">卡内余额</div>
+              <div class="mc-balance-value">1,200.00</div>
+            </div>
+            <button class="mc-action">查看详情</button>
+          </div>
+        </div>
+
+        <!-- Card 3: Platinum — Longhu -->
+        <div class="member-card">
+          <div class="mc-banner platinum">
+            <div class="mc-top">
+              <div>
+                <div class="mc-type">铂金卡</div>
+                <div class="mc-store">龙湖店</div>
+                <div class="mc-no">LD20260088</div>
+              </div>
+              <div class="mc-discount">
+                <div class="mc-discount-value">7折</div>
+                <div class="mc-discount-label">专属折扣</div>
+              </div>
+            </div>
+          </div>
+          <div class="mc-bottom">
+            <div>
+              <div class="mc-balance-label">卡内余额</div>
+              <div class="mc-balance-value">800.00</div>
+            </div>
+            <button class="mc-action">查看详情</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu list -->
+      <div class="menu-card animate-in delay-1">
+        <div class="menu-item">
+          <div class="menu-icon" style="background: #E8F4FD;"><i class="van-icon van-icon-location-o" style="color: #5B9BD5;"></i></div>
+          <span class="menu-text">收货地址</span>
+          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-chat-o" style="color: #2CB5A0;"></i></div>
+          <span class="menu-text">联系客服</span>
+          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-edit" style="color: #E8A849;"></i></div>
+          <span class="menu-text">意见反馈</span>
+          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-info-o" style="color: #F5A0B5;"></i></div>
+          <span class="menu-text">关于我们</span>
+          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon" style="background: #F0F0F0;"><i class="van-icon van-icon-setting-o" style="color: #999;"></i></div>
+          <span class="menu-text">设置</span>
+          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
+        </div>
+      </div>
+
+      <div style="height: 24px;"></div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <a href="member-home.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
+        <span class="tab-label">首页</span>
+      </a>
+      <a href="member-profile.html" class="tab-item active" style="text-decoration:none;">
+        <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
+        <span class="tab-label">我的</span>
+      </a>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+</body>
+</html>

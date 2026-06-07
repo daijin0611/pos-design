@@ -339,3 +339,16 @@ export const memberProfiles = {
     ],
   },
 }
+
+/** 今日数据概览 */
+export const todayOverviewData = {
+  date: '2026-06-07',
+  metrics: [
+    { key: 'salary', name: '今日工资', value: 380.00, unit: '元', icon: 'gold-coin-o', color: '#2CB5A0', bg: '#E8F8F5' },
+    { key: 'performance', name: '今日业绩', value: 1560.00, unit: '元', icon: 'chart-trending-o', color: '#5B9BD5', bg: '#EBF3FB' },
+    { key: 'project', name: '项目数', value: 5, unit: '个', icon: 'records-o', color: '#E8A849', bg: '#F8EFE1' },
+    { key: 'product', name: '产品数', value: 3, unit: '件', icon: 'gift-o', color: '#F5A0B5', bg: '#FEF0F4' },
+    { key: 'courseCard', name: '疗程卡', value: 2, unit: '张', icon: 'card', color: '#8B5CF6', bg: '#F0E8F8' },
+    { key: 'recharge', name: '充值', value: 2000.00, unit: '元', icon: 'balance-pay', color: '#2CB5A0', bg: '#E8F8F5' },
+  ],
+}

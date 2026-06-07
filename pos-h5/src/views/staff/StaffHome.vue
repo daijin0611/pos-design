@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 import { useStaffStore } from '../../stores/staff'
 import GreetingHeader from '../../components/staff/GreetingHeader.vue'
-import TodoSummary from '../../components/staff/TodoSummary.vue'
+import TodayOverview from '../../components/staff/TodayOverview.vue'
 import SalaryCard from '../../components/staff/SalaryCard.vue'
 import FollowupItem from '../../components/staff/FollowupItem.vue'
 import BirthdayItem from '../../components/staff/BirthdayItem.vue'
@@ -24,7 +24,7 @@ const quickEntries = [
     </div>
 
     <div style="margin-top: -10px; position: relative; z-index: 1; padding-top: 4px;">
-      <TodoSummary />
+      <TodayOverview />
     </div>
 
     <div class="staff-section-header" style="margin-top: 16px;">

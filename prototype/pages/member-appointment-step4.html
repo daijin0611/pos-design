@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>新建预约 · 确认 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    .step-bar {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: var(--space-lg); background: var(--bg-white);
+    }
+    .step-item { display: flex; flex-direction: column; align-items: center; }
+    .step-dot {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font: 600 11px / 1 var(--font-family); color: white; background: var(--border);
+    }
+    .step-dot.active { background: var(--primary); box-shadow: 0 2px 8px rgba(44,181,160,0.3); }
+    .step-dot.done { background: var(--success); }
+    .step-line { width: 30px; height: 2px; background: var(--border); margin: 11px 4px 0; }
+    .step-line.done { background: var(--success); }
+    .step-label { font: 400 10px / 1 var(--font-family); color: var(--text-tertiary); margin-top: 4px; }
+    .step-item.active .step-label { color: var(--primary); font-weight: 600; }
+    .step-item.done .step-label { color: var(--success); }
+
+    /* Confirm card */
+    .confirm-card {
+      margin: var(--space-md) var(--space-lg);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .confirm-card-header {
+      background: var(--primary-gradient);
+      padding: var(--space-lg);
+      color: white;
+    }
+    .confirm-card-header h3 {
+      font: 600 16px / 1.3 var(--font-family);
+    }
+    .confirm-card-header p {
+      font: 400 12px / 1.4 var(--font-family);
+      color: rgba(255,255,255,0.8);
+      margin-top: 4px;
+    }
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-md) var(--space-lg);
+    }
+    .confirm-row:not(:last-child) {
+      border-bottom: 1px solid var(--border-light);
+    }
+    .confirm-label {
+      font: 400 13px / 1 var(--font-family);
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .confirm-label .cr-icon {
+      font-size: 14px;
+      color: var(--text-placeholder);
+    }
+    .confirm-value {
+      font: 500 13px / 1 var(--font-family);
+      color: var(--text-primary);
+    }
+
+    /* Service detail */
+    .svc-detail-list {
+      padding: 0 var(--space-lg) var(--space-md);
+    }
+    .svc-detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-sm) 0;
+    }
+    .svc-detail-item + .svc-detail-item {
+      border-top: 1px dashed var(--border-light);
+    }
+    .sdi-left {
+      display: flex; align-items: center; gap: var(--space-sm);
+    }
+    .sdi-dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--text-placeholder); flex-shrink: 0;
+    }
+    .sdi-name {
+      font: 400 13px / 1.3 var(--font-family); color: var(--text-secondary);
+    }
+    .sdi-price {
+      font: 500 13px / 1 var(--font-family); color: var(--text-primary);
+    }
+
+    /* Total bar */
+    .total-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-light);
+      margin: 0 var(--space-lg);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+    .total-label {
+      font: 400 13px / 1 var(--font-family); color: var(--text-tertiary);
+    }
+    .total-amount {
+      font: 700 22px / 1.2 var(--font-family); color: var(--accent-dark);
+    }
+    .total-amount::before { content: '¥'; font-size: 14px; font-weight: 600; }
+
+    /* Pay method */
+    .pay-section {
+      margin: var(--space-md) var(--space-lg);
+    }
+    .pay-option {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg); background: var(--bg-white);
+      border-radius: var(--radius-md); margin-bottom: var(--space-sm);
+      box-shadow: var(--shadow-card); cursor: pointer;
+      border: 2px solid transparent; transition: all 0.2s;
+    }
+    .pay-option.selected { border-color: var(--primary); }
+    .pay-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .pay-info { flex: 1; }
+    .pay-info h4 { font: 500 13px / 1.3 var(--font-family); color: var(--text-primary); }
+    .pay-info p { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 1px; }
+    .pay-check {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 1.5px solid var(--border); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: white; transition: all 0.2s;
+    }
+    .pay-option.selected .pay-check { background: var(--primary); border-color: var(--primary); }
+
+    /* Remark */
+    .remark-input {
+      display: flex; align-items: center; gap: var(--space-sm);
+      margin: var(--space-md) var(--space-lg); padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white); border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+    }
+    .remark-input .remark-icon { font-size: 16px; color: var(--text-placeholder); }
+    .remark-input input {
+      flex: 1; border: none; outline: none; font: 400 13px / 1.3 var(--font-family);
+      color: var(--text-primary); background: transparent;
+    }
+    .remark-input input::placeholder { color: var(--text-placeholder); }
+
+    .bottom-bar {
+      position: sticky; bottom: 0; background: var(--bg-white);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .bottom-bar .total { font: 700 22px / 1 var(--font-family); color: var(--accent-dark); }
+    .bottom-bar .total::before { content: '¥'; font-size: 14px; }
+
+    .page-nav { position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px; }
+    .page-nav a {
+      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
+      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .page-nav a:hover { background: var(--primary); color: white; }
+    .page-nav a.active { background: var(--primary); color: white; }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html" class="active">会员</a>
+    <a href="staff-home.html">员工</a>
+    <a href="admin-home.html">管理</a>
+    <a href="global-login.html">登录</a>
+  </div>
+
+  <div class="phone-frame">
+    <div class="status-bar">9:41</div>
+    <div class="nav-bar">
+      <div class="nav-back" onclick="history.back()">‹</div>
+      <span class="nav-title">预约服务</span>
+    </div>
+
+    <div class="page-content">
+      <!-- Step bar -->
+      <div class="step-bar animate-in">
+        <div class="step-item done">
+          <div class="step-dot done"><i class="van-icon van-icon-success" style="color:white;"></i></div>
+          <div class="step-label">选店</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step-item done">
+          <div class="step-dot done"><i class="van-icon van-icon-success" style="color:white;"></i></div>
+          <div class="step-label">选项目</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step-item done">
+          <div class="step-dot done"><i class="van-icon van-icon-success" style="color:white;"></i></div>
+          <div class="step-label">选时间</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step-item active">
+          <div class="step-dot active">4</div>
+          <div class="step-label">确认</div>
+        </div>
+      </div>
+
+      <!-- Confirm info card -->
+      <div class="confirm-card animate-in delay-1">
+        <div class="confirm-card-header">
+          <h3>刘丽德健康 · 万达店</h3>
+          <p>杭州市西湖区万达广场3楼 L308</p>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-label"><span class="cr-icon"><i class="van-icon van-icon-clock-o"></i></span> 预约时间</span>
+          <span class="confirm-value">5月30日 周五 14:00</span>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-label"><span class="cr-icon"><i class="van-icon van-icon-contact"></i></span> 指定技师</span>
+          <span class="confirm-value">张技师</span>
+        </div>
+        <div class="confirm-row" style="flex-direction: column; align-items: flex-start;">
+          <span class="confirm-label" style="margin-bottom: var(--space-sm);"><span class="cr-icon"><i class="van-icon van-icon-orders-o"></i></span> 服务项目</span>
+          <div class="svc-detail-list" style="width: 100%; padding: 0;">
+            <div class="svc-detail-item">
+              <div class="sdi-left">
+                <span class="sdi-dot"></span>
+                <span class="sdi-name">肩颈深度调理 · 60分钟</span>
+              </div>
+              <span class="sdi-price">¥298.00</span>
+            </div>
+            <div class="svc-detail-item">
+              <div class="sdi-left">
+                <span class="sdi-dot"></span>
+                <span class="sdi-name">全身精油SPA · 90分钟</span>
+              </div>
+              <span class="sdi-price">¥498.00</span>
+            </div>
+          </div>
+        </div>
+        <div class="total-bar">
+          <span class="total-label">共 2 项 · 预计 150 分钟</span>
+          <span class="total-amount">796</span>
+        </div>
+      </div>
+
+      <!-- Remark -->
+      <div class="remark-input animate-in delay-3">
+        <span class="remark-icon"><i class="van-icon van-icon-edit"></i></span>
+        <input type="text" placeholder="备注（选填，如特殊需求等）">
+      </div>
+
+      <div style="height: 80px;"></div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="bottom-bar">
+      <div>
+        <div style="font: 400 11px/1 var(--font-family); color: var(--text-tertiary);">合计</div>
+        <div class="total">796.00</div>
+      </div>
+      <a href="member-appointment.html" class="btn btn-primary" style="padding: 12px 32px; text-decoration:none;">提交预约</a>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+
+  <script src="../js/prototype.js"></script>
+  <script>
+    function selectPay(el) {
+      document.querySelectorAll('.pay-option').forEach(function(o) { o.classList.remove('selected'); });
+      el.classList.add('selected');
+    }
+  </script>
+</body>
+</html>

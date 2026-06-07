@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>新建预约 · 选项目 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    .step-bar {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: var(--space-lg); background: var(--bg-white);
+    }
+    .step-item { display: flex; flex-direction: column; align-items: center; }
+    .step-dot {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font: 600 11px / 1 var(--font-family); color: white; background: var(--border);
+    }
+    .step-dot.active { background: var(--primary); box-shadow: 0 2px 8px rgba(44,181,160,0.3); }
+    .step-dot.done { background: var(--success); }
+    .step-line { width: 30px; height: 2px; background: var(--border); margin: 11px 4px 0; }
+    .step-line.done { background: var(--success); }
+    .step-label { font: 400 10px / 1 var(--font-family); color: var(--text-tertiary); margin-top: 4px; }
+    .step-item.active .step-label { color: var(--primary); font-weight: 600; }
+    .step-item.done .step-label { color: var(--success); }
+
+    /* Category tabs */
+    .cat-tabs {
+      display: flex; gap: var(--space-sm); padding: var(--space-md) var(--space-lg);
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+    }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      padding: 6px 16px; border-radius: var(--radius-pill);
+      font: 500 12px / 1 var(--font-family); background: var(--bg-white);
+      color: var(--text-secondary); cursor: pointer; border: 1px solid var(--border);
+      white-space: nowrap; transition: all 0.2s;
+    }
+    .cat-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Service card */
+    .svc-card {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg); background: var(--bg-white);
+      border-radius: var(--radius-lg); margin: 0 var(--space-lg) var(--space-sm);
+      box-shadow: var(--shadow-card); cursor: pointer;
+      border: 2px solid transparent; transition: all 0.2s;
+    }
+    .svc-card.selected { border-color: var(--primary); background: var(--primary-light); }
+    .svc-card:active { transform: scale(0.98); }
+    .svc-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .svc-info { flex: 1; min-width: 0; }
+    .svc-info h4 { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
+    .svc-info p {
+      font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .svc-info .svc-tags { display: flex; gap: 4px; margin-top: 6px; }
+    .svc-tag {
+      padding: 1px 6px; border-radius: 4px;
+      font: 500 9px / 1.2 var(--font-family);
+    }
+    .svc-right { text-align: right; flex-shrink: 0; }
+    .svc-price { font: 700 16px / 1 var(--font-family); color: var(--accent-dark); }
+    .svc-price::before { content: '¥'; font-size: 11px; font-weight: 600; }
+    .svc-duration { font: 400 10px / 1 var(--font-family); color: var(--text-placeholder); margin-top: 2px; }
+    .svc-check {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 1.5px solid var(--border); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 11px; color: white; flex-shrink: 0; transition: all 0.2s;
+    }
+    .svc-card.selected .svc-check { background: var(--primary); border-color: var(--primary); }
+
+    /* Selected summary bar */
+    .bottom-bar {
+      position: sticky; bottom: 0; background: var(--bg-white);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .selected-summary { font: 400 13px / 1.3 var(--font-family); color: var(--text-secondary); }
+    .selected-summary .sel-count { font-weight: 600; color: var(--primary); }
+    .selected-summary .sel-total { font-weight: 700; color: var(--accent-dark); font-size: 18px; display: block; margin-top: 2px; }
+
+    .page-nav { position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px; }
+    .page-nav a {
+      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
+      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .page-nav a:hover { background: var(--primary); color: white; }
+    .page-nav a.active { background: var(--primary); color: white; }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html" class="active">会员</a>
+    <a href="staff-home.html">员工</a>
+    <a href="admin-home.html">管理</a>
+    <a href="global-login.html">登录</a>
+  </div>
+
+  <div class="phone-frame">
+    <div class="status-bar">9:41</div>
+    <div class="nav-bar">
+      <div class="nav-back" onclick="history.back()">‹</div>
+      <span class="nav-title">预约服务</span>
+    </div>
+
+    <div class="page-content">
+      <!-- Step bar -->
+      <div class="step-bar animate-in">
+        <div class="step-item done">
+          <div class="step-dot done"><i class="van-icon van-icon-success" style="color:white;"></i></div>
+          <div class="step-label">选店</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step-item active">
+          <div class="step-dot active">2</div>
+          <div class="step-label">选项目</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+          <div class="step-dot">3</div>
+          <div class="step-label">选时间</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+          <div class="step-dot">4</div>
+          <div class="step-label">确认</div>
+        </div>
+      </div>
+
+      <!-- Category tabs -->
+      <div class="cat-tabs animate-in delay-1">
+        <div class="cat-tab active">全部</div>
+        <div class="cat-tab">肩颈调理</div>
+        <div class="cat-tab">全身SPA</div>
+        <div class="cat-tab">面部护理</div>
+        <div class="cat-tab">足部调理</div>
+      </div>
+
+      <!-- Service list -->
+      <div id="svc-list" style="padding-top: var(--space-sm);">
+        <div class="svc-card selected animate-in delay-1" onclick="toggleSvc(this)">
+          <div class="svc-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-service-o" style="color: #F5A0B5;"></i></div>
+          <div class="svc-info">
+            <h4>肩颈深度调理</h4>
+            <p>深层放松肩颈肌肉 · 缓解酸痛疲劳</p>
+            <div class="svc-tags">
+              <span class="svc-tag" style="background: var(--primary-light); color: var(--primary);">热门</span>
+              <span class="svc-tag" style="background: var(--accent-light); color: var(--accent-dark);">会员8折</span>
+            </div>
+          </div>
+          <div class="svc-right">
+            <div class="svc-price">298</div>
+            <div class="svc-duration">60分钟</div>
+          </div>
+          <span class="svc-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+
+        <div class="svc-card selected animate-in delay-2" onclick="toggleSvc(this)">
+          <div class="svc-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-service-o" style="color: #E8A849;"></i></div>
+          <div class="svc-info">
+            <h4>全身精油SPA</h4>
+            <p>精油按摩 · 全身深度放松</p>
+            <div class="svc-tags">
+              <span class="svc-tag" style="background: var(--secondary-light); color: var(--secondary-dark);">招牌</span>
+            </div>
+          </div>
+          <div class="svc-right">
+            <div class="svc-price">498</div>
+            <div class="svc-duration">90分钟</div>
+          </div>
+          <span class="svc-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+
+        <div class="svc-card animate-in delay-3" onclick="toggleSvc(this)">
+          <div class="svc-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-service-o" style="color: #2CB5A0;"></i></div>
+          <div class="svc-info">
+            <h4>面部水光护理</h4>
+            <p>深层补水 · 提亮肤色</p>
+          </div>
+          <div class="svc-right">
+            <div class="svc-price">198</div>
+            <div class="svc-duration">45分钟</div>
+          </div>
+          <span class="svc-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+
+        <div class="svc-card animate-in delay-3" onclick="toggleSvc(this)">
+          <div class="svc-icon" style="background: #E8F4FD;"><i class="van-icon van-icon-service-o" style="color: #5B9BD5;"></i></div>
+          <div class="svc-info">
+            <h4>足部经络调理</h4>
+            <p>足底穴位按摩 · 促进血液循环</p>
+          </div>
+          <div class="svc-right">
+            <div class="svc-price">128</div>
+            <div class="svc-duration">40分钟</div>
+          </div>
+          <span class="svc-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+
+        <div class="svc-card animate-in delay-3" onclick="toggleSvc(this)">
+          <div class="svc-icon" style="background: #F0E8F8;"><i class="van-icon van-icon-service-o" style="color: #8B5CF6;"></i></div>
+          <div class="svc-info">
+            <h4>头部舒压按摩</h4>
+            <p>缓解头痛 · 改善睡眠</p>
+          </div>
+          <div class="svc-right">
+            <div class="svc-price">168</div>
+            <div class="svc-duration">30分钟</div>
+          </div>
+          <span class="svc-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+      </div>
+
+      <div style="height: 80px;"></div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="bottom-bar">
+      <div class="selected-summary">
+        已选 <span class="sel-count" id="sel-count">2</span> 项
+        <span class="sel-total" id="sel-total">¥796</span>
+      </div>
+      <a href="member-appointment-step3.html" class="btn btn-primary" style="padding: 12px 32px; text-decoration:none;">下一步</a>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+
+  <script src="../js/prototype.js"></script>
+  <script>
+    function toggleSvc(el) {
+      el.classList.toggle('selected');
+      updateSummary();
+    }
+    function updateSummary() {
+      var cards = document.querySelectorAll('#svc-list .svc-card.selected');
+      var count = cards.length;
+      var total = 0;
+      cards.forEach(function(c) {
+        var p = c.querySelector('.svc-price').textContent;
+        total += parseInt(p);
+      });
+      document.getElementById('sel-count').textContent = count;
+      document.getElementById('sel-total').textContent = '¥' + total;
+    }
+  </script>
+</body>
+</html>
