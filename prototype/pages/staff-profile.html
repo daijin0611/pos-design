@@ -23,10 +23,19 @@
     }
     .profile-avatar {
       width: 64px; height: 64px; border-radius: 50%;
-      background: rgba(255,255,255,0.25);
       margin: 0 auto var(--space-md);
       display: flex; align-items: center; justify-content: center;
       font-size: 30px;
+      overflow: hidden; cursor: pointer; position: relative;
+      background: rgba(255,255,255,0.25);
+    }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-avatar .pa-edit {
+      position: absolute; bottom: -2px; right: -2px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: white; color: #4A6CF7;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     .profile-name {
       font: 600 20px / 1.3 var(--font-family);
@@ -52,6 +61,49 @@
     .stats-value { font: 700 16px / 1.2 var(--font-family); }
     .stats-label { font: 400 10px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
 
+    /* ===== Section title ===== */
+    .section-title {
+      font: 600 12px / 1 var(--font-family);
+      color: var(--text-tertiary);
+      padding: var(--space-md) var(--space-lg) var(--space-sm);
+    }
+
+    /* ===== Info card ===== */
+    .info-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-xl);
+      margin: 0 var(--space-lg);
+      padding: var(--space-sm) var(--space-lg);
+      box-shadow: 0 4px 24px rgba(74, 108, 247, 0.12);
+      position: relative;
+    }
+    .info-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-md) 0;
+    }
+    .info-row + .info-row { border-top: 1px solid var(--border-light); }
+    .info-label { font: 400 14px / 1.3 var(--font-family); color: var(--text-tertiary); flex-shrink: 0; }
+    .info-right { display: flex; align-items: center; gap: var(--space-sm); max-width: 60%; }
+    .info-value { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); text-align: right; }
+    .info-row.readonly .info-value { color: var(--text-tertiary); }
+    .info-row.editable { cursor: pointer; transition: background 0.15s; }
+    .info-row.editable:active { background: var(--bg-primary); }
+    .info-arrow { color: var(--text-placeholder); font-size: 14px; }
+    .info-row.readonly .info-arrow { display: none; }
+    .info-avatar-mini {
+      width: 40px; height: 40px; border-radius: 50%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .info-avatar-mini img { width: 100%; height: 100%; object-fit: cover; }
+    .info-pending {
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      background: var(--accent-light); color: var(--accent-dark);
+      font: 500 11px / 1 var(--font-family); white-space: nowrap;
+    }
+
     /* ===== Menu list ===== */
     .menu-card {
       background: var(--bg-white);
@@ -59,11 +111,6 @@
       margin: var(--space-lg) var(--space-lg) var(--space-sm);
       box-shadow: var(--shadow-card);
       overflow: hidden;
-    }
-    .menu-group-title {
-      font: 600 12px / 1 var(--font-family);
-      color: var(--text-tertiary);
-      padding: var(--space-md) var(--space-lg) var(--space-sm);
     }
     .menu-item {
       display: flex; align-items: center;
@@ -78,34 +125,80 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 18px; margin-right: var(--space-md); flex-shrink: 0;
     }
-    .menu-text {
-      flex: 1; font: 500 14px / 1.3 var(--font-family); color: var(--text-primary);
-    }
+    .menu-text { flex: 1; font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
     .menu-arrow { color: var(--text-placeholder); font-size: 14px; }
 
     /* ===== Logout ===== */
-    .logout-area {
-      text-align: center;
-      padding: var(--space-xxl) var(--space-lg);
-    }
+    .logout-area { text-align: center; padding: var(--space-xxl) var(--space-lg); }
     .logout-btn {
-      color: var(--danger);
-      font: 500 14px / 1 var(--font-family);
-      text-decoration: none;
-      cursor: pointer;
+      color: var(--danger); font: 500 14px / 1 var(--font-family);
+      text-decoration: none; cursor: pointer;
     }
 
-    .page-nav {
-      position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
+    /* ===== Bottom sheet ===== */
+    .sheet-mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 600; }
+    .sheet-mask.show { display: block; }
+    .sheet {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      background: var(--bg-white); border-radius: 20px 20px 0 0;
+      z-index: 601; display: none; flex-direction: column;
+      animation: slideUp 0.25s ease-out; max-height: 80%;
     }
+    .sheet.show { display: flex; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .sheet-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--border); margin: 10px auto 4px; }
+    .sheet-title { font: 600 15px / 1 var(--font-family); color: var(--text-primary); text-align: center; padding: 0 var(--space-lg) var(--space-sm); }
+    .sheet-body { padding: var(--space-sm) var(--space-lg) var(--space-lg); }
+    .as-option { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); cursor: pointer; transition: background 0.15s; }
+    .as-option:active { background: var(--bg-primary); }
+    .as-option + .as-option { border-top: 1px solid var(--border-light); }
+    .as-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .as-text { flex: 1; font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
+    .as-cancel { text-align: center; padding: var(--space-md); font: 500 14px / 1 var(--font-family); color: var(--text-tertiary); border-top: 8px solid var(--bg-primary); cursor: pointer; }
+    .as-cancel:active { background: var(--bg-primary); }
+    .pick-option { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); cursor: pointer; transition: background 0.15s; }
+    .pick-option:active { background: var(--bg-primary); }
+    .pick-option + .pick-option { border-top: 1px solid var(--border-light); }
+    .pick-text { flex: 1; font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
+    .pick-check { font-size: 16px; color: #4A6CF7; visibility: hidden; }
+    .pick-option.selected .pick-check { visibility: visible; }
+    .pick-option.selected .pick-text { color: #4A6CF7; font-weight: 600; }
+
+    /* ===== Center dialog ===== */
+    .dialog-mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 600; align-items: center; justify-content: center; }
+    .dialog-mask.show { display: flex; }
+    .dialog { width: 80%; max-width: 300px; background: var(--bg-white); border-radius: var(--radius-lg); overflow: hidden; animation: dialogIn 0.2s ease-out; }
+    @keyframes dialogIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .dialog-title { font: 600 16px / 1.3 var(--font-family); color: var(--text-primary); text-align: center; padding: var(--space-lg) var(--space-lg) var(--space-sm); }
+    .dialog-body { padding: var(--space-sm) var(--space-lg) var(--space-md); }
+    .dialog-input {
+      width: 100%; box-sizing: border-box; padding: 12px var(--space-md);
+      background: var(--bg-primary); border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      font: 400 15px / 1.2 var(--font-family);
+      color: var(--text-primary); outline: none; transition: border-color 0.15s;
+    }
+    .dialog-input:focus { border-color: #4A6CF7; background: var(--bg-white); }
+    .dialog-actions { display: flex; border-top: 1px solid var(--border-light); }
+    .dialog-btn { flex: 1; padding: var(--space-md) 0; cursor: pointer; font: 500 15px / 1 var(--font-family); text-align: center; background: none; border: none; }
+    .dialog-btn:active { background: var(--bg-primary); }
+    .dialog-btn.cancel { color: var(--text-tertiary); border-right: 1px solid var(--border-light); }
+    .dialog-btn.confirm { color: #4A6CF7; font-weight: 600; }
+
+    /* ===== Toast ===== */
+    .toast { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 12px 24px; border-radius: var(--radius-md); font: 500 13px / 1.4 var(--font-family); z-index: 999; }
+    .toast.show { display: block; }
+
+    .page-nav { position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px; }
     .page-nav a {
       display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
       font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
       color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       text-decoration: none; transition: all 0.2s;
     }
-    .page-nav a:hover { background: var(--primary); color: white; }
-    .page-nav a.active { background: var(--primary); color: white; }
+    .page-nav a:hover, .page-nav a.active { background: var(--primary); color: white; }
+
+    .hidden-date { position: absolute; left: -9999px; opacity: 0; width: 1px; height: 1px; }
   </style>
 </head>
 <body>
@@ -123,77 +216,82 @@
       <!-- Header -->
       <div class="header-area">
         <div style="padding-top: var(--space-md);"></div>
-        <div class="profile-avatar"><i class="van-icon van-icon-user-o" style="color: white;"></i></div>
-        <div class="profile-name">张技师</div>
+        <div class="profile-avatar" id="bigAvatar" onclick="openAvatarSheet()">
+          <i class="van-icon van-icon-user-o" style="color: white;" id="bigAvatarIcon"></i>
+          <span class="pa-edit"><i class="van-icon van-icon-photograph"></i></span>
+        </div>
+        <div class="profile-name" id="headerName">张技师</div>
         <div class="profile-meta">高级技师 · 工号 S20240012</div>
       </div>
 
       <!-- Stats -->
       <div class="stats-card animate-in">
-        <div class="stats-item">
+        <a href="staff-salary.html" class="stats-item" style="text-decoration:none;">
           <div class="stats-value" style="color: #4A6CF7;">¥8,640</div>
           <div class="stats-label">本月工资</div>
-        </div>
-        <div class="stats-item">
-          <div class="stats-value" style="color: #2CB5A0;">156</div>
-          <div class="stats-label">服务次数</div>
-        </div>
-        <div class="stats-item">
-          <div class="stats-value" style="color: #E8A849;">98%</div>
-          <div class="stats-label">好评率</div>
-        </div>
-        <div class="stats-item">
-          <div class="stats-value" style="color: #8B5CF6;">386</div>
-          <div class="stats-label">在职天数</div>
-        </div>
+        </a>
       </div>
 
-      <!-- Menu: Work -->
-      <div class="menu-card animate-in delay-1">
-        <div class="menu-group-title">工作相关</div>
-        <div class="menu-item">
-          <div class="menu-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-calendar-o" style="color: #4A6CF7;"></i></div>
-          <span class="menu-text">我的排班</span>
-          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
+      <!-- 个人信息（就地编辑） -->
+      <div class="section-title animate-in delay-1" style="margin-top: var(--space-lg);">个人信息</div>
+      <div class="info-card animate-in delay-1">
+        <!-- 头像 -->
+        <div class="info-row editable" onclick="openAvatarSheet()">
+          <span class="info-label">头像</span>
+          <span class="info-right">
+            <span class="info-avatar-mini" id="miniAvatar">
+              <i class="van-icon van-icon-user-o" style="color: white;" id="miniAvatarIcon"></i>
+            </span>
+            <i class="van-icon van-icon-arrow info-arrow"></i>
+          </span>
         </div>
-        <div class="menu-item">
-          <div class="menu-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-bar-chart-o" style="color: #2CB5A0;"></i></div>
-          <span class="menu-text">我的业绩</span>
-          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
+        <!-- 昵称 -->
+        <div class="info-row editable" onclick="openNicknameDialog()">
+          <span class="info-label">昵称</span>
+          <span class="info-right">
+            <span class="info-value" id="nickValue">张技师</span>
+            <i class="van-icon van-icon-arrow info-arrow"></i>
+          </span>
         </div>
-        <a href="staff-satisfaction.html" class="menu-item">
-          <div class="menu-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-star-o" style="color: #E8A849;"></i></div>
-          <span class="menu-text">满意度评价</span>
-          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
-        </a>
-        <a href="staff-salary.html" class="menu-item">
-          <div class="menu-icon" style="background: #F0E8F8;"><i class="van-icon van-icon-gold-coin-o" style="color: #8B5CF6;"></i></div>
-          <span class="menu-text">工资查询</span>
-          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
-        </a>
+        <!-- 工号（只读） -->
+        <div class="info-row readonly">
+          <span class="info-label">工号</span>
+          <span class="info-right"><span class="info-value">S20240012</span></span>
+        </div>
+        <!-- 职位（只读） -->
+        <div class="info-row readonly">
+          <span class="info-label">职位</span>
+          <span class="info-right"><span class="info-value">高级技师</span></span>
+        </div>
+        <!-- 手机号（只读） -->
+        <div class="info-row readonly">
+          <span class="info-label">手机号</span>
+          <span class="info-right"><span class="info-value">138****6688</span></span>
+        </div>
+        <!-- 性别 -->
+        <div class="info-row editable" onclick="openGenderSheet()">
+          <span class="info-label">性别</span>
+          <span class="info-right">
+            <span class="info-value" id="genderValue">女</span>
+            <i class="van-icon van-icon-arrow info-arrow"></i>
+          </span>
+        </div>
+        <!-- 生日 -->
+        <div class="info-row editable" id="birthdayRow" onclick="triggerDatePicker()">
+          <span class="info-label">生日</span>
+          <span class="info-right" id="birthdayRight">
+            <span class="info-value" id="birthdayValue"></span>
+            <i class="van-icon van-icon-arrow info-arrow"></i>
+          </span>
+        </div>
       </div>
 
       <!-- Menu: Settings -->
+      <div class="section-title animate-in delay-2" style="margin-top: var(--space-lg);">账号与安全</div>
       <div class="menu-card animate-in delay-2">
-        <div class="menu-group-title">个人设置</div>
-        <div class="menu-item">
-          <div class="menu-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-user-o" style="color: #4A6CF7;"></i></div>
-          <span class="menu-text">个人信息</span>
-          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
-        </div>
         <div class="menu-item">
           <div class="menu-icon" style="background: #F0F0F0;"><i class="van-icon van-icon-lock" style="color: #999;"></i></div>
           <span class="menu-text">修改密码</span>
-          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
-        </div>
-        <div class="menu-item">
-          <div class="menu-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-bell" style="color: #F5A0B5;"></i></div>
-          <span class="menu-text">消息通知</span>
-          <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
-        </div>
-        <div class="menu-item">
-          <div class="menu-icon" style="background: #F0F0F0;"><i class="van-icon van-icon-info-o" style="color: #999;"></i></div>
-          <span class="menu-text">关于</span>
           <span class="menu-arrow"><i class="van-icon van-icon-arrow"></i></span>
         </div>
       </div>
@@ -220,6 +318,233 @@
     <div class="safe-bottom"></div>
   </div>
 
-  <script src="../js/prototype.js"></script>
+  <!-- ===== Avatar Action Sheet ===== -->
+  <div class="sheet-mask" id="avatarMask" onclick="closeAvatarSheet()"></div>
+  <div class="sheet" id="avatarSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">更换头像</div>
+    <div class="sheet-body" style="padding-bottom: 0;">
+      <div class="as-option" onclick="pickAvatar('camera')">
+        <div class="as-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-photograph" style="color: #4A6CF7;"></i></div>
+        <span class="as-text">拍照</span>
+      </div>
+      <div class="as-option" onclick="pickAvatar('album')">
+        <div class="as-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-photo-o" style="color: #2CB5A0;"></i></div>
+        <span class="as-text">从相册选择</span>
+      </div>
+      <div class="as-cancel" onclick="closeAvatarSheet()">取消</div>
+    </div>
+  </div>
+
+  <!-- ===== Gender Sheet ===== -->
+  <div class="sheet-mask" id="genderMask" onclick="closeGenderSheet()"></div>
+  <div class="sheet" id="genderSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">选择性别</div>
+    <div class="sheet-body" style="padding-bottom: 0;">
+      <div class="pick-option" data-val="男" onclick="pickGender('男')">
+        <span class="pick-text">男</span>
+        <i class="van-icon van-icon-success pick-check"></i>
+      </div>
+      <div class="pick-option" data-val="女" onclick="pickGender('女')">
+        <span class="pick-text">女</span>
+        <i class="van-icon van-icon-success pick-check"></i>
+      </div>
+      <div class="pick-option" data-val="保密" onclick="pickGender('保密')">
+        <span class="pick-text">保密</span>
+        <i class="van-icon van-icon-success pick-check"></i>
+      </div>
+      <div class="as-cancel" onclick="closeGenderSheet()">取消</div>
+    </div>
+  </div>
+
+  <!-- ===== Nickname Dialog ===== -->
+  <div class="dialog-mask" id="nickMask" onclick="if(event.target===this)closeNicknameDialog()">
+    <div class="dialog">
+      <div class="dialog-title">修改昵称</div>
+      <div class="dialog-body">
+        <input type="text" class="dialog-input" id="nickInput" maxlength="12" placeholder="请输入昵称">
+      </div>
+      <div class="dialog-actions">
+        <button class="dialog-btn cancel" onclick="closeNicknameDialog()">取消</button>
+        <button class="dialog-btn confirm" id="nickConfirm" onclick="saveNickname()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden native date input -->
+  <input type="date" class="hidden-date" id="dateInput" onchange="pickBirthday(this.value)">
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ===== Mock data layer (localStorage) ===== */
+    var STORAGE_KEY = 'pos_staff_profile_v1';
+    var AVATAR_POOL = [
+      { bg: 'linear-gradient(135deg,#FF8A8A,#FFC2C2)', letter: '技' },
+      { bg: 'linear-gradient(135deg,#8AC9FF,#C2E5FF)', letter: '师' },
+      { bg: 'linear-gradient(135deg,#FFC28A,#FFE0B0)', letter: '雅' },
+      { bg: 'linear-gradient(135deg,#B59CFF,#D8C8FF)', letter: '兰' }
+    ];
+
+    var DEFAULTS = {
+      avatarIdx: -1,
+      nick: '张技师',
+      gender: '女',
+      birthday: ''
+    };
+
+    function load() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return Object.assign({}, DEFAULTS);
+        return Object.assign({}, DEFAULTS, JSON.parse(raw));
+      } catch (e) { return Object.assign({}, DEFAULTS); }
+    }
+    function save(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
+
+    var state = load();
+
+    /* ===== Render ===== */
+    function applyAvatar() {
+      var a = state.avatarIdx >= 0 ? AVATAR_POOL[state.avatarIdx % AVATAR_POOL.length] : null;
+      var bigImg = document.getElementById('bigAvatar');
+      var miniImg = document.getElementById('miniAvatar');
+      var bigIcon = document.getElementById('bigAvatarIcon');
+      var miniIcon = document.getElementById('miniAvatarIcon');
+      if (a) {
+        bigImg.style.background = a.bg;
+        bigIcon.style.display = 'none';
+        bigImg.querySelectorAll('.pa-letter').forEach(function(n){ n.remove(); });
+        var ls = document.createElement('span');
+        ls.className = 'pa-letter'; ls.textContent = a.letter;
+        ls.style.cssText = 'color:#fff;font-size:28px;font-weight:600;';
+        bigImg.insertBefore(ls, bigImg.firstChild);
+        miniImg.style.background = a.bg;
+        miniIcon.style.display = 'none';
+        miniImg.querySelectorAll('.pa-letter').forEach(function(n){ n.remove(); });
+        var ls2 = document.createElement('span');
+        ls2.className = 'pa-letter'; ls2.textContent = a.letter;
+        ls2.style.cssText = 'color:#fff;font-size:20px;font-weight:600;';
+        miniImg.insertBefore(ls2, miniImg.firstChild);
+      } else {
+        bigImg.style.background = '';
+        bigIcon.style.display = '';
+        bigImg.querySelectorAll('.pa-letter').forEach(function(n){ n.remove(); });
+        miniImg.style.background = '';
+        miniIcon.style.display = '';
+        miniImg.querySelectorAll('.pa-letter').forEach(function(n){ n.remove(); });
+      }
+    }
+    function applyAll() {
+      applyAvatar();
+      document.getElementById('nickValue').textContent = state.nick;
+      document.getElementById('headerName').textContent = state.nick;
+      document.getElementById('genderValue').textContent = state.gender;
+      renderBirthday();
+      document.querySelectorAll('#genderSheet .pick-option').forEach(function(o){
+        o.classList.toggle('selected', o.dataset.val === state.gender);
+      });
+    }
+    function renderBirthday() {
+      var valEl = document.getElementById('birthdayValue');
+      var rightEl = document.getElementById('birthdayRight');
+      var arrow = rightEl.querySelector('.info-arrow');
+      var oldPending = rightEl.querySelector('.info-pending');
+      if (oldPending) oldPending.remove();
+      if (!state.birthday) {
+        valEl.textContent = '';
+        var pending = document.createElement('span');
+        pending.className = 'info-pending';
+        pending.textContent = '待完善';
+        rightEl.insertBefore(pending, arrow);
+      } else {
+        valEl.textContent = state.birthday;
+      }
+    }
+
+    /* ===== Avatar ===== */
+    function openAvatarSheet() {
+      document.getElementById('avatarMask').classList.add('show');
+      document.getElementById('avatarSheet').classList.add('show');
+    }
+    function closeAvatarSheet() {
+      document.getElementById('avatarMask').classList.remove('show');
+      document.getElementById('avatarSheet').classList.remove('show');
+    }
+    function pickAvatar(type) {
+      state.avatarIdx = (state.avatarIdx + 1 + AVATAR_POOL.length) % AVATAR_POOL.length;
+      save(state);
+      applyAvatar();
+      closeAvatarSheet();
+      toast('头像更新成功');
+    }
+
+    /* ===== Nickname ===== */
+    function openNicknameDialog() {
+      var input = document.getElementById('nickInput');
+      input.value = state.nick;
+      document.getElementById('nickMask').classList.add('show');
+      setTimeout(function(){ input.focus(); input.select(); }, 100);
+    }
+    function closeNicknameDialog() {
+      document.getElementById('nickMask').classList.remove('show');
+    }
+    function saveNickname() {
+      var v = document.getElementById('nickInput').value.trim();
+      if (!v) { toast('昵称不能为空'); return; }
+      state.nick = v; save(state);
+      document.getElementById('nickValue').textContent = v;
+      document.getElementById('headerName').textContent = v;
+      closeNicknameDialog();
+      toast('已保存');
+    }
+
+    /* ===== Gender ===== */
+    function openGenderSheet() {
+      document.querySelectorAll('#genderSheet .pick-option').forEach(function(o){
+        o.classList.toggle('selected', o.dataset.val === state.gender);
+      });
+      document.getElementById('genderMask').classList.add('show');
+      document.getElementById('genderSheet').classList.add('show');
+    }
+    function closeGenderSheet() {
+      document.getElementById('genderMask').classList.remove('show');
+      document.getElementById('genderSheet').classList.remove('show');
+    }
+    function pickGender(val) {
+      state.gender = val; save(state);
+      document.getElementById('genderValue').textContent = val;
+      closeGenderSheet();
+      toast('已保存');
+    }
+
+    /* ===== Birthday ===== */
+    function triggerDatePicker() {
+      var di = document.getElementById('dateInput');
+      if (state.birthday) di.value = state.birthday; else di.value = '';
+      di.click();
+    }
+    function pickBirthday(val) {
+      if (!val) return;
+      state.birthday = val; save(state);
+      renderBirthday();
+      toast('已保存');
+    }
+
+    /* ===== Toast ===== */
+    var toastTimer = null;
+    function toast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 1500);
+    }
+
+    /* ===== Init ===== */
+    applyAll();
+  </script>
 </body>
 </html>
