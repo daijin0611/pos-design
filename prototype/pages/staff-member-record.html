@@ -3,281 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>会员调理记录 - POS H5 原型</title>
+  <title>创建调理记录 - POS H5 原型</title>
   <link rel="stylesheet" href="../css/design-system.css">
   <style>
     /* ===== Nav ===== */
-    .nav-bar {
-      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
-    }
+    .nav-bar { background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%); }
     .nav-bar .nav-title { color: white; }
     .nav-bar .nav-back { color: white; }
 
-    /* ===== Search ===== */
-    .search-area {
-      padding: var(--space-md) var(--space-lg);
-      background: var(--bg-white);
-      border-bottom: 1px solid var(--border-light);
-    }
-    .search-box {
-      display: flex; align-items: center; gap: var(--space-sm);
-      height: 44px; border-radius: var(--radius-pill);
-      background: var(--bg-primary); padding: 0 var(--space-lg);
-    }
-    .search-box .s-icon {
-      font-size: 16px; flex-shrink: 0;
-    }
-    .search-box .s-input {
-      flex: 1; border: none; background: transparent;
-      font: var(--font-body); color: var(--text-primary);
-      outline: none;
-    }
-    .search-box .s-input::placeholder { color: var(--text-placeholder); }
-
-    /* Search results dropdown */
-    .search-results {
-      display: none;
-      background: var(--bg-white);
-      border-top: 1px solid var(--border-light);
-      max-height: 240px;
-      overflow-y: auto;
-    }
-    .search-results.show { display: block; }
-    .sr-item {
-      display: flex; align-items: center; gap: var(--space-md);
-      padding: var(--space-md) var(--space-lg);
-      cursor: pointer; transition: background 0.15s;
-      border-bottom: 1px solid var(--border-light);
-    }
-    .sr-item:last-child { border-bottom: none; }
-    .sr-item:active { background: var(--primary-light); }
-    .sr-avatar {
-      width: 40px; height: 40px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .sr-info { flex: 1; }
-    .sr-info h4 { font: 500 14px / 1.3 var(--font-family); }
-    .sr-info p { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
-    .sr-tag {
-      padding: 2px 8px; border-radius: var(--radius-pill);
-      font: 500 10px / 1 var(--font-family);
-    }
-
-    /* ===== Selected member card ===== */
+    /* ===== Member card (read-only) ===== */
     .member-card {
-      display: none;
-      margin: var(--space-md) var(--space-lg);
-      background: var(--bg-white);
-      border-radius: var(--radius-lg);
-      padding: var(--space-lg);
-      box-shadow: var(--shadow-card);
-    }
-    .member-card.show { display: block; }
-    .mc-header {
+      margin: var(--space-md) var(--space-lg); background: var(--bg-white); border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-lg); box-shadow: var(--shadow-card);
       display: flex; align-items: center; gap: var(--space-md);
     }
-    .mc-avatar {
-      width: 48px; height: 48px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
-    }
-    .mc-user { flex: 1; }
-    .mc-user h4 { font: 600 16px / 1.3 var(--font-family); }
-    .mc-user p { font: 400 12px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
-    .mc-change {
-      padding: 4px 12px; border-radius: var(--radius-pill);
-      font: 500 11px / 1 var(--font-family);
-      background: var(--bg-primary); color: var(--text-secondary);
-      border: none; cursor: pointer;
-    }
-    .mc-tags {
-      display: flex; gap: 6px; flex-wrap: wrap; margin-top: var(--space-md);
-    }
-    .mc-tag {
-      padding: 3px 10px; border-radius: var(--radius-pill);
-      font: 500 11px / 1.2 var(--font-family);
-    }
-    .mc-history {
-      margin-top: var(--space-md); padding-top: var(--space-md);
-      border-top: 1px solid var(--border-light);
-    }
-    .mc-history h5 {
-      font: 500 12px / 1 var(--font-family); color: var(--text-tertiary); margin-bottom: var(--space-sm);
-    }
-    .mc-history-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 4px 0;
-    }
-    .mc-history-item .mch-name {
-      font: 400 12px / 1.3 var(--font-family); color: var(--text-primary);
-    }
-    .mc-history-item .mch-date {
-      font: 400 11px / 1 var(--font-family); color: var(--text-tertiary);
-    }
+    .mc-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .mc-info { flex: 1; }
+    .mc-name { font: 600 15px / 1.3 var(--font-family); color: var(--text-primary); }
+    .mc-meta { font: 400 12px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+    .mc-session { text-align: right; flex-shrink: 0; }
+    .mc-session-label { font: 400 10px / 1 var(--font-family); color: var(--text-tertiary); }
+    .mc-session-val { font: 600 13px / 1 var(--font-family); color: #4A6CF7; margin-top: 3px; }
 
     /* ===== Form sections ===== */
-    .form-section {
-      display: none;
-      padding: 0 var(--space-lg);
-    }
-    .form-section.show { display: block; }
-    .fs-title {
-      font: 600 14px / 1 var(--font-family);
-      color: var(--text-primary);
-      padding: var(--space-lg) 0 var(--space-md);
-      display: flex; align-items: center; gap: var(--space-sm);
-    }
+    .fs-title { font: 600 14px / 1 var(--font-family); color: var(--text-primary); padding: var(--space-lg) var(--space-lg) var(--space-sm); display: flex; align-items: center; gap: var(--space-sm); }
+    .fs-title .req { color: var(--danger); }
+    .fs-sub { font: 400 11px / 1 var(--font-family); color: var(--text-tertiary); font-weight: 400; }
 
-    /* Service selector */
-    .service-list {
-      display: flex; flex-direction: column; gap: var(--space-sm);
-    }
-    .svc-item {
-      display: flex; align-items: center; gap: var(--space-md);
-      padding: var(--space-md);
-      background: var(--bg-white);
-      border-radius: var(--radius-md);
-      border: 2px solid var(--border-light);
-      cursor: pointer; transition: all 0.2s;
-    }
-    .svc-item:active { border-color: #4A6CF7; }
-    .svc-item.selected {
-      border-color: #4A6CF7; background: #F0F3FF;
-    }
-    .svc-icon {
-      width: 40px; height: 40px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .svc-info { flex: 1; }
-    .svc-info h4 { font: 500 14px / 1.3 var(--font-family); }
-    .svc-info p { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
-    .svc-check {
-      width: 22px; height: 22px; border-radius: 50%;
-      border: 2px solid var(--border); flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; color: transparent; transition: all 0.2s;
-    }
-    .svc-item.selected .svc-check {
-      background: #4A6CF7; border-color: #4A6CF7; color: white;
-    }
+    /* Service select trigger */
+    .svc-trigger { display: flex; align-items: center; gap: var(--space-md); margin: 0 var(--space-lg); padding: var(--space-md); background: var(--bg-white); border-radius: var(--radius-md); border: 1.5px solid var(--border-light); cursor: pointer; transition: border-color 0.2s; }
+    .svc-trigger.selected { border-color: #4A6CF7; background: #F5F7FF; }
+    .svc-trigger:active { border-color: #4A6CF7; }
+    .svc-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .svc-text { flex: 1; }
+    .svc-text .st-name { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
+    .svc-text .st-desc { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+    .svc-placeholder { flex: 1; color: var(--text-placeholder); font: 400 14px / 1 var(--font-family); }
+    .svc-arrow { font-size: 14px; color: var(--text-placeholder); }
 
-    /* Date row */
-    .form-row {
-      display: flex; gap: var(--space-md);
-    }
-    .form-field {
-      flex: 1;
-    }
-    .form-field label {
-      display: block;
-      font: 500 12px / 1 var(--font-family);
-      color: var(--text-secondary);
-      margin-bottom: var(--space-sm);
-    }
-    .form-field .ff-input {
-      width: 100%; height: 44px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 0 var(--space-md);
-      font: var(--font-body); color: var(--text-primary);
-      background: var(--bg-white);
-      display: flex; align-items: center;
-      cursor: pointer;
-    }
-    .form-field .ff-input span {
-      color: var(--text-primary);
-    }
-    .form-field .ff-input .placeholder {
-      color: var(--text-placeholder);
-    }
+    /* Response options */
+    .resp-row { display: flex; gap: var(--space-sm); margin: 0 var(--space-lg); }
+    .resp-chip { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: var(--space-md) 4px; background: var(--bg-white); border: 1.5px solid var(--border-light); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s; text-align: center; }
+    .resp-chip:active { transform: scale(0.97); }
+    .resp-chip .rc-emoji { font-size: 22px; line-height: 1; }
+    .resp-chip .rc-label { font: 500 12px / 1.2 var(--font-family); color: var(--text-secondary); }
+    .resp-chip.active.good { border-color: #2CB5A0; background: #ECF8F4; } .resp-chip.active.good .rc-label { color: #1E9B88; }
+    .resp-chip.active.great { border-color: #4A6CF7; background: #F0F3FF; } .resp-chip.active.great .rc-label { color: #4A6CF7; }
+    .resp-chip.active.normal { border-color: #C8C8C8; background: #F7F8FA; } .resp-chip.active.normal .rc-label { color: var(--text-secondary); }
+    .resp-chip.active.bad { border-color: #EA5252; background: #FFF0F0; } .resp-chip.active.bad .rc-label { color: #EA5252; }
 
-    /* Textarea */
-    .textarea-field {
-      width: 100%;
-      min-height: 120px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: var(--space-md);
-      font: var(--font-body); color: var(--text-primary);
-      background: var(--bg-white);
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .textarea-field:focus { border-color: #4A6CF7; }
-    .textarea-field::placeholder { color: var(--text-placeholder); }
+    /* Attention chips */
+    .att-wrap { margin: 0 var(--space-lg); display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+    .att-chip { padding: 6px 14px; border-radius: var(--radius-pill); background: var(--bg-white); border: 1.5px solid var(--border-light); font: 500 12px / 1 var(--font-family); color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
+    .att-chip:active { transform: scale(0.96); }
+    .att-chip.active { background: #FFF8E8; border-color: #E8A849; color: var(--accent-dark); }
+    .att-tip { margin: var(--space-sm) var(--space-lg) 0; font: 400 10px / 1.3 var(--font-family); color: var(--text-placeholder); }
 
-    /* Photo upload */
-    .photo-grid {
-      display: flex; flex-wrap: wrap; gap: var(--space-sm);
-    }
-    .photo-item {
-      width: 72px; height: 72px;
-      border-radius: var(--radius-md);
-      overflow: hidden; position: relative;
-    }
-    .photo-item img, .photo-item .photo-placeholder {
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    .photo-placeholder {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 4px;
-      font-size: 24px;
-    }
-    .photo-add {
-      width: 72px; height: 72px;
-      border-radius: var(--radius-md);
-      border: 2px dashed var(--border);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 2px; cursor: pointer;
-      background: var(--bg-primary);
-      transition: border-color 0.2s;
-    }
+    /* Note */
+    .note-area { margin: 0 var(--space-lg); }
+    .note-input { width: 100%; min-height: 64px; border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-md); font: var(--font-body); color: var(--text-primary); background: var(--bg-white); resize: none; outline: none; transition: border-color 0.2s; }
+    .note-input:focus { border-color: #4A6CF7; }
+    .note-input::placeholder { color: var(--text-placeholder); }
+
+    /* Photos */
+    .photo-grid { margin: 0 var(--space-lg); display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+    .photo-item { width: 72px; height: 72px; border-radius: var(--radius-md); overflow: hidden; position: relative; }
+    .photo-item .photo-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .photo-remove { position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.5); color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .photo-add { width: 72px; height: 72px; border-radius: var(--radius-md); border: 2px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; background: var(--bg-primary); transition: border-color 0.2s; }
     .photo-add:active { border-color: #4A6CF7; }
-    .photo-add .pa-icon { font-size: 20px; }
-    .photo-add .pa-text {
-      font: 400 10px / 1 var(--font-family); color: var(--text-tertiary);
-    }
-    .photo-remove {
-      position: absolute; top: 2px; right: 2px;
-      width: 20px; height: 20px; border-radius: 50%;
-      background: rgba(0,0,0,0.5); color: white;
-      font-size: 12px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-    }
+    .photo-add .pa-icon { font-size: 20px; color: var(--text-tertiary); }
+    .photo-add .pa-text { font: 400 10px / 1 var(--font-family); color: var(--text-tertiary); }
 
     /* Submit */
-    .submit-area {
-      padding: var(--space-xl) var(--space-lg) var(--space-xxl);
-    }
-    .submit-btn {
-      width: 100%; padding: 14px;
-      border-radius: var(--radius-pill);
-      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
-      color: white;
-      font: 600 16px / 1 var(--font-family);
-      border: none; cursor: pointer;
-      transition: opacity 0.2s;
-    }
+    .submit-area { padding: var(--space-xl) var(--space-lg) var(--space-xxl); }
+    .submit-btn { width: 100%; padding: 14px; border-radius: var(--radius-pill); background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%); color: white; font: 600 16px / 1 var(--font-family); border: none; cursor: pointer; transition: opacity 0.2s; }
     .submit-btn:active { opacity: 0.85; }
 
-    .page-nav {
-      position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
-    }
-    .page-nav a {
-      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
-      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
-      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      text-decoration: none; transition: all 0.2s;
-    }
+    /* ===== Service picker modal ===== */
+    .modal-mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 600; }
+    .modal-mask.show { display: block; }
+    .modal-sheet { position: fixed; left: 0; right: 0; bottom: 0; max-height: 75%; background: var(--bg-white); border-radius: 20px 20px 0 0; z-index: 601; display: none; flex-direction: column; animation: slideUp 0.25s ease-out; }
+    .modal-sheet.show { display: flex; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .ms-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--border); margin: 10px auto 4px; }
+    .ms-title { font: 600 15px / 1 var(--font-family); color: var(--text-primary); text-align: center; padding: 0 var(--space-lg) var(--space-sm); }
+    .ms-search { margin: 0 var(--space-lg) var(--space-sm); display: flex; align-items: center; gap: var(--space-sm); height: 40px; border-radius: var(--radius-pill); background: var(--bg-primary); padding: 0 var(--space-md); }
+    .ms-search .ms-icon { font-size: 15px; color: var(--text-tertiary); }
+    .ms-search input { flex: 1; border: none; background: transparent; font: var(--font-body); color: var(--text-primary); outline: none; }
+    .ms-search input::placeholder { color: var(--text-placeholder); }
+    .ms-list { flex: 1; overflow-y: auto; padding: 0 var(--space-lg) var(--space-md); }
+    .ms-group-label { font: 500 12px / 1 var(--font-family); color: var(--text-tertiary); padding: var(--space-sm) 0 var(--space-xs); }
+    .ms-option { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); border-radius: var(--radius-md); cursor: pointer; transition: background 0.15s; }
+    .ms-option:active { background: var(--bg-primary); }
+    .ms-icon-box { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .ms-opt-info { flex: 1; min-width: 0; }
+    .ms-opt-name { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
+    .ms-opt-desc { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+    .ms-opt-check { font-size: 16px; color: #4A6CF7; visibility: hidden; flex-shrink: 0; }
+    .ms-option.selected .ms-opt-check { visibility: visible; }
+    .ms-option.selected .ms-opt-name { color: #4A6CF7; }
+
+    .page-nav { position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px; }
+    .page-nav a { display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill); font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-decoration: none; transition: all 0.2s; }
     .page-nav a:hover { background: var(--primary); color: white; }
     .page-nav a.active { background: var(--primary); color: white; }
+
+    .toast { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 12px 24px; border-radius: var(--radius-md); font: 500 13px / 1.4 var(--font-family); z-index: 999; }
+    .toast.show { display: block; }
   </style>
 </head>
 <body>
@@ -291,230 +124,282 @@
   <div class="phone-frame">
     <div class="status-bar">9:41</div>
 
-    <!-- Nav bar -->
     <div class="nav-bar">
-      <div class="nav-back" onclick="history.back()">‹</div>
-      <span class="nav-title">调理记录</span>
+      <div class="nav-back" id="navBack">‹</div>
+      <span class="nav-title" id="navTitle">创建调理记录</span>
     </div>
 
     <div class="page-content">
+      <!-- Member card (from URL ?member=) -->
+      <div class="member-card animate-in" id="memberCard"></div>
 
-      <!-- Step 1: Search member -->
-      <div class="search-area">
-        <div class="search-box">
-          <span class="s-icon"><i class="van-icon van-icon-search" style="color: var(--text-tertiary);"></i></span>
-          <input class="s-input" type="text" placeholder="搜索会员姓名 / 手机号" id="memberSearch">
-        </div>
-      </div>
-      <div class="search-results" id="searchResults">
-        <div class="sr-item" onclick="selectMember(this)">
-          <div class="sr-avatar" style="background: var(--primary-light);"><i class="van-icon van-icon-contact" style="color: #2CB5A0;"></i></div>
-          <div class="sr-info">
-            <h4>李女士</h4>
-            <p>138****6789 · 金卡会员</p>
-          </div>
-          <span class="sr-tag" style="background: var(--accent-light); color: var(--accent-dark);">金卡</span>
-        </div>
-        <div class="sr-item" onclick="selectMember(this)">
-          <div class="sr-avatar" style="background: var(--secondary-light);"><i class="van-icon van-icon-contact" style="color: #F5A0B5;"></i></div>
-          <div class="sr-info">
-            <h4>王女士</h4>
-            <p>139****1234 · 银卡会员</p>
-          </div>
-          <span class="sr-tag" style="background: #E8E8E8; color: var(--text-secondary);">银卡</span>
-        </div>
-        <div class="sr-item" onclick="selectMember(this)">
-          <div class="sr-avatar" style="background: #E8F4FD;"><i class="van-icon van-icon-contact" style="color: #5B9BD5;"></i></div>
-          <div class="sr-info">
-            <h4>张女士</h4>
-            <p>137****5678 · 普通会员</p>
-          </div>
-          <span class="sr-tag" style="background: var(--bg-primary); color: var(--text-tertiary);">普通</span>
-        </div>
-        <div class="sr-item" onclick="selectMember(this)">
-          <div class="sr-avatar" style="background: var(--accent-light);"><i class="van-icon van-icon-contact" style="color: #E8A849;"></i></div>
-          <div class="sr-info">
-            <h4>赵女士</h4>
-            <p>136****9012 · 银卡会员</p>
-          </div>
-          <span class="sr-tag" style="background: #E8E8E8; color: var(--text-secondary);">银卡</span>
-        </div>
+      <!-- Service project -->
+      <div class="fs-title"><span class="req">*</span> 服务项目 <span class="fs-sub">点击选择</span></div>
+      <div class="svc-trigger" id="svcTrigger" onclick="openServiceModal()">
+        <span class="svc-placeholder">请选择本次服务项目</span>
+        <span class="svc-arrow"><i class="van-icon van-icon-arrow"></i></span>
       </div>
 
-      <!-- Step 2: Member info (auto-filled) -->
-      <div class="member-card animate-in" id="memberCard">
-        <div class="mc-header">
-          <div class="mc-avatar" style="background: var(--primary-light);"><i class="van-icon van-icon-contact" style="color: #2CB5A0;"></i></div>
-          <div class="mc-user">
-            <h4>李女士</h4>
-            <p>138****6789 · 金卡会员 · 累计消费 ¥28,600</p>
-          </div>
-          <button class="mc-change">更换</button>
-        </div>
-        <div class="mc-tags">
-          <span class="mc-tag" style="background: var(--primary-light); color: var(--primary);">肩颈问题</span>
-          <span class="mc-tag" style="background: var(--secondary-light); color: var(--secondary-dark);">过敏体质</span>
-          <span class="mc-tag" style="background: var(--accent-light); color: var(--accent-dark);">偏好轻柔手法</span>
-        </div>
-        <div class="mc-history">
-          <h5>最近调理记录</h5>
-          <div class="mc-history-item">
-            <span class="mch-name">肩颈深度调理 · 第4次</span>
-            <span class="mch-date">2026-05-18</span>
-          </div>
-          <div class="mc-history-item">
-            <span class="mch-name">肩颈深度调理 · 第3次</span>
-            <span class="mch-date">2026-05-08</span>
-          </div>
-        </div>
+      <!-- Response -->
+      <div class="fs-title"><span class="req">*</span> 客户反应 <span class="fs-sub">本次服务后反馈</span></div>
+      <div class="resp-row">
+        <div class="resp-chip great" onclick="selectResp(this)"><span class="rc-emoji">😍</span><span class="rc-label">很满意</span></div>
+        <div class="resp-chip good active" onclick="selectResp(this)"><span class="rc-emoji">😊</span><span class="rc-label">改善明显</span></div>
+        <div class="resp-chip normal" onclick="selectResp(this)"><span class="rc-emoji">😐</span><span class="rc-label">一般</span></div>
+        <div class="resp-chip bad" onclick="selectResp(this)"><span class="rc-emoji">😣</span><span class="rc-label">不适</span></div>
       </div>
 
-      <!-- Step 3: Form -->
-      <div class="form-section show" id="formSection">
+      <!-- Attention -->
+      <div class="fs-title">下次注意 <span class="fs-sub">选填 · 多选</span></div>
+      <div class="att-wrap" id="attWrap">
+        <span class="att-chip" onclick="toggleAtt(this)">加强手法力度</span>
+        <span class="att-chip" onclick="toggleAtt(this)">换轻柔手法</span>
+        <span class="att-chip" onclick="toggleAtt(this)">配合拔罐</span>
+        <span class="att-chip" onclick="toggleAtt(this)">下次加强牵引</span>
+        <span class="att-chip" onclick="toggleAtt(this)">减少服务频率</span>
+        <span class="att-chip" onclick="toggleAtt(this)">注意过敏禁忌</span>
+        <span class="att-chip" onclick="toggleAtt(this)">重点处理肩井</span>
+        <span class="att-chip" onclick="toggleAtt(this)">建议居家拉伸</span>
+      </div>
+      <div class="att-tip">标签由管理员在后台维护，可多选标记给下次服务的技师</div>
 
-        <!-- Select service -->
-        <div class="fs-title"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i> 服务项目</div>
-        <div class="service-list">
-          <div class="svc-item selected" onclick="toggleService(this)">
-            <div class="svc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
-            <div class="svc-info">
-              <h4>肩颈深度调理</h4>
-              <p>60分钟 · 针对肩颈劳损、僵硬</p>
-            </div>
-            <div class="svc-check"><i class="van-icon van-icon-success" style="color: white;"></i></div>
-          </div>
-          <div class="svc-item" onclick="toggleService(this)">
-            <div class="svc-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-service-o" style="color: #2CB5A0;"></i></div>
-            <div class="svc-info">
-              <h4>全身精油SPA</h4>
-              <p>90分钟 · 全身放松舒缓</p>
-            </div>
-            <div class="svc-check"><i class="van-icon van-icon-success" style="color: white;"></i></div>
-          </div>
-          <div class="svc-item" onclick="toggleService(this)">
-            <div class="svc-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-service-o" style="color: #F5A0B5;"></i></div>
-            <div class="svc-info">
-              <h4>面部精华护理</h4>
-              <p>45分钟 · 深层补水修护</p>
-            </div>
-            <div class="svc-check"><i class="van-icon van-icon-success" style="color: white;"></i></div>
-          </div>
-        </div>
+      <!-- Note -->
+      <div class="fs-title">备注 <span class="fs-sub">选填</span></div>
+      <div class="note-area"><textarea class="note-input" id="noteInput" placeholder="想补充说明的写在这里…（可不填）"></textarea></div>
 
-        <!-- Follow-up date & session -->
-        <div class="fs-title"><i class="van-icon van-icon-edit" style="color: #2CB5A0;"></i> 回访安排</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label>计划回访日期</label>
-            <div class="ff-input">
-              <span>2026-06-08</span>
-            </div>
-          </div>
-          <div class="form-field">
-            <label>本次疗程</label>
-            <div class="ff-input">
-              <span>第 5 次</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Description -->
-        <div class="fs-title"><i class="van-icon van-icon-edit" style="color: #2CB5A0;"></i> 修复调理详情</div>
-        <textarea class="textarea-field" placeholder="请描述本次调理的详细情况，如客户状况、调理手法、改善情况、注意事项等…">客户肩颈僵硬情况较上次有明显改善，颈椎两侧肌肉紧张度降低。本次重点做了深层筋膜松解和热石理疗，客户反馈舒适度很好。
-
-建议：下次调理可增加颈部牵引动作，同时客户日常注意减少低头使用手机时间。</textarea>
-
-        <!-- Photos -->
-        <div class="fs-title"><i class="van-icon van-icon-edit" style="color: #2CB5A0;"></i> 现场照片（选填）</div>
-        <div class="photo-grid">
-          <div class="photo-item">
-            <div class="photo-placeholder" style="background: var(--primary-light);"></div>
-            <div class="photo-remove">×</div>
-          </div>
-          <div class="photo-item">
-            <div class="photo-placeholder" style="background: #EBF0FF;"></div>
-            <div class="photo-remove">×</div>
-          </div>
-          <div class="photo-add">
-            <span class="pa-icon">＋</span>
-            <span class="pa-text">添加</span>
-          </div>
-        </div>
-
-        <!-- Submit -->
-        <div class="submit-area">
-          <button class="submit-btn" onclick="location.href='staff-member-detail.html'">保存调理记录</button>
-        </div>
+      <!-- Photos -->
+      <div class="fs-title">现场照片 <span class="fs-sub">选填 · 最多 9 张</span></div>
+      <div class="photo-grid" id="photoGrid">
+        <div class="photo-add" onclick="addPhoto()"><span class="pa-icon">＋</span><span class="pa-text">添加</span></div>
       </div>
 
+      <div class="submit-area"><button class="submit-btn" onclick="submitRecord()">保存调理记录</button></div>
     </div>
 
-    <!-- Tab Bar -->
+    <!-- Service picker modal -->
+    <div class="modal-mask" id="modalMask" onclick="closeServiceModal()"></div>
+    <div class="modal-sheet" id="serviceSheet">
+      <div class="ms-handle"></div>
+      <div class="ms-title">选择服务项目</div>
+      <div class="ms-search">
+        <span class="ms-icon"><i class="van-icon van-icon-search"></i></span>
+        <input type="text" id="svcSearch" placeholder="搜索项目名称" oninput="filterService()">
+      </div>
+      <div class="ms-list" id="svcList"></div>
+    </div>
+
     <div class="tab-bar staff-tab-bar">
-      <div class="tab-item" onclick="location.href='staff-home.html'">
-        <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
-        <span class="tab-label">首页</span>
-      </div>
-      <div class="tab-item" onclick="location.href='staff-profile.html'">
-        <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
-        <span class="tab-label">我的</span>
-      </div>
+      <div class="tab-item" onclick="location.href='staff-home.html'"><span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span><span class="tab-label">首页</span></div>
+      <div class="tab-item" onclick="location.href='staff-profile.html'"><span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span><span class="tab-label">我的</span></div>
     </div>
     <div class="safe-bottom"></div>
   </div>
 
-  <script src="../js/prototype.js"></script>
-  <script>
-    // Search input → show results
-    var searchInput = document.getElementById('memberSearch');
-    var searchResults = document.getElementById('searchResults');
-    var memberCard = document.getElementById('memberCard');
+  <div class="toast" id="toast"></div>
 
-    if (searchInput) {
-      searchInput.addEventListener('focus', function () {
-        searchResults.classList.add('show');
+  <script src="../js/prototype.js"></script>
+  <script src="../js/health-db.js"></script>
+  <script>
+    var memberId = HealthDB.getParam('member') || 'm1';
+    var editId = HealthDB.getParam('edit'); // 编辑模式：回填某条记录
+    var editingRecord = editId ? HealthDB.getRecord(editId) : null;
+    var member = HealthDB.getMember(memberId);
+    var allProjects = HealthDB.getAllProjects();
+    var frequentIds = HealthDB.getFrequentProjectIds();
+
+    var selectedProjectId = null;
+    var selectedResponse = 'good';
+    var photoCount = 0;
+
+    // ===== 渲染会员卡 + 默认疗程 =====
+    function renderMember() {
+      if (!member) {
+        document.getElementById('memberCard').innerHTML = '<div style="padding:var(--space-md);color:var(--danger);">会员不存在</div>';
+        return;
+      }
+      document.getElementById('memberCard').innerHTML =
+        '<div class="mc-avatar" style="background:' + member.avatarBg + ';"><i class="van-icon van-icon-contact" style="color:' + member.avatarColor + ';"></i></div>' +
+        '<div class="mc-info"><div class="mc-name">' + member.name + ' <span style="font:500 10px/1 var(--font-family); padding:1px 6px; border-radius:var(--radius-pill); background:' + member.levelBg + '; color:' + member.levelColor + '; margin-left:4px;">' + member.level + '</span></div><div class="mc-meta">' + member.phone + ' · 万达店</div></div>' +
+        '<div class="mc-session"><div class="mc-session-label">本次疗程</div><div class="mc-session-val" id="sessionVal">—</div></div>';
+      updateSessionNo();
+    }
+
+    // 选中项目后更新本次疗程次数（自动递增）
+    function updateSessionNo() {
+      var el = document.getElementById('sessionVal');
+      if (!el) return;
+      if (selectedProjectId) {
+        el.textContent = '第 ' + HealthDB.getNextSessionNo(memberId, selectedProjectId) + ' 次';
+      } else {
+        el.textContent = '选项目后显示';
+      }
+    }
+
+    // ===== 渲染项目弹窗（常用置顶 + 搜索） =====
+    function renderServiceList() {
+      var kw = (document.getElementById('svcSearch').value || '').trim().toLowerCase();
+      var list = document.getElementById('svcList');
+      var html = '';
+      // 常用
+      if (!kw) {
+        html += '<div class="ms-group-label">常用</div>';
+        frequentIds.forEach(function (pid) {
+          var p = projectById(pid);
+          if (p) html += optionHtml(p);
+        });
+        html += '<div class="ms-group-label">全部项目</div>';
+      }
+      allProjects.forEach(function (p) {
+        if (kw && p.name.toLowerCase().indexOf(kw) < 0) return;
+        if (!kw && frequentIds.indexOf(p.id) > -1) return; // 常用已在上方
+        html += optionHtml(p);
       });
-      searchInput.addEventListener('input', function () {
-        if (this.value.length > 0) {
-          searchResults.classList.add('show');
+      if (!html) html = '<div style="padding:var(--space-xl); text-align:center; color:var(--text-placeholder); font:400 12px/1.4 var(--font-family);">未找到匹配项目</div>';
+      list.innerHTML = html;
+    }
+
+    function optionHtml(p) {
+      var sel = selectedProjectId === p.id ? ' selected' : '';
+      return '<div class="ms-option' + sel + '" data-id="' + p.id + '" onclick="pickService(\'' + p.id + '\')">' +
+        '<div class="ms-icon-box" style="background:' + p.iconBg + ';"><i class="van-icon van-icon-service-o" style="color:' + p.iconColor + ';"></i></div>' +
+        '<div class="ms-opt-info"><div class="ms-opt-name">' + p.name + '</div><div class="ms-opt-desc">' + p.desc + '</div></div>' +
+        '<span class="ms-opt-check"><i class="van-icon van-icon-success"></i></span></div>';
+    }
+
+    function projectById(id) {
+      for (var i = 0; i < allProjects.length; i++) { if (allProjects[i].id === id) return allProjects[i]; }
+      return null;
+    }
+
+    function openServiceModal() {
+      document.getElementById('svcSearch').value = '';
+      renderServiceList();
+      document.getElementById('modalMask').classList.add('show');
+      document.getElementById('serviceSheet').classList.add('show');
+    }
+    function closeServiceModal() {
+      document.getElementById('modalMask').classList.remove('show');
+      document.getElementById('serviceSheet').classList.remove('show');
+    }
+    function pickService(pid) {
+      selectedProjectId = pid;
+      var p = projectById(pid);
+      var trigger = document.getElementById('svcTrigger');
+      trigger.classList.add('selected');
+      trigger.innerHTML =
+        '<div class="svc-icon" style="background:' + p.iconBg + ';"><i class="van-icon van-icon-service-o" style="color:' + p.iconColor + ';"></i></div>' +
+        '<div class="svc-text"><div class="st-name">' + p.name + '</div><div class="st-desc">' + p.desc + '</div></div>' +
+        '<span class="svc-arrow"><i class="van-icon van-icon-arrow"></i></span>';
+      updateSessionNo();
+      renderServiceList(); // 更新选中态
+      setTimeout(closeServiceModal, 200);
+    }
+    function filterService() { renderServiceList(); }
+
+    // ===== 反应档 / 注意标签 / 照片 =====
+    function selectResp(el) {
+      document.querySelectorAll('.resp-chip').forEach(function (c) { c.classList.remove('active'); });
+      el.classList.add('active');
+      selectedResponse = el.className.match(/resp-chip (\w+)/)[1];
+    }
+    function toggleAtt(el) { el.classList.toggle('active'); }
+    function addPhoto() {
+      if (photoCount >= 9) return;
+      photoCount++;
+      var grid = document.getElementById('photoGrid');
+      var div = document.createElement('div');
+      div.className = 'photo-item';
+      div.innerHTML = '<div class="photo-placeholder" style="background:#EBF0FF;"><i class="van-icon van-icon-photo-o" style="color:#4A6CF7;"></i></div><div class="photo-remove" onclick="removePhoto(this,event)">×</div>';
+      grid.insertBefore(div, grid.firstChild);
+    }
+    function removePhoto(el, e) {
+      if (e) e.stopPropagation();
+      el.parentElement.remove();
+      photoCount--;
+    }
+
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function () { t.classList.remove('show'); }, 1500);
+    }
+
+    // ===== 提交：写入数据层，自动归档 =====
+    function submitRecord() {
+      if (!selectedProjectId) {
+        showToast(editingRecord ? '请选择项目' : '请先选择服务项目');
+        return;
+      }
+      var attention = [];
+      document.querySelectorAll('.att-chip.active').forEach(function (c) { attention.push(c.textContent); });
+
+      if (editingRecord) {
+        // 编辑模式：更新现有记录
+        HealthDB.updateRecord(editingRecord.id, {
+          projectId: selectedProjectId,
+          response: selectedResponse,
+          attention: attention,
+          note: document.getElementById('noteInput').value.trim(),
+          hasPhoto: photoCount > 0,
+          photoCount: photoCount
+        });
+        showToast('修改成功');
+        setTimeout(function () {
+          location.href = 'staff-member-detail.html?member=' + memberId + '&project=' + selectedProjectId;
+        }, 800);
+      } else {
+        // 新建模式：自动归档
+        HealthDB.addRecord({
+          memberId: memberId,
+          projectId: selectedProjectId,
+          sessionNo: HealthDB.getNextSessionNo(memberId, selectedProjectId),
+          response: selectedResponse,
+          attention: attention,
+          note: document.getElementById('noteInput').value.trim(),
+          hasPhoto: photoCount > 0,
+          photoCount: photoCount
+        });
+        showToast('保存成功');
+        setTimeout(function () {
+          location.href = 'staff-member-detail.html?member=' + memberId + '&project=' + selectedProjectId;
+        }, 800);
+      }
+    }
+
+    // ===== 初始化 =====
+    document.getElementById('navBack').onclick = function () {
+      location.href = 'staff-member-detail.html?member=' + memberId;
+    };
+    renderMember();
+    // ===== 编辑模式：回填表单 =====
+    if (editingRecord) {
+      document.getElementById('navTitle').textContent = '编辑调理记录';
+      // 回填项目
+      pickService(editingRecord.projectId);
+      // 回填反应档（编辑模式不改疗程次数，保留原值）
+      document.querySelectorAll('.resp-chip').forEach(function (c) {
+        var cls = c.className.match(/resp-chip (\w+)/);
+        if (cls && cls[1] === editingRecord.response) {
+          document.querySelectorAll('.resp-chip').forEach(function (x) { x.classList.remove('active'); });
+          c.classList.add('active');
+          selectedResponse = editingRecord.response;
         }
       });
-    }
-
-    // Click outside to close search results
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('.search-area') && !e.target.closest('.search-results')) {
-        searchResults.classList.remove('show');
-      }
-    });
-
-    // Select a member
-    function selectMember(el) {
-      searchResults.classList.remove('show');
-      searchInput.value = '';
-      searchInput.setAttribute('placeholder', el.querySelector('.sr-info h4').textContent);
-      memberCard.classList.add('show');
-      document.getElementById('formSection').classList.add('show');
-    }
-
-    // Change member
-    var changeBtn = document.querySelector('.mc-change');
-    if (changeBtn) {
-      changeBtn.addEventListener('click', function () {
-        memberCard.classList.remove('show');
-        searchInput.value = '';
-        searchInput.setAttribute('placeholder', '搜索会员姓名 / 手机号');
-        searchInput.focus();
+      // 编辑模式：疗程次数显示原值
+      var sv = document.getElementById('sessionVal');
+      if (sv) sv.textContent = '第 ' + editingRecord.sessionNo + ' 次 (原)';
+      // 回填下次注意
+      document.querySelectorAll('.att-chip').forEach(function (c) {
+        if (editingRecord.attention && editingRecord.attention.indexOf(c.textContent) > -1) c.classList.add('active');
       });
-    }
-
-    // Toggle service selection
-    function toggleService(el) {
-      // Single select
-      el.parentElement.querySelectorAll('.svc-item').forEach(function (item) {
-        item.classList.remove('selected');
-      });
-      el.classList.add('selected');
+      // 回填备注
+      document.getElementById('noteInput').value = editingRecord.note || '';
+      // 回填照片
+      var restoreN = editingRecord.photoCount || (editingRecord.hasPhoto ? 1 : 0);
+      for (var pi = 0; pi < restoreN; pi++) addPhoto();
+      // 改提交按钮文案
+      document.querySelector('.submit-btn').textContent = '保存修改';
     }
   </script>
 </body>

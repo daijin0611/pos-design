@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>健康档案 - POS H5 原型</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <style>
+    /* ===== Nav ===== */
+    .nav-bar {
+      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
+    }
+    .nav-bar .nav-title { color: white; }
+    .nav-bar .nav-back { color: white; }
+
+    /* ===== Search ===== */
+    .search-area {
+      padding: var(--space-md) var(--space-lg) var(--space-sm);
+      background: var(--bg-white);
+    }
+    .search-box {
+      display: flex; align-items: center; gap: var(--space-sm);
+      height: 40px; border-radius: var(--radius-pill);
+      background: var(--bg-primary); padding: 0 var(--space-lg);
+    }
+    .search-box .s-icon { font-size: 15px; flex-shrink: 0; }
+    .search-box .s-input {
+      flex: 1; border: none; background: transparent;
+      font: var(--font-body); color: var(--text-primary); outline: none;
+    }
+    .search-box .s-input::placeholder { color: var(--text-placeholder); }
+
+    .list-tip-top {
+      font: 400 11px / 1 var(--font-family); color: var(--text-tertiary);
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--bg-white);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .list-tip-top i { font-size: 12px; }
+
+    /* ===== Member card ===== */
+    .h-card {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white);
+      margin-bottom: 1px;
+      cursor: pointer; transition: background 0.15s;
+      text-decoration: none;
+    }
+    .h-card:active { background: var(--bg-primary); }
+    .h-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .h-info { flex: 1; min-width: 0; }
+    .h-info-top { display: flex; align-items: center; gap: 6px; }
+    .h-name { font: 600 15px / 1.3 var(--font-family); color: var(--text-primary); }
+    .h-level {
+      padding: 1px 8px; border-radius: var(--radius-pill);
+      font: 500 10px / 1 var(--font-family);
+    }
+    .h-recent {
+      font: 400 12px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 3px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .h-recent i { font-size: 12px; }
+    .h-recent .hr-proj {
+      color: #4A6CF7;
+      max-width: 130px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .h-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+    .h-tag {
+      padding: 2px 8px; border-radius: var(--radius-pill);
+      font: 400 10px / 1 var(--font-family);
+      background: var(--bg-primary); color: var(--text-tertiary);
+    }
+    .h-right {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0;
+    }
+    .h-count { font: 700 16px / 1 var(--font-family); color: #4A6CF7; }
+    .h-count small { font: 400 10px / 1 var(--font-family); color: var(--text-tertiary); font-weight: 400; }
+    .h-date { font: 400 11px / 1 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+
+    .page-nav {
+      position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
+    }
+    .page-nav a {
+      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
+      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
+      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .page-nav a:hover { background: var(--primary); color: white; }
+    .page-nav a.active { background: var(--primary); color: white; }
+
+    .empty-row {
+      text-align: center; padding: var(--space-xxl) var(--space-lg);
+      font: 400 12px / 1.5 var(--font-family); color: var(--text-placeholder);
+    }
+
+    .reset-btn {
+      position: fixed; top: 12px; left: 12px; z-index: 100;
+      padding: 4px 10px; border-radius: var(--radius-pill);
+      font: 500 10px / 1 var(--font-family);
+      background: rgba(255,255,255,0.9); color: var(--danger);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: none; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-nav">
+    <a href="member-home.html">会员</a>
+    <a href="staff-home.html" class="active">员工</a>
+    <a href="admin-home.html">管理</a>
+    <a href="global-login.html">登录</a>
+  </div>
+  <button class="reset-btn" onclick="resetData()">重置演示数据</button>
+
+  <div class="phone-frame">
+    <div class="status-bar light">9:41</div>
+
+    <!-- Nav bar -->
+    <div class="nav-bar">
+      <div class="nav-back" onclick="location.href='staff-home.html'">‹</div>
+      <span class="nav-title">健康档案</span>
+    </div>
+
+    <div class="page-content">
+      <!-- Search -->
+      <div class="search-area">
+        <div class="search-box">
+          <span class="s-icon"><i class="van-icon van-icon-search" style="color: var(--text-tertiary);"></i></span>
+          <input class="s-input" type="text" placeholder="搜索会员姓名 / 手机号" id="searchInput">
+        </div>
+      </div>
+
+      <div class="list-tip-top">
+        <i class="van-icon van-icon-underway-o"></i>
+        按最近调理时间倒序 · 共 <span id="memberCount">0</span> 位会员
+      </div>
+
+      <!-- Member list (dynamic) -->
+      <div id="memberList"></div>
+
+      <div style="height: 24px;"></div>
+    </div>
+
+    <!-- Tab Bar (Staff) -->
+    <div class="tab-bar staff-tab-bar">
+      <div class="tab-item" onclick="location.href='staff-home.html'">
+        <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
+        <span class="tab-label">首页</span>
+      </div>
+      <div class="tab-item" onclick="location.href='staff-profile.html'">
+        <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
+        <span class="tab-label">我的</span>
+      </div>
+    </div>
+    <div class="safe-bottom"></div>
+  </div>
+
+  <script src="../js/prototype.js"></script>
+  <script src="../js/health-db.js"></script>
+  <script>
+    var allMembers = [];
+
+    function projectName(pid) {
+      var ps = HealthDB.getAllProjects();
+      for (var i = 0; i < ps.length; i++) { if (ps[i].id === pid) return ps[i].name; }
+      return '';
+    }
+
+    function renderList(keyword) {
+      var members = allMembers;
+      if (keyword) {
+        members = members.filter(function (m) {
+          return m.name.indexOf(keyword) > -1 || m.phone.indexOf(keyword) > -1;
+        });
+      }
+      var html = '';
+      members.forEach(function (m, idx) {
+        var lastProj = m.lastProjectId ? projectName(m.lastProjectId) : '';
+        var hasRecord = m.recordCount > 0;
+        var tagsHtml = (m.prefs || []).slice(0, 2).map(function (t) {
+          return '<span class="h-tag">' + t + '</span>';
+        }).join('');
+        html +=
+          '<a href="staff-member-detail.html?member=' + m.id + '" class="h-card animate-in' + (idx === 0 ? '' : ' delay-' + Math.min(idx + 1, 3)) + '">' +
+            '<div class="h-avatar" style="background:' + m.avatarBg + ';"><i class="van-icon van-icon-contact" style="color:' + m.avatarColor + ';"></i></div>' +
+            '<div class="h-info">' +
+              '<div class="h-info-top">' +
+                '<span class="h-name">' + m.name + '</span>' +
+                '<span class="h-level" style="background:' + m.levelBg + '; color:' + m.levelColor + ';">' + m.level + '</span>' +
+              '</div>' +
+              (hasRecord
+                ? '<div class="h-recent"><i class="van-icon van-icon-service-o"></i> 最近：<span class="hr-proj">' + lastProj + '</span></div>'
+                : '<div class="h-recent" style="color: var(--text-placeholder);"><i class="van-icon van-icon-warning-o"></i> 暂无调理记录</div>') +
+              (tagsHtml ? '<div class="h-tags">' + tagsHtml + '</div>' : '') +
+            '</div>' +
+            '<div class="h-right">' +
+              '<div class="h-count"' + (hasRecord ? '' : ' style="color: var(--text-tertiary);"') + '>' + m.recordCount + '<small> 次</small></div>' +
+              '<div class="h-date">' + (hasRecord ? HealthDB.mdDate(m.lastDate) : '—') + '</div>' +
+            '</div>' +
+          '</a>';
+      });
+      if (members.length === 0) {
+        html = '<div class="empty-row">未找到匹配的会员</div>';
+      }
+      document.getElementById('memberList').innerHTML = html;
+      document.getElementById('memberCount').textContent = members.length;
+    }
+
+    function resetData() {
+      HealthDB.reset();
+      allMembers = HealthDB.getAllMembers();
+      renderList();
+    }
+
+    // init
+    allMembers = HealthDB.getAllMembers();
+    renderList();
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+      renderList(this.value.trim());
+    });
+  </script>
+</body>
+</html>

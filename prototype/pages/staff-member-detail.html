@@ -3,184 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>P5 调理记录查看 - POS H5 原型</title>
+  <title>会员健康档案 - POS H5 原型</title>
   <link rel="stylesheet" href="../css/design-system.css">
   <style>
     /* ===== Nav ===== */
-    .nav-bar {
-      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
-    }
+    .nav-bar { background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%); }
     .nav-bar .nav-title { color: white; }
     .nav-bar .nav-back { color: white; }
 
     /* ===== Header area ===== */
-    .header-area {
-      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
-      padding: 0 var(--space-lg) var(--space-xxl);
-      position: relative;
-    }
-    .header-area::after {
-      content: '';
-      position: absolute;
-      bottom: -20px; left: 0; right: 0;
-      height: 40px;
-      background: var(--bg-primary);
-      border-radius: 24px 24px 0 0;
-    }
-
-    .member-header {
-      display: flex; align-items: center; gap: var(--space-md);
-      padding: var(--space-md) 0;
-    }
-    .mh-avatar {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; flex-shrink: 0;
-    }
+    .header-area { background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%); padding: 0 var(--space-lg) var(--space-xxl); position: relative; }
+    .header-area::after { content: ''; position: absolute; bottom: -20px; left: 0; right: 0; height: 40px; background: var(--bg-primary); border-radius: 24px 24px 0 0; }
+    .member-header { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md) 0; }
+    .mh-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
     .mh-info { flex: 1; }
     .mh-name { font: 600 18px / 1.3 var(--font-family); color: white; }
     .mh-meta { font: 400 12px / 1.4 var(--font-family); color: rgba(255,255,255,0.7); margin-top: 2px; }
-    .mh-level {
-      padding: 2px 8px; border-radius: var(--radius-pill);
-      background: rgba(255,255,255,0.2);
-      font: 500 10px / 1 var(--font-family); color: white;
-      display: inline-block; margin-left: 6px;
-    }
-    .mh-search {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; color: white; cursor: pointer; flex-shrink: 0;
-    }
+    .mh-level { padding: 2px 8px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.2); font: 500 10px / 1 var(--font-family); color: white; display: inline-block; margin-left: 6px; }
 
     /* ===== Stats summary ===== */
-    .summary-card {
-      background: var(--bg-white);
-      border-radius: var(--radius-xl);
-      padding: var(--space-md) var(--space-sm);
-      display: flex; justify-content: space-around;
-      position: relative; z-index: 1;
-      margin: -24px var(--space-lg) 0;
-      box-shadow: 0 4px 24px rgba(74, 108, 247, 0.15);
-    }
+    .summary-card { background: var(--bg-white); border-radius: var(--radius-xl); padding: var(--space-md) var(--space-sm); display: flex; justify-content: space-around; position: relative; z-index: 1; margin: -24px var(--space-lg) 0; box-shadow: 0 4px 24px rgba(74, 108, 247, 0.15); }
     .summary-item { text-align: center; flex: 1; }
     .summary-value { font: 700 18px / 1.2 var(--font-family); color: #4A6CF7; }
     .summary-label { font: 400 10px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
 
-    /* ===== Filter bar ===== */
-    .filter-bar {
-      display: flex; align-items: center; gap: var(--space-sm);
-      padding: var(--space-md) var(--space-lg) var(--space-sm);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .filter-bar::-webkit-scrollbar { display: none; }
-    .filter-chip {
-      flex-shrink: 0;
-      padding: 5px 14px;
-      border-radius: var(--radius-pill);
-      background: var(--bg-white);
-      font: 500 12px / 1 var(--font-family);
-      color: var(--text-secondary);
-      cursor: pointer;
-      box-shadow: var(--shadow-card);
-    }
-    .filter-chip.active {
-      background: #4A6CF7; color: white;
-    }
+    .pref-row { display: flex; flex-wrap: wrap; gap: 6px; padding: var(--space-md) var(--space-lg) var(--space-sm); }
+    .pref-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--radius-pill); background: var(--bg-white); box-shadow: var(--shadow-card); font: 400 11px / 1 var(--font-family); color: var(--text-secondary); }
+    .pref-tag i { font-size: 12px; color: #4A6CF7; }
 
-    /* ===== Record list ===== */
-    .record-list {
-      padding: 0 var(--space-lg);
-    }
-    .record-section {
-      margin-bottom: var(--space-md);
-    }
-    .record-date-label {
-      font: 600 12px / 1 var(--font-family);
-      color: var(--text-tertiary);
-      padding: var(--space-sm) 0;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .record-date-label::before {
-      content: ''; width: 3px; height: 12px;
-      background: #4A6CF7; border-radius: 2px;
-    }
+    .create-bar { padding: var(--space-sm) var(--space-lg) var(--space-md); }
+    .create-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px; border-radius: var(--radius-pill); background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%); color: white; border: none; cursor: pointer; font: 600 14px / 1 var(--font-family); box-shadow: 0 4px 16px rgba(74, 108, 247, 0.3); transition: opacity 0.2s; }
+    .create-btn:active { opacity: 0.85; }
 
-    .record-card {
-      display: flex; gap: var(--space-md);
-      padding: var(--space-md);
-      background: var(--bg-white);
-      border-radius: var(--radius-md);
-      margin-bottom: var(--space-sm);
-      box-shadow: var(--shadow-card);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .record-card:active { background: var(--bg-primary); }
-    .rc-icon {
-      width: 40px; height: 40px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .rc-info { flex: 1; min-width: 0; }
-    .rc-title-row {
-      display: flex; align-items: center; gap: 6px;
-    }
-    .rc-title { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
-    .rc-cat {
-      font: 500 10px / 1 var(--font-family);
-      padding: 2px 6px; border-radius: 4px;
-    }
-    .rc-cat.fix { background: #EBF0FF; color: #4A6CF7; }
-    .rc-cat.care { background: var(--primary-light); color: #2CB5A0; }
-    .rc-meta { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 4px; }
-    .rc-meta i { font-size: 11px; margin-right: 2px; }
-    .rc-note {
-      font: 400 12px / 1.5 var(--font-family);
-      color: var(--text-secondary); margin-top: 6px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .rc-photos {
-      display: flex; gap: 4px; margin-top: 6px;
-    }
-    .rc-photo {
-      width: 44px; height: 44px; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; color: rgba(255,255,255,0.8);
-    }
-    .rc-right { flex-shrink: 0; text-align: right; }
-    .rc-time { font: 400 11px / 1 var(--font-family); color: var(--text-tertiary); }
-    .rc-session {
-      font: 500 11px / 1 var(--font-family);
-      color: #4A6CF7; margin-top: 4px;
-      padding: 2px 8px; border-radius: var(--radius-pill);
-      background: #EBF0FF;
-      display: inline-block;
-    }
+    .sec-title { display: flex; align-items: center; gap: 6px; font: 600 14px / 1 var(--font-family); color: var(--text-primary); padding: var(--space-lg) var(--space-lg) var(--space-sm); }
+    .sec-title::before { content: ''; width: 3px; height: 14px; background: #4A6CF7; border-radius: 2px; }
 
-    /* ===== Page nav ===== */
-    .page-nav {
-      position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
-    }
-    .page-nav a {
-      display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill);
-      font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9);
-      color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      text-decoration: none; transition: all 0.2s;
-    }
+    /* ===== Project archives (accordion) ===== */
+    .archive-list { padding: 0 var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .archive-wrap { background: var(--bg-white); border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden; }
+    .archive-card { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); background: var(--bg-white); cursor: pointer; transition: background 0.15s; }
+    .archive-card:active { background: var(--bg-primary); }
+    .archive-wrap.expanded .archive-card { background: #F5F7FF; }
+    .ac-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .ac-info { flex: 1; min-width: 0; }
+    .ac-title { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
+    .ac-meta { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 4px; display: flex; align-items: center; gap: 8px; }
+    .ac-meta .am-count { color: #4A6CF7; font-weight: 500; }
+    .ac-arrow { font-size: 14px; color: var(--text-placeholder); flex-shrink: 0; transition: transform 0.25s; }
+    .archive-wrap.expanded .ac-arrow { transform: rotate(90deg); }
+
+    /* 展开的记录列表 */
+    .archive-records { display: none; padding: 0 var(--space-sm) var(--space-sm); }
+    .archive-wrap.expanded .archive-records { display: block; animation: fadeInUp 0.25s ease-out; }
+    .ar-empty { padding: var(--space-md); text-align: center; font: 400 11px / 1.4 var(--font-family); color: var(--text-placeholder); }
+    .ar-item { display: flex; gap: var(--space-sm); padding: var(--space-sm) var(--space-sm); border-top: 1px solid var(--border-light); }
+    .ar-item:first-child { border-top: none; }
+    .ar-date-col { flex-shrink: 0; text-align: center; min-width: 38px; }
+    .ar-date { font: 600 12px / 1.2 var(--font-family); color: var(--text-primary); }
+    .ar-session { font: 400 10px / 1 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+    .ar-body { flex: 1; min-width: 0; }
+    .ar-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .ar-resp { display: inline-flex; align-items: center; gap: 3px; font: 500 10px / 1 var(--font-family); padding: 2px 8px; border-radius: var(--radius-pill); }
+    .ar-resp i { font-size: 11px; }
+    .ar-resp.good { background: #E6F8F4; color: #1E9B88; }
+    .ar-resp.great { background: #EBF0FF; color: #4A6CF7; }
+    .ar-resp.normal { background: var(--bg-primary); color: var(--text-tertiary); }
+    .ar-resp.bad { background: #FFF0F0; color: var(--danger); }
+    .ar-note { font: 400 11px / 1.4 var(--font-family); color: var(--text-secondary); margin-top: 4px; }
+    .ar-att { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .ar-att-tag { padding: 1px 7px; border-radius: var(--radius-pill); font: 400 9px / 1.2 var(--font-family); background: #FFF8E8; color: var(--accent-dark); }
+    .ar-photos { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+    .ar-photo { width: 40px; height: 40px; border-radius: 5px; overflow: hidden; cursor: pointer; transition: transform 0.15s; }
+    .ar-photo:active { transform: scale(0.94); }
+    .ar-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ar-photo .ph-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: rgba(255,255,255,0.85); }
+    .ar-actions { display: flex; align-items: center; gap: var(--space-sm); flex-shrink: 0; }
+    .ar-edit { display: inline-flex; align-items: center; gap: 2px; padding: 4px 8px; border-radius: var(--radius-pill); font: 500 10px / 1 var(--font-family); color: #4A6CF7; background: #EBF0FF; cursor: pointer; }
+    .ar-edit i { font-size: 11px; }
+    .ar-edit:active { opacity: 0.7; }
+
+
+    .page-nav { position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px; }
+    .page-nav a { display: inline-flex; padding: 6px 12px; border-radius: var(--radius-pill); font: 500 11px / 1 var(--font-family); background: rgba(255,255,255,0.9); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-decoration: none; transition: all 0.2s; }
     .page-nav a:hover { background: var(--primary); color: white; }
     .page-nav a.active { background: var(--primary); color: white; }
-
-    .list-tip {
-      text-align: center; padding: var(--space-md);
-      font: 400 11px / 1.4 var(--font-family);
-      color: var(--text-placeholder);
-    }
   </style>
 </head>
 <body>
@@ -194,205 +100,167 @@
   <div class="phone-frame">
     <div class="status-bar light">9:41</div>
 
-    <!-- Nav bar -->
     <div class="nav-bar">
-      <div class="nav-back" onclick="location.href='staff-home.html'">‹</div>
-      <span class="nav-title">调理记录</span>
+      <div class="nav-back" id="navBack">‹</div>
+      <span class="nav-title">会员健康档案</span>
     </div>
 
     <div class="page-content">
-      <!-- Header -->
       <div class="header-area">
         <div class="member-header">
           <div class="mh-avatar"><i class="van-icon van-icon-contact" style="color: white;"></i></div>
           <div class="mh-info">
-            <span class="mh-name">李女士<span class="mh-level">金卡</span></span>
-            <div class="mh-meta">138****6789 · 万达店</div>
-          </div>
-          <div class="mh-search" onclick="location.href='staff-member-record.html'">
-            <i class="van-icon van-icon-search"></i>
+            <span class="mh-name" id="memberName">—<span class="mh-level" id="memberLevel">—</span></span>
+            <div class="mh-meta" id="memberMeta">—</div>
           </div>
         </div>
       </div>
 
-      <!-- Summary -->
       <div class="summary-card animate-in">
-        <div class="summary-item">
-          <div class="summary-value">12</div>
-          <div class="summary-label">调理次数</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-value" style="color: #2CB5A0;">8</div>
-          <div class="summary-label">修复项目</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-value" style="color: #E8A849;">4</div>
-          <div class="summary-label">调理项目</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-value" style="color: #F5A0B5;">05-18</div>
-          <div class="summary-label">最近服务</div>
-        </div>
+        <div class="summary-item"><div class="summary-value" id="totalCount">0</div><div class="summary-label">调理次数</div></div>
+        <div class="summary-item"><div class="summary-value" style="color: #2CB5A0;" id="archiveCount">0</div><div class="summary-label">项目档案</div></div>
+        <div class="summary-item"><div class="summary-value" style="color: #E8A849;" id="lastDate">—</div><div class="summary-label">最近服务</div></div>
       </div>
 
-      <!-- Filter bar -->
-      <div class="filter-bar">
-        <span class="filter-chip active">全部</span>
-        <span class="filter-chip">修复类</span>
-        <span class="filter-chip">调理类</span>
-        <span class="filter-chip">本月</span>
-        <span class="filter-chip">近3月</span>
-        <span class="filter-chip">全部时间</span>
+      <div class="pref-row animate-in delay-1" id="prefRow"></div>
+
+      <div class="create-bar">
+        <button class="create-btn" id="createBtn"><i class="van-icon van-icon-add-o"></i> 创建调理记录</button>
       </div>
 
-      <!-- Record list -->
-      <div class="record-list">
-        <!-- 5月 -->
-        <div class="record-section animate-in delay-1">
-          <div class="record-date-label">2026年5月</div>
+      <!-- 项目档案（手风琴展开） -->
+      <div class="sec-title">项目档案 <span style="font:400 11px/1 var(--font-family); color:var(--text-tertiary); font-weight:400; margin-left:auto;">点击展开记录</span></div>
+      <div class="archive-list" id="archiveList"></div>
 
-          <div class="record-card">
-            <div class="rc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
-            <div class="rc-info">
-              <div class="rc-title-row">
-                <span class="rc-title">肩颈深度调理</span>
-                <span class="rc-cat fix">修复</span>
-              </div>
-              <div class="rc-meta">
-                <i class="van-icon van-icon-manager-o"></i>张技师 ·
-                <i class="van-icon van-icon-clock-o"></i>60分钟 ·
-                <i class="van-icon van-icon-location-o"></i>万达店
-              </div>
-              <div class="rc-note">肩颈僵硬明显改善，做了深层筋膜松解和热石理疗，建议下次配合拔罐</div>
-              <div class="rc-photos">
-                <div class="rc-photo" style="background: linear-gradient(135deg,#4A6CF7,#6B8AFF);"><i class="van-icon van-icon-photo-o"></i></div>
-                <div class="rc-photo" style="background: linear-gradient(135deg,#2CB5A0,#3DD1BA);"><i class="van-icon van-icon-photo-o"></i></div>
-              </div>
-            </div>
-            <div class="rc-right">
-              <div class="rc-time">05-18</div>
-              <div class="rc-session">第4次</div>
-            </div>
-          </div>
-
-          <div class="record-card">
-            <div class="rc-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-service-o" style="color: #2CB5A0;"></i></div>
-            <div class="rc-info">
-              <div class="rc-title-row">
-                <span class="rc-title">肩颈深度调理</span>
-                <span class="rc-cat fix">修复</span>
-              </div>
-              <div class="rc-meta">
-                <i class="van-icon van-icon-manager-o"></i>张技师 ·
-                <i class="van-icon van-icon-clock-o"></i>60分钟 ·
-                <i class="van-icon van-icon-location-o"></i>万达店
-              </div>
-              <div class="rc-note">颈椎两侧肌肉紧张，重点松解斜方肌，客户反馈手法舒适</div>
-            </div>
-            <div class="rc-right">
-              <div class="rc-time">05-08</div>
-              <div class="rc-session">第3次</div>
-            </div>
-          </div>
-
-          <div class="record-card">
-            <div class="rc-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-service-o" style="color: #F5A0B5;"></i></div>
-            <div class="rc-info">
-              <div class="rc-title-row">
-                <span class="rc-title">面部精华护理</span>
-                <span class="rc-cat care">调理</span>
-              </div>
-              <div class="rc-meta">
-                <i class="van-icon van-icon-manager-o"></i>李技师 ·
-                <i class="van-icon van-icon-clock-o"></i>45分钟 ·
-                <i class="van-icon van-icon-location-o"></i>万达店
-              </div>
-              <div class="rc-note">深层补水修护，客户反馈良好，肤色明显提亮</div>
-              <div class="rc-photos">
-                <div class="rc-photo" style="background: linear-gradient(135deg,#F5A0B5,#F8B8C8);"><i class="van-icon van-icon-photo-o"></i></div>
-              </div>
-            </div>
-            <div class="rc-right">
-              <div class="rc-time">05-03</div>
-              <div class="rc-session">第2次</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4月 -->
-        <div class="record-section animate-in delay-2">
-          <div class="record-date-label">2026年4月</div>
-
-          <div class="record-card">
-            <div class="rc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
-            <div class="rc-info">
-              <div class="rc-title-row">
-                <span class="rc-title">肩颈深度调理</span>
-                <span class="rc-cat fix">修复</span>
-              </div>
-              <div class="rc-meta">
-                <i class="van-icon van-icon-manager-o"></i>张技师 ·
-                <i class="van-icon van-icon-clock-o"></i>60分钟 ·
-                <i class="van-icon van-icon-location-o"></i>万达店
-              </div>
-              <div class="rc-note">初次调理，客户肩颈劳损较严重，手法以轻柔为主</div>
-            </div>
-            <div class="rc-right">
-              <div class="rc-time">04-18</div>
-              <div class="rc-session">第1次</div>
-            </div>
-          </div>
-
-          <div class="record-card">
-            <div class="rc-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-service-o" style="color: #E8A849;"></i></div>
-            <div class="rc-info">
-              <div class="rc-title-row">
-                <span class="rc-title">足底反射调理</span>
-                <span class="rc-cat care">调理</span>
-              </div>
-              <div class="rc-meta">
-                <i class="van-icon van-icon-manager-o"></i>王技师 ·
-                <i class="van-icon van-icon-clock-o"></i>40分钟 ·
-                <i class="van-icon van-icon-location-o"></i>银泰店
-              </div>
-              <div class="rc-note">足底穴位按压，促进血液循环，客户反馈睡眠改善</div>
-            </div>
-            <div class="rc-right">
-              <div class="rc-time">04-10</div>
-              <div class="rc-session">第1次</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="list-tip">共 12 条调理记录 · 上滑查看更多</div>
-      </div>
 
       <div style="height: 24px;"></div>
     </div>
 
-    <!-- Tab Bar (Staff) -->
     <div class="tab-bar staff-tab-bar">
-      <div class="tab-item" onclick="location.href='staff-home.html'">
-        <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
-        <span class="tab-label">首页</span>
-      </div>
-      <div class="tab-item" onclick="location.href='staff-profile.html'">
-        <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
-        <span class="tab-label">我的</span>
-      </div>
+      <div class="tab-item" onclick="location.href='staff-home.html'"><span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span><span class="tab-label">首页</span></div>
+      <div class="tab-item" onclick="location.href='staff-profile.html'"><span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span><span class="tab-label">我的</span></div>
     </div>
     <div class="safe-bottom"></div>
   </div>
 
   <script src="../js/prototype.js"></script>
+  <script src="../js/health-db.js"></script>
   <script>
-    // Filter chip switching
-    document.querySelectorAll('.filter-chip').forEach(function(chip) {
-      chip.addEventListener('click', function() {
-        document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
-        chip.classList.add('active');
+    var memberId = HealthDB.getParam('member') || 'm1';
+    var expandProject = HealthDB.getParam('project'); // 从录入页带回，定位展开某档案
+
+    function refresh() {
+      return {
+        member: HealthDB.getMember(memberId),
+        archives: HealthDB.getMemberArchives(memberId),
+        records: HealthDB.getMemberRecords(memberId)
+      };
+    }
+    var data = refresh();
+
+    // ===== 抬头 =====
+    function renderHeader() {
+      var m = data.member;
+      if (!m) { document.getElementById('memberName').innerHTML = '会员不存在'; return; }
+      document.getElementById('memberName').innerHTML =
+        m.name + '<span class="mh-level" style="background:' + m.levelBg + ';color:' + m.levelColor + ';">' + m.level + '</span>';
+      document.getElementById('memberMeta').textContent = m.phone + ' · 万达店';
+      var total = data.archives.reduce(function (s, a) { return s + a.count; }, 0);
+      document.getElementById('totalCount').textContent = total;
+      document.getElementById('archiveCount').textContent = data.archives.length;
+      var allDates = data.records.map(function (r) { return r.date; }).sort();
+      document.getElementById('lastDate').textContent = allDates.length ? HealthDB.mdDate(allDates[allDates.length - 1]) : '—';
+      var prefIcons = { '偏好轻柔手法': 'like-o', '过敏体质': 'warn-o', '常约下午场': 'clock-o', '敏感肌': 'warn-o', '足疗保健': 'service-o' };
+      document.getElementById('prefRow').innerHTML = (m.prefs || []).map(function (t) {
+        return '<span class="pref-tag"><i class="van-icon van-icon-' + (prefIcons[t] || 'label-o') + '"></i>' + t + '</span>';
+      }).join('');
+    }
+
+    // 单条记录 HTML（用于展开列表和编辑入口）
+    function recordRowHtml(r) {
+      var meta = HealthDB.respMeta(r.response);
+      var resp = '<span class="ar-resp ' + meta.cls + '">' + (meta.icon ? '<i class="van-icon van-icon-' + meta.icon + '"></i>' : '') + meta.label + '</span>';
+      var att = (r.attention || []).map(function (t) { return '<span class="ar-att-tag">' + t + '</span>'; }).join('');
+      var pc = r.photoCount || (r.hasPhoto ? 1 : 0);
+      var photosHtml = '';
+      if (pc > 0) {
+        var cols = ['#4A6CF7', '#2CB5A0', '#F5A0B5', '#E8A849', '#8B5CF6'];
+        var items = '';
+        for (var i = 0; i < Math.min(pc, 4); i++) {
+          var c = cols[i % cols.length];
+          items += '<div class="ar-photo" onclick="previewPhoto(event)"><div class="ph-ph" style="background:linear-gradient(135deg,' + c + ',#6B8AFF);"><i class="van-icon van-icon-photo-o"></i></div></div>';
+        }
+        photosHtml = '<div class="ar-photos">' + items + '</div>';
+      }
+      return '<div class="ar-item">' +
+          '<div class="ar-date-col"><div class="ar-date">' + HealthDB.mdDate(r.date) + '</div><div class="ar-session">第' + r.sessionNo + '次</div></div>' +
+          '<div class="ar-body">' +
+            '<div class="ar-top">' + resp + '</div>' +
+            (r.note ? '<div class="ar-note">' + r.note + '</div>' : '') +
+            (att ? '<div class="ar-att">' + att + '</div>' : '') +
+            photosHtml +
+          '</div>' +
+          '<div class="ar-actions"><span class="ar-edit" onclick="editRecord(\'' + r.id + '\')"><i class="van-icon van-icon-edit"></i>编辑</span></div>' +
+        '</div>';
+    }
+
+    // ===== 项目档案（手风琴） =====
+    function renderArchives() {
+      var html = '';
+      data.archives.forEach(function (a) {
+        var expanded = expandProject === a.projectId;
+        var recsHtml = '';
+        if (a.records.length === 0) {
+          recsHtml = '<div class="ar-empty">暂无记录</div>';
+        } else {
+          recsHtml = a.records.map(recordRowHtml).join('');
+        }
+        html +=
+          '<div class="archive-wrap' + (expanded ? ' expanded' : '') + '" id="wrap-' + a.projectId + '">' +
+            '<div class="archive-card" onclick="toggleArchive(\'' + a.projectId + '\')">' +
+              '<div class="ac-icon" style="background:' + a.iconBg + ';"><i class="van-icon van-icon-service-o" style="color:' + a.iconColor + ';"></i></div>' +
+              '<div class="ac-info"><div class="ac-title">' + a.projectName + '</div>' +
+                '<div class="ac-meta"><span class="am-count">' + a.count + ' 次记录</span><span>最近 ' + HealthDB.mdDate(a.lastDate) + '</span></div>' +
+              '</div>' +
+              '<span class="ac-arrow"><i class="van-icon van-icon-arrow"></i></span>' +
+            '</div>' +
+            '<div class="archive-records">' + recsHtml + '</div>' +
+          '</div>';
       });
-    });
+      if (data.archives.length === 0) {
+        html = '<div style="padding:var(--space-md) var(--space-lg); font:400 12px/1.4 var(--font-family); color:var(--text-placeholder);">暂无项目档案，点击上方"创建调理记录"开始记录</div>';
+      }
+      document.getElementById('archiveList').innerHTML = html;
+    }
+
+
+    // ===== 交互 =====
+    function previewPhoto(e) {
+      if (e) e.stopPropagation();
+      alert('查看大图（原型占位：实际接入后显示原图）');
+    }
+    function toggleArchive(pid) {
+      expandProject = (expandProject === pid) ? null : pid;
+      renderArchives();
+    }
+    function editRecord(rid) {
+      location.href = 'staff-member-record.html?member=' + memberId + '&edit=' + rid;
+    }
+    function setupNav() {
+      document.getElementById('navBack').onclick = function () { location.href = 'staff-health-list.html'; };
+      document.getElementById('createBtn').onclick = function () { location.href = 'staff-member-record.html?member=' + memberId; };
+    }
+
+    // 若编辑后带回 project 参数，滚动到项目档案区并展开
+    renderHeader();
+    renderArchives();
+    setupNav();
+    if (expandProject) {
+      setTimeout(function () {
+        var el = document.getElementById('wrap-' + expandProject);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
   </script>
 </body>
 </html>
