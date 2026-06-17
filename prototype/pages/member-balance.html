@@ -132,89 +132,6 @@
       margin-left: 2px;
     }
 
-    /* Store dropdown — full overlay inside phone-frame */
-    .store-dropdown {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 500;
-    }
-    .store-dropdown.show {
-      display: block;
-    }
-    .store-dropdown-mask {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.3);
-    }
-    .store-dropdown-inner {
-      position: absolute;
-      top: 195px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--bg-white);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      padding: var(--space-sm) 0;
-      min-width: 240px;
-      z-index: 1;
-    }
-    .store-dropdown-inner::before {
-      content: '';
-      position: absolute;
-      top: -6px;
-      left: 50%;
-      width: 12px;
-      height: 12px;
-      background: var(--bg-white);
-      border-radius: 2px;
-      transform: translateX(-50%) rotate(45deg);
-    }
-    .store-option {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-      padding: var(--space-sm) var(--space-lg);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .store-option:active {
-      background: var(--bg-primary);
-    }
-    .store-option .so-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .store-option .so-info {
-      flex: 1;
-    }
-    .store-option .so-name {
-      font: 500 13px / 1.3 var(--font-family);
-      color: var(--text-primary);
-    }
-    .store-option .so-balance {
-      font: 400 11px / 1.3 var(--font-family);
-      color: var(--text-tertiary);
-      margin-top: 1px;
-    }
-    .store-option .so-check {
-      color: var(--primary);
-      font-size: 16px;
-      visibility: hidden;
-    }
-    .store-option.active .so-check {
-      visibility: visible;
-    }
-    .store-option.active .so-name {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
     /* Quick stats row */
     .quick-stats {
       display: flex;
@@ -506,6 +423,208 @@
       color: var(--text-placeholder);
     }
 
+    /* Records link card */
+    .records-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin: var(--space-md) var(--space-lg);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      transition: transform 0.15s;
+    }
+    .records-link:active { transform: scale(0.98); }
+    .records-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .records-text { flex: 1; min-width: 0; }
+    .records-title {
+      font: 600 14px / 1.3 var(--font-family);
+      color: var(--text-primary);
+    }
+    .records-desc {
+      font: 400 11px / 1.3 var(--font-family);
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+    .records-arrow {
+      color: var(--text-placeholder);
+      font-size: 14px;
+    }
+
+    /* Section title (会员卡 / 优惠券) */
+    .asset-section {
+      margin: var(--space-lg) var(--space-lg) 0;
+    }
+    .asset-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-md);
+    }
+    .asset-title {
+      font: 600 15px / 1 var(--font-family);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .asset-count {
+      font: 400 12px / 1 var(--font-family);
+      color: var(--text-placeholder);
+    }
+    .asset-more {
+      font: 400 12px / 1 var(--font-family);
+      color: var(--text-tertiary);
+      text-decoration: none;
+    }
+
+    /* Member card (金/银/铂金) */
+    .member-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      margin-bottom: var(--space-md);
+    }
+    .mc-banner {
+      padding: var(--space-md) var(--space-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    .mc-banner::before {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+    }
+    .mc-banner.gold { background: linear-gradient(135deg, #C9A96E 0%, #E8C878 50%, #D4A94E 100%); }
+    .mc-banner.silver { background: linear-gradient(135deg, #8E9AAF 0%, #B8C4D0 50%, #9EAAB8 100%); }
+    .mc-banner.platinum { background: linear-gradient(135deg, #2CB5A0 0%, #3DD1BA 50%, #25A090 100%); }
+    .mc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      z-index: 1;
+    }
+    .mc-type {
+      font: 600 14px / 1 var(--font-family);
+      color: white;
+      background: rgba(255,255,255,0.2);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .mc-store {
+      font: 400 12px / 1 var(--font-family);
+      color: rgba(255,255,255,0.85);
+      margin-top: 6px;
+    }
+    .mc-no {
+      font: 400 11px / 1 var(--font-family);
+      color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+    }
+    .mc-discount { text-align: right; }
+    .mc-discount-value {
+      font: 700 22px / 1 var(--font-family);
+      color: white;
+    }
+    .mc-discount-label {
+      font: 400 10px / 1 var(--font-family);
+      color: rgba(255,255,255,0.7);
+      margin-top: 2px;
+    }
+    .mc-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--bg-white);
+    }
+    .mc-balance-label {
+      font: 400 11px / 1 var(--font-family);
+      color: var(--text-tertiary);
+    }
+    .mc-balance-value {
+      font: 700 18px / 1.2 var(--font-family);
+      color: var(--primary);
+      margin-top: 2px;
+    }
+    .mc-balance-value::before {
+      content: '¥';
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Coupon card (mini) */
+    .coupon-card {
+      display: flex;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      background: var(--bg-white);
+      margin-bottom: var(--space-sm);
+    }
+    .coupon-left {
+      width: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-md);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .coupon-left::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 10px;
+      bottom: 10px;
+      width: 1px;
+      border-left: 2px dashed var(--border);
+    }
+    .coupon-left .c-amount {
+      font: 700 24px / 1 var(--font-family);
+      color: white;
+    }
+    .coupon-left .c-unit {
+      font: 400 10px / 1 var(--font-family);
+      color: rgba(255,255,255,0.85);
+      margin-top: 2px;
+    }
+    .coupon-left.discount { background: var(--secondary); }
+    .coupon-left.cash { background: var(--primary); }
+    .coupon-left.gift { background: var(--accent); }
+    .coupon-right {
+      flex: 1;
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .coupon-right .c-title {
+      font: 600 13px / 1.3 var(--font-family);
+      color: var(--text-primary);
+    }
+    .coupon-right .c-desc {
+      font: 400 11px / 1.4 var(--font-family);
+      color: var(--text-tertiary);
+      margin-top: 3px;
+    }
+    .coupon-right .c-date {
+      font: 400 10px / 1 var(--font-family);
+      color: var(--text-placeholder);
+      margin-top: 4px;
+    }
+
     .page-nav {
       position: fixed;
       top: 12px;
@@ -549,11 +668,10 @@
         </div>
         <div class="balance-hero animate-in">
           <div class="label">账户余额（元）<span class="eye-toggle"><i class="van-icon van-icon-eye-o"></i></span></div>
-          <div class="amount">3,280.00</div>
-          <div class="store-selector" onclick="document.querySelector('.store-dropdown').classList.toggle('show')">
+          <div class="amount">5,280.00</div>
+          <div class="store-selector">
             <span class="store-dot"></span>
             <span class="store-name">万达店</span>
-            <span class="store-arrow"><i class="van-icon van-icon-arrow-down"></i></span>
           </div>
         </div>
         <div class="quick-stats animate-in delay-1">
@@ -569,204 +687,146 @@
       </div>
 
       <!-- Month summary -->
-      <div class="month-summary animate-in delay-2">
+      <!-- <div class="month-summary animate-in delay-2">
         <div class="ms-item">
-          <div class="ms-value expense">¥2,192</div>
-          <div class="ms-label">本月消费</div>
+          <div class="ms-value income">¥5,280</div>
+          <div class="ms-label">累计充值</div>
         </div>
         <div class="ms-divider"></div>
         <div class="ms-item">
-          <div class="ms-value income">¥3,000</div>
-          <div class="ms-label">本月充值</div>
+          <div class="ms-value expense">¥2,000</div>
+          <div class="ms-label">累计消费</div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- Toolbar: month + filters -->
-      <div class="toolbar animate-in delay-2">
-        <div class="month-picker">
-          <div class="month-arrow"><i class="van-icon van-icon-arrow-left" style="font-size:12px;"></i></div>
-          <span class="month-text">2026年5月</span>
-          <div class="month-arrow"><i class="van-icon van-icon-arrow" style="font-size:12px;"></i></div>
+      <!-- 入口：查看消费记录 -->
+      <!-- <a href="member-records.html" class="records-link animate-in delay-3" style="text-decoration:none;">
+        <div class="records-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-orders-o" style="color: #2CB5A0;"></i></div>
+        <div class="records-text">
+          <div class="records-title">消费记录</div>
+          <div class="records-desc">查看充值与消费明细、按月筛选</div>
         </div>
-        <div class="filter-tabs">
-          <div class="filter-tab active">全部</div>
-          <div class="filter-tab">消费</div>
-          <div class="filter-tab">充值</div>
-        </div>
-      </div>
+        <span class="records-arrow"><i class="van-icon van-icon-arrow"></i></span>
+      </a> -->
 
-      <!-- Transaction list -->
-      <div class="tx-list animate-in delay-3">
-        <div class="tx-date-group">
-          <div class="tx-date-label">5月28日 <span class="tx-count">· 1笔</span></div>
-          <!-- 多明细订单（可展开） -->
-          <div class="order-card" onclick="this.classList.toggle('expanded')">
-            <div class="order-header">
-              <div class="order-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-orders-o" style="color: #F5A0B5;"></i></div>
-              <div class="order-summary">
-                <h4>肩颈调理 + 全身SPA</h4>
-                <p>万达店 · 张技师、李技师</p>
+      <!-- 我的会员卡 -->
+      <div class="asset-section animate-in delay-3">
+        <div class="asset-header">
+          <span class="asset-title"><i class="van-icon van-icon-card" style="color: #2CB5A0;"></i> 我的会员卡</span>
+          <span class="asset-count">共 3 张</span>
+        </div>
+
+        <div class="member-card">
+          <div class="mc-banner gold">
+            <div class="mc-top">
+              <div>
+                <div class="mc-type">金卡</div>
+                <div class="mc-store">万达店</div>
+                <div class="mc-no">LD20260001</div>
               </div>
-              <div class="order-right">
-                <div class="order-amount expense">-¥796.00</div>
-                <div class="order-balance">余额 ¥3,280.00</div>
-                <span class="order-expand-icon"><i class="van-icon van-icon-arrow-down"></i></span>
-              </div>
-            </div>
-            <div class="order-details">
-              <div class="order-detail-list">
-                <div class="detail-item">
-                  <div class="detail-left">
-                    <span class="detail-dot"></span>
-                    <span class="detail-name">肩颈深度调理</span>
-                    <span class="detail-staff">张技师</span>
-                  </div>
-                  <span class="detail-price">¥298.00</span>
-                </div>
-                <div class="detail-item">
-                  <div class="detail-left">
-                    <span class="detail-dot"></span>
-                    <span class="detail-name">全身精油SPA</span>
-                    <span class="detail-staff">李技师</span>
-                  </div>
-                  <span class="detail-price">¥498.00</span>
-                </div>
-              </div>
-              <div class="order-total-bar">
-                <span class="otb-label">共2项 · 余额支付</span>
-                <span class="otb-amount">合计 ¥796.00</span>
+              <div class="mc-discount">
+                <div class="mc-discount-value">8折</div>
+                <div class="mc-discount-label">专属折扣</div>
               </div>
             </div>
           </div>
+          <div class="mc-bottom">
+            <div>
+              <div class="mc-balance-label">卡内余额</div>
+              <div class="mc-balance-value">3,280.00</div>
+            </div>
+            <span class="badge badge-success">当前门店</span>
+          </div>
         </div>
-
-        <div class="tx-date-group">
-          <div class="tx-date-label">5月25日 <span class="tx-count">· 1笔</span></div>
-          <!-- 充值订单（无明细） -->
-          <div class="order-card">
-            <div class="order-header">
-              <div class="order-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-gold-coin-o" style="color: #2CB5A0;"></i></div>
-              <div class="order-summary">
-                <h4>余额充值</h4>
-                <p>微信支付</p>
+        <div class="member-card">
+          <div class="mc-banner silver">
+            <div class="mc-top">
+              <div>
+                <div class="mc-type">银卡</div>
+                <div class="mc-store">银泰店</div>
+                <div class="mc-no">LD20260042</div>
               </div>
-              <div class="order-right">
-                <div class="order-amount income">+¥2,000.00</div>
-                <div class="order-balance">余额 ¥4,076.00</div>
+              <div class="mc-discount">
+                <div class="mc-discount-value">9折</div>
+                <div class="mc-discount-label">专属折扣</div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="tx-date-group">
-          <div class="tx-date-label">5月20日 <span class="tx-count">· 1笔</span></div>
-          <div class="order-card" onclick="this.classList.toggle('expanded')">
-            <div class="order-header">
-              <div class="order-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-orders-o" style="color: #E8A849;"></i></div>
-              <div class="order-summary">
-                <h4>面部护理 + 足部调理</h4>
-                <p>万达店 · 王技师</p>
-              </div>
-              <div class="order-right">
-                <div class="order-amount expense">-¥326.00</div>
-                <div class="order-balance">余额 ¥2,076.00</div>
-                <span class="order-expand-icon"><i class="van-icon van-icon-arrow-down"></i></span>
-              </div>
-            </div>
-            <div class="order-details">
-              <div class="order-detail-list">
-                <div class="detail-item">
-                  <div class="detail-left">
-                    <span class="detail-dot"></span>
-                    <span class="detail-name">面部护理</span>
-                    <span class="detail-staff">王技师</span>
-                  </div>
-                  <span class="detail-price">¥198.00</span>
-                </div>
-                <div class="detail-item">
-                  <div class="detail-left">
-                    <span class="detail-dot"></span>
-                    <span class="detail-name">足部调理</span>
-                  </div>
-                  <span class="detail-price">¥128.00</span>
-                </div>
-              </div>
-              <div class="order-total-bar">
-                <span class="otb-label">共2项 · 余额支付</span>
-                <span class="otb-amount">合计 ¥326.00</span>
-              </div>
+          <div class="mc-bottom">
+            <div>
+              <div class="mc-balance-label">卡内余额</div>
+              <div class="mc-balance-value">1,200.00</div>
             </div>
           </div>
         </div>
-
-        <div class="tx-date-group">
-          <div class="tx-date-label">5月15日 <span class="tx-count">· 1笔</span></div>
-          <div class="order-card">
-            <div class="order-header">
-              <div class="order-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-gold-coin-o" style="color: #2CB5A0;"></i></div>
-              <div class="order-summary">
-                <h4>余额充值</h4>
-                <p>微信支付</p>
+        <div class="member-card">
+          <div class="mc-banner platinum">
+            <div class="mc-top">
+              <div>
+                <div class="mc-type">铂金卡</div>
+                <div class="mc-store">龙湖店</div>
+                <div class="mc-no">LD20260088</div>
               </div>
-              <div class="order-right">
-                <div class="order-amount income">+¥1,000.00</div>
-                <div class="order-balance">余额 ¥2,302.00</div>
+              <div class="mc-discount">
+                <div class="mc-discount-value">7折</div>
+                <div class="mc-discount-label">专属折扣</div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="tx-date-group">
-          <div class="tx-date-label">5月10日 <span class="tx-count">· 1笔</span></div>
-          <!-- 单服务订单（无明细展开） -->
-          <div class="order-card">
-            <div class="order-header">
-              <div class="order-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-service-o" style="color: #F5A0B5;"></i></div>
-              <div class="order-summary">
-                <h4>足部调理</h4>
-                <p>银泰店 · 赵技师</p>
-              </div>
-              <div class="order-right">
-                <div class="order-amount expense">-¥128.00</div>
-                <div class="order-balance">余额 ¥1,302.00</div>
-              </div>
+          <div class="mc-bottom">
+            <div>
+              <div class="mc-balance-label">卡内余额</div>
+              <div class="mc-balance-value">800.00</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="list-footer">已显示全部交易记录</div>
-    </div>
+      <!-- 我的优惠券 -->
+      <div class="asset-section animate-in delay-3">
+        <div class="asset-header">
+          <span class="asset-title"><i class="van-icon van-icon-coupon-o" style="color: #F5A0B5;"></i> 我的优惠券</span>
+          <a href="member-coupon.html" class="asset-more">查看全部 ›</a>
+        </div>
 
-    <!-- Store dropdown (outside page-content to avoid overflow clipping) -->
-    <div class="store-dropdown">
-      <div class="store-dropdown-mask" onclick="document.querySelector('.store-dropdown').classList.remove('show')"></div>
-      <div class="store-dropdown-inner">
-        <div class="store-option active">
-          <span class="so-dot" style="background: #C9A96E;"></span>
-          <div class="so-info">
-            <div class="so-name">万达店 · 金卡 <span class="so-discount">8折</span></div>
-            <div class="so-balance">余额 ¥3,280.00</div>
+        <div class="coupon-card">
+          <div class="coupon-left cash">
+            <div class="c-amount">50</div>
+            <div class="c-unit">满200可用</div>
           </div>
-          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+          <div class="coupon-right">
+            <div class="c-title">满减优惠券</div>
+            <div class="c-desc">全场项目通用 · 不可叠加</div>
+            <div class="c-date">有效期至 2026-06-30</div>
+          </div>
         </div>
-        <div class="store-option">
-          <span class="so-dot" style="background: #8E9AAF;"></span>
-          <div class="so-info">
-            <div class="so-name">银泰店 · 银卡 <span class="so-discount">9折</span></div>
-            <div class="so-balance">余额 ¥1,200.00</div>
+
+        <div class="coupon-card">
+          <div class="coupon-left discount">
+            <div class="c-amount">8折</div>
+            <div class="c-unit">肩颈专用</div>
           </div>
-          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+          <div class="coupon-right">
+            <div class="c-title">肩颈调理专属折扣</div>
+            <div class="c-desc">仅限肩颈调理项目 · 每人限用1次</div>
+            <div class="c-date">有效期至 2026-06-15</div>
+          </div>
         </div>
-        <div class="store-option">
-          <span class="so-dot" style="background: var(--primary);"></span>
-          <div class="so-info">
-            <div class="so-name">龙湖店 · 铂金卡 <span class="so-discount">7折</span></div>
-            <div class="so-balance">余额 ¥800.00</div>
+
+        <div class="coupon-card">
+          <div class="coupon-left gift">
+            <div class="c-amount">赠</div>
+            <div class="c-unit">体验项目</div>
           </div>
-          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+          <div class="coupon-right">
+            <div class="c-title">新项目免费体验券</div>
+            <div class="c-desc">肩颈深度调理免费体验1次</div>
+            <div class="c-date">有效期至 2026-07-31</div>
+          </div>
         </div>
       </div>
+
+      <div class="list-footer">— 资产信息 —</div>
     </div>
 
     <!-- Tab Bar -->

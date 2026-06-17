@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>会员详情 - POS H5 原型</title>
+  <title>P5 调理记录查看 - POS H5 原型</title>
   <link rel="stylesheet" href="../css/design-system.css">
   <style>
     /* ===== Nav ===== */
@@ -12,7 +12,6 @@
     }
     .nav-bar .nav-title { color: white; }
     .nav-bar .nav-back { color: white; }
-    .nav-bar .nav-right { color: white; font-size: 13px; cursor: pointer; }
 
     /* ===== Header area ===== */
     .header-area {
@@ -34,56 +33,81 @@
       padding: var(--space-md) 0;
     }
     .mh-avatar {
-      width: 56px; height: 56px; border-radius: 50%;
+      width: 48px; height: 48px; border-radius: 50%;
       background: rgba(255,255,255,0.25);
       display: flex; align-items: center; justify-content: center;
-      font-size: 28px; flex-shrink: 0;
+      font-size: 24px; flex-shrink: 0;
     }
     .mh-info { flex: 1; }
-    .mh-name { font: 600 20px / 1.3 var(--font-family); color: white; }
+    .mh-name { font: 600 18px / 1.3 var(--font-family); color: white; }
     .mh-meta { font: 400 12px / 1.4 var(--font-family); color: rgba(255,255,255,0.7); margin-top: 2px; }
     .mh-level {
-      padding: 3px 10px; border-radius: var(--radius-pill);
+      padding: 2px 8px; border-radius: var(--radius-pill);
       background: rgba(255,255,255,0.2);
-      font: 500 11px / 1 var(--font-family); color: white;
-      display: inline-block; margin-top: 4px;
+      font: 500 10px / 1 var(--font-family); color: white;
+      display: inline-block; margin-left: 6px;
+    }
+    .mh-search {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: white; cursor: pointer; flex-shrink: 0;
     }
 
-    /* ===== Stats card ===== */
-    .stats-card {
+    /* ===== Stats summary ===== */
+    .summary-card {
       background: var(--bg-white);
       border-radius: var(--radius-xl);
-      padding: var(--space-lg) var(--space-sm);
+      padding: var(--space-md) var(--space-sm);
       display: flex; justify-content: space-around;
       position: relative; z-index: 1;
       margin: -24px var(--space-lg) 0;
       box-shadow: 0 4px 24px rgba(74, 108, 247, 0.15);
     }
-    .stats-item { text-align: center; flex: 1; }
-    .stats-value { font: 700 16px / 1.2 var(--font-family); }
-    .stats-label { font: 400 10px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
+    .summary-item { text-align: center; flex: 1; }
+    .summary-value { font: 700 18px / 1.2 var(--font-family); color: #4A6CF7; }
+    .summary-label { font: 400 10px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
 
-    /* ===== Tags ===== */
-    .section {
-      padding: var(--space-lg) var(--space-lg) 0;
+    /* ===== Filter bar ===== */
+    .filter-bar {
+      display: flex; align-items: center; gap: var(--space-sm);
+      padding: var(--space-md) var(--space-lg) var(--space-sm);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
-    .section-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: var(--space-md);
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      flex-shrink: 0;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-white);
+      font: 500 12px / 1 var(--font-family);
+      color: var(--text-secondary);
+      cursor: pointer;
+      box-shadow: var(--shadow-card);
     }
-    .section-title {
-      font: 600 14px / 1 var(--font-family); color: var(--text-primary);
-    }
-    .section-more {
-      font: 400 12px / 1 var(--font-family); color: var(--text-tertiary); cursor: pointer;
-    }
-    .tags-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
-    .tag-item {
-      padding: 4px 12px; border-radius: var(--radius-pill);
-      font: 500 11px / 1.2 var(--font-family);
+    .filter-chip.active {
+      background: #4A6CF7; color: white;
     }
 
     /* ===== Record list ===== */
+    .record-list {
+      padding: 0 var(--space-lg);
+    }
+    .record-section {
+      margin-bottom: var(--space-md);
+    }
+    .record-date-label {
+      font: 600 12px / 1 var(--font-family);
+      color: var(--text-tertiary);
+      padding: var(--space-sm) 0;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .record-date-label::before {
+      content: ''; width: 3px; height: 12px;
+      background: #4A6CF7; border-radius: 2px;
+    }
+
     .record-card {
       display: flex; gap: var(--space-md);
       padding: var(--space-md);
@@ -101,26 +125,45 @@
       font-size: 18px; flex-shrink: 0;
     }
     .rc-info { flex: 1; min-width: 0; }
-    .rc-title { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
-    .rc-meta { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 2px; }
-    .rc-note { font: 400 12px / 1.4 var(--font-family); color: var(--text-secondary); margin-top: 4px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .rc-right { flex-shrink: 0; text-align: right; }
-    .rc-date { font: 400 11px / 1 var(--font-family); color: var(--text-tertiary); }
-    .rc-session { font: 500 11px / 1 var(--font-family); color: #4A6CF7; margin-top: 2px; }
-
-    /* ===== Submit ===== */
-    .submit-area { padding: var(--space-lg) var(--space-lg) var(--space-xxl); }
-    .submit-btn {
-      width: 100%; padding: 14px;
-      border-radius: var(--radius-pill);
-      background: linear-gradient(135deg, #4A6CF7 0%, #6B8AFF 100%);
-      color: white; font: 600 16px / 1 var(--font-family);
-      border: none; cursor: pointer; transition: opacity 0.2s;
-      text-decoration: none; display: block; text-align: center;
+    .rc-title-row {
+      display: flex; align-items: center; gap: 6px;
     }
-    .submit-btn:active { opacity: 0.85; }
+    .rc-title { font: 500 14px / 1.3 var(--font-family); color: var(--text-primary); }
+    .rc-cat {
+      font: 500 10px / 1 var(--font-family);
+      padding: 2px 6px; border-radius: 4px;
+    }
+    .rc-cat.fix { background: #EBF0FF; color: #4A6CF7; }
+    .rc-cat.care { background: var(--primary-light); color: #2CB5A0; }
+    .rc-meta { font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 4px; }
+    .rc-meta i { font-size: 11px; margin-right: 2px; }
+    .rc-note {
+      font: 400 12px / 1.5 var(--font-family);
+      color: var(--text-secondary); margin-top: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .rc-photos {
+      display: flex; gap: 4px; margin-top: 6px;
+    }
+    .rc-photo {
+      width: 44px; height: 44px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: rgba(255,255,255,0.8);
+    }
+    .rc-right { flex-shrink: 0; text-align: right; }
+    .rc-time { font: 400 11px / 1 var(--font-family); color: var(--text-tertiary); }
+    .rc-session {
+      font: 500 11px / 1 var(--font-family);
+      color: #4A6CF7; margin-top: 4px;
+      padding: 2px 8px; border-radius: var(--radius-pill);
+      background: #EBF0FF;
+      display: inline-block;
+    }
 
+    /* ===== Page nav ===== */
     .page-nav {
       position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
     }
@@ -132,6 +175,12 @@
     }
     .page-nav a:hover { background: var(--primary); color: white; }
     .page-nav a.active { background: var(--primary); color: white; }
+
+    .list-tip {
+      text-align: center; padding: var(--space-md);
+      font: 400 11px / 1.4 var(--font-family);
+      color: var(--text-placeholder);
+    }
   </style>
 </head>
 <body>
@@ -147,9 +196,8 @@
 
     <!-- Nav bar -->
     <div class="nav-bar">
-      <div class="nav-back" onclick="history.back()">‹</div>
-      <span class="nav-title">会员详情</span>
-      <div class="nav-right"><i class="van-icon van-icon-edit"></i> 编辑</div>
+      <div class="nav-back" onclick="location.href='staff-home.html'">‹</div>
+      <span class="nav-title">调理记录</span>
     </div>
 
     <div class="page-content">
@@ -158,126 +206,175 @@
         <div class="member-header">
           <div class="mh-avatar"><i class="van-icon van-icon-contact" style="color: white;"></i></div>
           <div class="mh-info">
-            <div class="mh-name">李女士</div>
-            <div class="mh-meta">138****6789 · LD20260008</div>
-            <span class="mh-level">金卡会员</span>
+            <span class="mh-name">李女士<span class="mh-level">金卡</span></span>
+            <div class="mh-meta">138****6789 · 万达店</div>
+          </div>
+          <div class="mh-search" onclick="location.href='staff-member-record.html'">
+            <i class="van-icon van-icon-search"></i>
           </div>
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="stats-card animate-in">
-        <div class="stats-item">
-          <div class="stats-value" style="color: #2CB5A0;">¥3,280</div>
-          <div class="stats-label">余额</div>
+      <!-- Summary -->
+      <div class="summary-card animate-in">
+        <div class="summary-item">
+          <div class="summary-value">12</div>
+          <div class="summary-label">调理次数</div>
         </div>
-        <div class="stats-item">
-          <div class="stats-value" style="color: #E8A849;">1,560</div>
-          <div class="stats-label">积分</div>
+        <div class="summary-item">
+          <div class="summary-value" style="color: #2CB5A0;">8</div>
+          <div class="summary-label">修复项目</div>
         </div>
-        <div class="stats-item">
-          <div class="stats-value" style="color: #4A6CF7;">42</div>
-          <div class="stats-label">到店次数</div>
+        <div class="summary-item">
+          <div class="summary-value" style="color: #E8A849;">4</div>
+          <div class="summary-label">调理项目</div>
         </div>
-        <div class="stats-item">
-          <div class="stats-value" style="color: #8B5CF6;">¥28,600</div>
-          <div class="stats-label">累计消费</div>
-        </div>
-      </div>
-
-      <!-- Tags -->
-      <div class="section animate-in delay-1">
-        <div class="section-header">
-          <span class="section-title">健康标签</span>
-        </div>
-        <div class="tags-wrap">
-          <span class="tag-item" style="background: #EBF0FF; color: #4A6CF7;">肩颈问题</span>
-          <span class="tag-item" style="background: var(--secondary-light); color: var(--secondary-dark);">过敏体质</span>
-          <span class="tag-item" style="background: var(--accent-light); color: var(--accent-dark);">偏好轻柔手法</span>
+        <div class="summary-item">
+          <div class="summary-value" style="color: #F5A0B5;">05-18</div>
+          <div class="summary-label">最近服务</div>
         </div>
       </div>
 
-      <!-- Treatment records -->
-      <div class="section animate-in delay-2">
-        <div class="section-header">
-          <span class="section-title">调理记录 (12次)</span>
-          <span class="section-more">查看全部 ›</span>
-        </div>
-
-        <div class="record-card">
-          <div class="rc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
-          <div class="rc-info">
-            <div class="rc-title">肩颈深度调理</div>
-            <div class="rc-meta">张技师 · 60分钟</div>
-            <div class="rc-note">肩颈僵硬明显改善，做了深层筋膜松解和热石理疗</div>
-          </div>
-          <div class="rc-right">
-            <div class="rc-date">05-18</div>
-            <div class="rc-session">第4次</div>
-          </div>
-        </div>
-
-        <div class="record-card">
-          <div class="rc-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-service-o" style="color: #2CB5A0;"></i></div>
-          <div class="rc-info">
-            <div class="rc-title">肩颈深度调理</div>
-            <div class="rc-meta">张技师 · 60分钟</div>
-            <div class="rc-note">颈椎两侧肌肉紧张，重点松解斜方肌</div>
-          </div>
-          <div class="rc-right">
-            <div class="rc-date">05-08</div>
-            <div class="rc-session">第3次</div>
-          </div>
-        </div>
-
-        <div class="record-card">
-          <div class="rc-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-service-o" style="color: #F5A0B5;"></i></div>
-          <div class="rc-info">
-            <div class="rc-title">面部精华护理</div>
-            <div class="rc-meta">李技师 · 45分钟</div>
-            <div class="rc-note">深层补水修护，客户反馈良好</div>
-          </div>
-          <div class="rc-right">
-            <div class="rc-date">04-28</div>
-            <div class="rc-session">第2次</div>
-          </div>
-        </div>
-
-        <div class="record-card">
-          <div class="rc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
-          <div class="rc-info">
-            <div class="rc-title">肩颈深度调理</div>
-            <div class="rc-meta">张技师 · 60分钟</div>
-            <div class="rc-note">初次调理，客户肩颈劳损较严重</div>
-          </div>
-          <div class="rc-right">
-            <div class="rc-date">04-18</div>
-            <div class="rc-session">第1次</div>
-          </div>
-        </div>
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <span class="filter-chip active">全部</span>
+        <span class="filter-chip">修复类</span>
+        <span class="filter-chip">调理类</span>
+        <span class="filter-chip">本月</span>
+        <span class="filter-chip">近3月</span>
+        <span class="filter-chip">全部时间</span>
       </div>
 
-      <!-- Add record button -->
-      <div class="submit-area animate-in delay-3">
-        <a href="staff-member-record.html" class="submit-btn">+ 新增调理记录</a>
+      <!-- Record list -->
+      <div class="record-list">
+        <!-- 5月 -->
+        <div class="record-section animate-in delay-1">
+          <div class="record-date-label">2026年5月</div>
+
+          <div class="record-card">
+            <div class="rc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
+            <div class="rc-info">
+              <div class="rc-title-row">
+                <span class="rc-title">肩颈深度调理</span>
+                <span class="rc-cat fix">修复</span>
+              </div>
+              <div class="rc-meta">
+                <i class="van-icon van-icon-manager-o"></i>张技师 ·
+                <i class="van-icon van-icon-clock-o"></i>60分钟 ·
+                <i class="van-icon van-icon-location-o"></i>万达店
+              </div>
+              <div class="rc-note">肩颈僵硬明显改善，做了深层筋膜松解和热石理疗，建议下次配合拔罐</div>
+              <div class="rc-photos">
+                <div class="rc-photo" style="background: linear-gradient(135deg,#4A6CF7,#6B8AFF);"><i class="van-icon van-icon-photo-o"></i></div>
+                <div class="rc-photo" style="background: linear-gradient(135deg,#2CB5A0,#3DD1BA);"><i class="van-icon van-icon-photo-o"></i></div>
+              </div>
+            </div>
+            <div class="rc-right">
+              <div class="rc-time">05-18</div>
+              <div class="rc-session">第4次</div>
+            </div>
+          </div>
+
+          <div class="record-card">
+            <div class="rc-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-service-o" style="color: #2CB5A0;"></i></div>
+            <div class="rc-info">
+              <div class="rc-title-row">
+                <span class="rc-title">肩颈深度调理</span>
+                <span class="rc-cat fix">修复</span>
+              </div>
+              <div class="rc-meta">
+                <i class="van-icon van-icon-manager-o"></i>张技师 ·
+                <i class="van-icon van-icon-clock-o"></i>60分钟 ·
+                <i class="van-icon van-icon-location-o"></i>万达店
+              </div>
+              <div class="rc-note">颈椎两侧肌肉紧张，重点松解斜方肌，客户反馈手法舒适</div>
+            </div>
+            <div class="rc-right">
+              <div class="rc-time">05-08</div>
+              <div class="rc-session">第3次</div>
+            </div>
+          </div>
+
+          <div class="record-card">
+            <div class="rc-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-service-o" style="color: #F5A0B5;"></i></div>
+            <div class="rc-info">
+              <div class="rc-title-row">
+                <span class="rc-title">面部精华护理</span>
+                <span class="rc-cat care">调理</span>
+              </div>
+              <div class="rc-meta">
+                <i class="van-icon van-icon-manager-o"></i>李技师 ·
+                <i class="van-icon van-icon-clock-o"></i>45分钟 ·
+                <i class="van-icon van-icon-location-o"></i>万达店
+              </div>
+              <div class="rc-note">深层补水修护，客户反馈良好，肤色明显提亮</div>
+              <div class="rc-photos">
+                <div class="rc-photo" style="background: linear-gradient(135deg,#F5A0B5,#F8B8C8);"><i class="van-icon van-icon-photo-o"></i></div>
+              </div>
+            </div>
+            <div class="rc-right">
+              <div class="rc-time">05-03</div>
+              <div class="rc-session">第2次</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4月 -->
+        <div class="record-section animate-in delay-2">
+          <div class="record-date-label">2026年4月</div>
+
+          <div class="record-card">
+            <div class="rc-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-service-o" style="color: #4A6CF7;"></i></div>
+            <div class="rc-info">
+              <div class="rc-title-row">
+                <span class="rc-title">肩颈深度调理</span>
+                <span class="rc-cat fix">修复</span>
+              </div>
+              <div class="rc-meta">
+                <i class="van-icon van-icon-manager-o"></i>张技师 ·
+                <i class="van-icon van-icon-clock-o"></i>60分钟 ·
+                <i class="van-icon van-icon-location-o"></i>万达店
+              </div>
+              <div class="rc-note">初次调理，客户肩颈劳损较严重，手法以轻柔为主</div>
+            </div>
+            <div class="rc-right">
+              <div class="rc-time">04-18</div>
+              <div class="rc-session">第1次</div>
+            </div>
+          </div>
+
+          <div class="record-card">
+            <div class="rc-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-service-o" style="color: #E8A849;"></i></div>
+            <div class="rc-info">
+              <div class="rc-title-row">
+                <span class="rc-title">足底反射调理</span>
+                <span class="rc-cat care">调理</span>
+              </div>
+              <div class="rc-meta">
+                <i class="van-icon van-icon-manager-o"></i>王技师 ·
+                <i class="van-icon van-icon-clock-o"></i>40分钟 ·
+                <i class="van-icon van-icon-location-o"></i>银泰店
+              </div>
+              <div class="rc-note">足底穴位按压，促进血液循环，客户反馈睡眠改善</div>
+            </div>
+            <div class="rc-right">
+              <div class="rc-time">04-10</div>
+              <div class="rc-session">第1次</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-tip">共 12 条调理记录 · 上滑查看更多</div>
       </div>
 
-      <div style="height: 8px;"></div>
+      <div style="height: 24px;"></div>
     </div>
 
     <!-- Tab Bar (Staff) -->
     <div class="tab-bar staff-tab-bar">
       <div class="tab-item" onclick="location.href='staff-home.html'">
         <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
-        <span class="tab-label">工作台</span>
-      </div>
-      <div class="tab-item active">
-        <span class="tab-icon"><i class="van-icon van-icon-friends-o"></i></span>
-        <span class="tab-label">会员</span>
-      </div>
-      <div class="tab-item" onclick="location.href='staff-reminder.html'">
-        <span class="tab-icon"><i class="van-icon van-icon-bell"></i></span>
-        <span class="tab-label">提醒</span>
+        <span class="tab-label">首页</span>
       </div>
       <div class="tab-item" onclick="location.href='staff-profile.html'">
         <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
@@ -288,5 +385,14 @@
   </div>
 
   <script src="../js/prototype.js"></script>
+  <script>
+    // Filter chip switching
+    document.querySelectorAll('.filter-chip').forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>

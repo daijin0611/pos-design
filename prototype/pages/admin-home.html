@@ -205,6 +205,48 @@
       color: var(--text-secondary);
     }
 
+    /* Store dropdown */
+    .store-dropdown {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 500;
+    }
+    .store-dropdown.show { display: block; }
+    .store-dropdown-mask {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.3);
+    }
+    .store-dropdown-inner {
+      position: absolute;
+      top: 120px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      padding: var(--space-sm) 0;
+      min-width: 240px;
+      z-index: 1;
+    }
+    .store-option {
+      display: flex; align-items: center; gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-lg);
+      cursor: pointer;
+    }
+    .store-option:active { background: var(--bg-primary); }
+    .store-option .so-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .store-option .so-name {
+      font: 500 13px / 1.3 var(--font-family); color: var(--text-primary);
+    }
+    .store-option .so-balance {
+      font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 1px;
+    }
+    .store-option .so-check { color: #1A1A2E; font-size: 16px; visibility: hidden; }
+    .store-option.active .so-check { visibility: visible; }
+    .store-option.active .so-name { color: #1A1A2E; font-weight: 600; }
+
     .page-nav {
       position: fixed;
       top: 12px;
@@ -251,7 +293,7 @@
             <h2>管理后台 <i class="van-icon van-icon-bar-chart-o" style="color: rgba(255,255,255,0.8);"></i></h2>
             <p>2026年5月25日 · 星期一</p>
           </div>
-          <div class="store-selector">万达店</div>
+          <div class="store-selector" onclick="document.querySelector('.store-dropdown').classList.toggle('show')">万达店 ▾</div>
         </div>
       </div>
 
@@ -299,17 +341,13 @@
           <div class="admin-action-icon" style="background: #EBF0FF;"><i class="van-icon van-icon-chart-trending-o" style="color: #4A6CF7;"></i></div>
           <span class="admin-action-label">业绩查询</span>
         </a>
-        <a href="admin-ranking.html" class="admin-action" style="text-decoration:none;">
-          <div class="admin-action-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-gold-coin-o" style="color: #2CB5A0;"></i></div>
-          <span class="admin-action-label">工资查询</span>
+        <a href="admin-salary.html" class="admin-action" style="text-decoration:none;">
+          <div class="admin-action-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-balance-list-o" style="color: #2CB5A0;"></i></div>
+          <span class="admin-action-label">工资明细</span>
         </a>
         <a href="admin-ranking.html" class="admin-action" style="text-decoration:none;">
           <div class="admin-action-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-trophy-o" style="color: #E8A849;"></i></div>
-          <span class="admin-action-label">项目排名</span>
-        </a>
-        <a href="admin-ranking.html" class="admin-action" style="text-decoration:none;">
-          <div class="admin-action-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-user-o" style="color: #F5A0B5;"></i></div>
-          <span class="admin-action-label">员工业绩</span>
+          <span class="admin-action-label">排名查询</span>
         </a>
       </div>
 
@@ -400,23 +438,46 @@
       <div style="height: 24px;"></div>
     </div>
 
+    <!-- Store dropdown -->
+    <div class="store-dropdown">
+      <div class="store-dropdown-mask" onclick="document.querySelector('.store-dropdown').classList.remove('show')"></div>
+      <div class="store-dropdown-inner">
+        <div class="store-option active" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+          <span class="so-dot" style="background: #1A1A2E;"></span>
+          <div>
+            <div class="so-name">万达店</div>
+            <div class="so-balance">当前门店</div>
+          </div>
+          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+        <div class="store-option" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+          <span class="so-dot" style="background: #8E9AAF;"></span>
+          <div>
+            <div class="so-name">银泰店</div>
+            <div class="so-balance">切换</div>
+          </div>
+          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+        <div class="store-option" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+          <span class="so-dot" style="background: #2CB5A0;"></span>
+          <div>
+            <div class="so-name">龙湖店</div>
+            <div class="so-balance">切换</div>
+          </div>
+          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+      </div>
+    </div>
+
     <!-- Tab Bar (Admin) -->
     <div class="tab-bar">
       <div class="tab-item active">
-        <span class="tab-icon"><i class="van-icon van-icon-bar-chart-o" style="color: rgba(255,255,255,0.8);"></i></span>
-        <span class="tab-label">数据</span>
+        <span class="tab-icon"><i class="van-icon van-icon-home-o"></i></span>
+        <span class="tab-label">首页</span>
       </div>
       <div class="tab-item">
-        <span class="tab-icon"><i class="van-icon van-icon-trophy-o"></i></span>
-        <span class="tab-label">排名</span>
-      </div>
-      <div class="tab-item">
-        <span class="tab-icon"><i class="van-icon van-icon-balance-list-o"></i></span>
-        <span class="tab-label">工资</span>
-      </div>
-      <div class="tab-item">
-        <span class="tab-icon"><i class="van-icon van-icon-setting-o"></i></span>
-        <span class="tab-label">设置</span>
+        <span class="tab-icon"><i class="van-icon van-icon-user-o"></i></span>
+        <span class="tab-label">我的</span>
       </div>
     </div>
     <div class="safe-bottom"></div>

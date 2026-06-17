@@ -1,6 +1,7 @@
 # POS H5 高保真原型 — 丽德健康管理系统
 
-> 健康美业管理平台移动端原型，覆盖 **会员端 / 员工端 / 管理端** 三个角色，共计 18 个功能页面。
+> 健康美业管理平台移动端原型，覆盖 **会员端 / 员工端 / 管理端** 三个角色。
+> **当前主页仅展示二期范围功能**（M0-M3 / E0-E2 / A0-A3 / P5），二期外页面文件保留但已从入口隐藏。
 
 ## 快速开始
 
@@ -38,29 +39,40 @@ prototype/
 │   └── design-system.css  # 全局设计系统（变量、组件、布局）
 ├── js/
 │   └── prototype.js       # 交互脚本（Tab切换、筛选、动画等）
-├── index.html             # 导航主页（全部页面入口）
+├── index.html             # 导航主页（仅二期范围入口）
 └── pages/
     ├── global-login.html          # 登录 / 角色选择
     │
+    │  ── 会员端（二期） ──
     ├── member-home.html           # 会员首页
-    ├── member-balance.html        # M1 余额查询
-    ├── member-appointment.html    # M4 预约服务
-    ├── member-coupon.html         # M5 优惠券
-    ├── member-store.html          # M6 门店查询
-    ├── member-qrcode.html         # M7 会员二维码
-    ├── member-points.html         # M8-M9 积分与兑换
+    ├── member-balance.html        # M0+M1 会员卡与消费记录（含门店切换）
+    ├── member-profile.html        # M2 个人信息维护
+    ├── member-password.html       # M3 密码管理（默认/修改/忘记）
     │
+    │  ── 员工端（二期） ──
     ├── staff-home.html            # 员工首页
-    ├── staff-appointment.html     # 预约管理
     ├── staff-salary.html          # E1 工资查询
-    ├── staff-reminder.html        # E2-E3 回访/生日提醒
-    ├── staff-member-record.html   # E6 会员修复调理记录
-    ├── staff-satisfaction.html    # 满意度查询
-    ├── staff-checkout.html        # E7 手机收银
+    ├── staff-member-record.html   # E2 修复调理档案录入
+    ├── staff-member-detail.html   # P5 调理记录查看
     │
-    ├── admin-home.html            # 管理首页
+    │  ── 管理端（二期） ──
+    ├── admin-home.html            # A0+A1 管理首页（门店切换 + 业绩看板）
     ├── admin-performance.html     # A1 业绩查询
-    └── admin-ranking.html         # A3-A5 排名
+    ├── admin-salary.html          # A2 员工工资明细
+    ├── admin-ranking.html         # A3 排名查询
+    │
+    │  ── 二期外（文件保留，主页已隐藏） ──
+    ├── member-appointment.html    # 预约服务（一期遗留）
+    ├── member-coupon.html         # 优惠券
+    ├── member-store.html          # 门店查询（地图）
+    ├── member-qrcode.html         # 会员二维码
+    ├── member-points.html         # 积分与兑换
+    ├── staff-appointment.html     # 预约管理
+    ├── staff-reminder.html        # 回访/生日提醒
+    ├── staff-satisfaction.html    # 满意度查询
+    ├── staff-checkout.html        # 手机收银
+    ├── staff-member-list.html     # 会员列表
+    └── staff-profile.html         # 我的（员工）
 ```
 
 ## 设计规范
@@ -99,43 +111,44 @@ prototype/
 
 ## 页面总览
 
+> 以下仅列出**二期范围内**页面（主页可见）。二期外页面文件保留，但已从主页与各端首页入口隐藏。
+
 ### 🌐 全局（1 页）
 
 | 页面 | 文件 | 说明 |
 |------|------|------|
 | 登录/授权 | `global-login.html` | 手机验证码 + 微信登录 + 角色选择（会员/员工/管理） |
 
-### 👤 会员端（7 页）
+### 👤 会员端 · M0-M3（4 页）
 
 | 页面 | 文件 | 功能 |
 |------|------|------|
-| 会员首页 | `member-home.html` | 余额卡片、快捷操作（7个入口）、最近预约、消费记录 |
-| 余额查询 | `member-balance.html` | 余额/累计充值/消费、交易明细列表、按月筛选 |
-| 预约服务 | `member-appointment.html` | 选门店→选项目→选时间→选技师→确认预约 |
-| 优惠券 | `member-coupon.html` | 可使用/已使用/已过期分类、优惠券详情 |
-| 门店查询 | `member-store.html` | 门店列表+地图定位+详情+导航 |
-| 会员二维码 | `member-qrcode.html` | 动态二维码展示+会员信息卡 |
-| 积分 | `member-points.html` | 积分余额/明细+积分兑换商城 |
+| 会员首页 | `member-home.html` | 余额卡片、二期快捷入口（余额/门店/个人信息/密码）、最近消费 |
+| M0+M1 会员卡与消费记录 | `member-balance.html` | 门店切换 + 余额/累计充值/消费 + 明细 + 时间筛选 |
+| M2 个人信息维护 | `member-profile.html` | 会员基本信息展示（编辑表单待补） |
+| M3 密码管理 | `member-password.html` | 修改密码 / 忘记密码（短信重置）/ 默认密码说明 |
 
-### 👨‍💼 员工端（9 页）
+### 👨‍💼 员工端 · E0-E2 + P5（4 页）
 
 | 页面 | 文件 | 功能 |
 |------|------|------|
-| 员工首页 | `staff-home.html` | 今日统计、工资速览、快捷入口（8个）、待跟进列表 |
-| 预约管理 | `staff-appointment.html` | 日期切换、状态筛选（待确认/已确认/已完成）、确认/拒绝/开始服务 |
-| 工资查询 | `staff-salary.html` | 月份切换、总工资+3类分项、业务明细+筛选（项目/产品/疗程券/充值） |
-| 回访/生日提醒 | `staff-reminder.html` | 双 Tab 面板：回访提醒（5条/紧急程度）+ 生日提醒（3条/日期分组） |
-| 会员修复调理记录 | `staff-member-record.html` | 搜索选会员→选服务项目→回访安排→描述详情→拍照上传 |
-| 满意度 | `staff-satisfaction.html` | 综合评分、评分分布、趋势图、服务项目排行、最新评价列表 |
-| 手机收银 | `staff-checkout.html` | 选会员→选项目/产品→购物车→优惠券→结算 |
+| 员工首页 | `staff-home.html` | 今日统计、本月工资、二期快捷入口（工资/调理录入/调理查看） |
+| E1 工资查询 | `staff-salary.html` | 月份切换、总工资+分类明细、业务明细筛选 |
+| E2 修复调理档案录入 | `staff-member-record.html` | 搜索选会员→选服务项目→详情→拍照上传（分类标签待补） |
+| P5 调理记录查看 | `staff-member-detail.html` | 会员档案 + 调理记录时间线 + 详情查看 |
 
-### 📊 管理端（3 页）
+### 📊 管理端 · A0-A3（4 页）
 
 | 页面 | 文件 | 功能 |
 |------|------|------|
-| 管理首页 | `admin-home.html` | 数据看板（营业额/订单/客流/满意度）、业绩趋势图、员工排名 |
-| 业绩查询 | `admin-performance.html` | 门店/员工维度业绩数据、分类统计、图表 |
-| 排名 | `admin-ranking.html` | 项目排名+员工业绩排名+工资排名、时间筛选 |
+| A0+A1 管理首页 | `admin-home.html` | 门店切换 + 业绩看板 + 趋势 + 排名快捷入口 |
+| A1 业绩查询 | `admin-performance.html` | 区间查询 + 营业额/客流/客单价 + 趋势图（分类/门店对比待补） |
+| A2 员工工资明细 | `admin-salary.html` | 月份切换 + 工资汇总（总额/平均/最高/最低）+ 全员工资列表 |
+| A3 排名查询 | `admin-ranking.html` | 员工业绩 + 项目排名 + 工资排名（产品销量 tab 待补） |
+
+### 📦 二期外（已隐藏，文件保留）
+
+预约系列、优惠券、积分、二维码、门店地图、员工预约管理、回访/生日提醒、手机收银、满意度、会员列表、员工「我的」页。
 
 ## 交互说明
 
@@ -174,6 +187,7 @@ prototype/
 
 | 文档 | 说明 |
 |------|------|
+| `POS项目二期需求文档（最终版）.md` | **二期需求基线（客户精简后）**，当前原型对齐此文档 |
 | `POS项目二期原始需求.md` | 原始 26 项需求列表 |
 | `POS项目二期需求文档.md` | 细化版需求（含子需求、数据表、实施计划） |
 

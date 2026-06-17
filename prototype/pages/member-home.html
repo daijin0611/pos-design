@@ -30,12 +30,23 @@
       padding: var(--space-sm) 0 var(--space-md);
     }
 
-    .greeting h2 {
+    .store-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.2);
+      font: 500 13px / 1 var(--font-family);
+      color: white;
+    }
+
+    .greeting-block h2 {
       font: 600 18px / 1.3 var(--font-family);
       color: var(--text-inverse);
     }
 
-    .greeting p {
+    .greeting-block p {
       font: 400 12px / 1.4 var(--font-family);
       color: rgba(255,255,255,0.75);
       margin-top: 2px;
@@ -127,12 +138,46 @@
 
     .stat-item.points .stat-value { color: var(--accent); }
     .stat-item.coupons .stat-value { color: var(--secondary); }
+    .stat-item.cards .stat-value { color: var(--primary); }
 
-    /* Quick Actions */
-    .quick-actions {
-      padding: var(--space-xl) var(--space-lg) var(--space-sm);
+    /* Entry cards (会员卡 / 优惠券) */
+    .entry-cards {
+      padding: var(--space-md) var(--space-lg) var(--space-sm);
       position: relative;
       z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .entry-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      transition: transform 0.15s;
+    }
+    .entry-card:active { transform: scale(0.98); }
+    .ec-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .ec-text { flex: 1; min-width: 0; }
+    .ec-title {
+      font: 600 14px / 1.3 var(--font-family);
+      color: var(--text-primary);
+    }
+    .ec-desc {
+      font: 400 11px / 1.3 var(--font-family);
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+    .ec-arrow {
+      color: var(--text-placeholder);
+      font-size: 14px;
     }
 
     .action-grid {
@@ -235,6 +280,48 @@
 
     .notice-bar .notice-icon { font-size: 14px; }
 
+    /* Store dropdown */
+    .store-dropdown {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 500;
+    }
+    .store-dropdown.show { display: block; }
+    .store-dropdown-mask {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.3);
+    }
+    .store-dropdown-inner {
+      position: absolute;
+      top: 110px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      padding: var(--space-sm) 0;
+      min-width: 240px;
+      z-index: 1;
+    }
+    .store-option {
+      display: flex; align-items: center; gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-lg);
+      cursor: pointer;
+    }
+    .store-option:active { background: var(--bg-primary); }
+    .store-option .so-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .store-option .so-name {
+      font: 500 13px / 1.3 var(--font-family); color: var(--text-primary);
+    }
+    .store-option .so-balance {
+      font: 400 11px / 1.3 var(--font-family); color: var(--text-tertiary); margin-top: 1px;
+    }
+    .store-option .so-check { color: var(--primary); font-size: 16px; visibility: hidden; }
+    .store-option.active .so-check { visibility: visible; }
+    .store-option.active .so-name { color: var(--primary); font-weight: 600; }
+
     /* Page nav */
     .page-nav {
       position: fixed;
@@ -285,96 +372,43 @@
       <!-- Header with gradient -->
       <div class="header-area">
         <div class="header-top">
-          <div class="greeting">
-            <h2>你好，张小姐</h2>
-            <p>欢迎来到刘丽德健康</p>
+          <div class="store-switch" onclick="document.querySelector('.store-dropdown').classList.toggle('show')">
+            <i class="van-icon van-icon-location-o" style="font-size:14px;"></i>
+            <span>万达店</span>
+            <i class="van-icon van-icon-arrow-down" style="font-size:10px;"></i>
           </div>
           <div class="avatar"><i class="van-icon van-icon-user-o" style="color: white;"></i></div>
         </div>
 
-        <div class="balance-card animate-in">
+        <div class="greeting-block animate-in">
+          <h2>你好，张小姐</h2>
+          <p>欢迎来到刘丽德健康</p>
+        </div>
+
+        <!-- 可点击卡片：余额 -->
+        <a href="member-balance.html" class="balance-card animate-in delay-1" style="text-decoration:none;">
           <div class="balance-info">
             <div class="label">账户余额（元）</div>
             <div class="amount">5,280.00</div>
-            <div class="card-summary">
-              <span class="card-tag"><i class="van-icon van-icon-card" style="font-size:12px;"></i> 3张会员卡</span>
-              <span class="card-divider">·</span>
-              <span class="card-detail">金卡8折 / 银卡9折 / 铂金7折</span>
-            </div>
           </div>
           <div class="balance-stats">
+            <div class="stat-item cards">
+              <div class="stat-value">3</div>
+              <div class="stat-label">会员卡</div>
+            </div>
             <div class="stat-item coupons">
               <div class="stat-value">3</div>
               <div class="stat-label">优惠券</div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Notice bar -->
-      <div class="notice-bar animate-in delay-1" style="margin-top: 16px;">
-        <span class="notice-icon"><i class="van-icon van-icon-volume-o" style="color: #E8A849;"></i></span>
-        <span>本周新上架「肩颈深度调理」项目，会员专享8折优惠</span>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="quick-actions animate-in delay-2">
-        <div class="action-grid">
-          <a href="member-balance.html" class="action-item" style="text-decoration:none;">
-            <div class="action-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-orders-o" style="color: #2CB5A0;"></i></div>
-            <span class="action-label">余额查询</span>
-          </a>
-
-          <a href="member-appointment.html" class="action-item" style="text-decoration:none;">
-            <div class="action-icon" style="background: var(--secondary-light);"><i class="van-icon van-icon-calendar-o" style="color: #F5A0B5;"></i></div>
-            <span class="action-label">预约</span>
-          </a>
-          <a href="member-coupon.html" class="action-item" style="text-decoration:none;">
-            <div class="action-icon" style="background: var(--accent-light);"><i class="van-icon van-icon-coupon-o" style="color: #E8A849;"></i></div>
-            <span class="action-label">优惠券</span>
-          </a>
-          <a href="member-store.html" class="action-item" style="text-decoration:none;">
-            <div class="action-icon" style="background: #E8F4FD;"><i class="van-icon van-icon-location-o" style="color: #5B9BD5;"></i></div>
-            <span class="action-label">门店</span>
-          </a>
-          <a href="member-qrcode.html" class="action-item" style="text-decoration:none;">
-            <div class="action-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-qr" style="color: #2CB5A0;"></i></div>
-            <span class="action-label">二维码</span>
-          </a>
-          <div class="action-item">
-            <div class="action-icon" style="background: #F0E8F8;"><i class="van-icon van-icon-card" style="color: #8B5CF6;"></i></div>
-            <span class="action-label">充值</span>
-          </div>
-          <div class="action-item">
-            <div class="action-icon" style="background: #E8F4FD;"><i class="van-icon van-icon-setting-o" style="color: #5B9BD5;"></i></div>
-            <span class="action-label">设置</span>
-          </div>
-          <div class="action-item">
-            <div class="action-icon" style="background: var(--primary-light);"><i class="van-icon van-icon-chat-o" style="color: #2CB5A0;"></i></div>
-            <span class="action-label">消息</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="section animate-in delay-3">
-        <div class="section-header">
-          <span class="section-title">我的预约</span>
-          <a href="member-appointment.html" class="section-more">查看全部 ›</a>
-        </div>
-        <div class="apt-card">
-          <div class="apt-info">
-            <h4>肩颈调理</h4>
-            <p>明天 14:00 · 张技师 · 万达店</p>
-          </div>
-          <span class="badge badge-success">已确认</span>
-        </div>
+        </a>
       </div>
 
       <!-- Recent transactions -->
       <div class="section">
         <div class="section-header">
           <span class="section-title">最近消费</span>
-          <a href="member-balance.html" class="section-more">查看全部 ›</a>
+          <a href="member-records.html" class="section-more">查看全部 ›</a>
         </div>
         <div class="tx-item">
           <div class="tx-info">
@@ -400,6 +434,37 @@
       </div>
 
       <div style="height: 24px;"></div>
+    </div>
+
+    <!-- Store dropdown -->
+    <div class="store-dropdown">
+      <div class="store-dropdown-mask" onclick="document.querySelector('.store-dropdown').classList.remove('show')"></div>
+      <div class="store-dropdown-inner">
+        <div class="store-option active" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+          <span class="so-dot" style="background: #C9A96E;"></span>
+          <div>
+            <div class="so-name">万达店</div>
+            <div class="so-balance">当前门店</div>
+          </div>
+          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+        <div class="store-option" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+          <span class="so-dot" style="background: #8E9AAF;"></span>
+          <div>
+            <div class="so-name">银泰店</div>
+            <div class="so-balance">切换</div>
+          </div>
+          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+        <div class="store-option" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+          <span class="so-dot" style="background: #2CB5A0;"></span>
+          <div>
+            <div class="so-name">龙湖店</div>
+            <div class="so-balance">切换</div>
+          </div>
+          <span class="so-check"><i class="van-icon van-icon-success"></i></span>
+        </div>
+      </div>
     </div>
 
     <!-- Tab Bar -->
