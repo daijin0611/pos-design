@@ -293,7 +293,7 @@
             <h2>管理后台 <i class="van-icon van-icon-bar-chart-o" style="color: rgba(255,255,255,0.8);"></i></h2>
             <p>2026年5月25日 · 星期一</p>
           </div>
-          <div class="store-selector" onclick="document.querySelector('.store-dropdown').classList.toggle('show')">万达店 ▾</div>
+          <div class="store-selector" onclick="document.querySelector('.store-dropdown').classList.toggle('show')"><span id="storeSwitchName">万达店</span> ▾</div>
         </div>
       </div>
 
@@ -442,27 +442,27 @@
     <div class="store-dropdown">
       <div class="store-dropdown-mask" onclick="document.querySelector('.store-dropdown').classList.remove('show')"></div>
       <div class="store-dropdown-inner">
-        <div class="store-option active" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+        <div class="store-option active" data-name="万达店">
           <span class="so-dot" style="background: #1A1A2E;"></span>
           <div>
             <div class="so-name">万达店</div>
-            <div class="so-balance">当前门店</div>
+            <div class="so-balance">万达广场 3 楼</div>
           </div>
           <span class="so-check"><i class="van-icon van-icon-success"></i></span>
         </div>
-        <div class="store-option" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+        <div class="store-option" data-name="银泰店">
           <span class="so-dot" style="background: #8E9AAF;"></span>
           <div>
             <div class="so-name">银泰店</div>
-            <div class="so-balance">切换</div>
+            <div class="so-balance">银泰百货 5 楼</div>
           </div>
           <span class="so-check"><i class="van-icon van-icon-success"></i></span>
         </div>
-        <div class="store-option" onclick="document.querySelector('.store-dropdown').classList.remove('show')">
+        <div class="store-option" data-name="龙湖店">
           <span class="so-dot" style="background: #2CB5A0;"></span>
           <div>
             <div class="so-name">龙湖店</div>
-            <div class="so-balance">切换</div>
+            <div class="so-balance">龙湖天街 B1</div>
           </div>
           <span class="so-check"><i class="van-icon van-icon-success"></i></span>
         </div>
@@ -482,5 +482,38 @@
     </div>
     <div class="safe-bottom"></div>
   </div>
+  <script>
+    /* ===== 门店切换逻辑 ===== */
+    var STORE_KEY = 'pos_current_store';
+    var dropdown = document.querySelector('.store-dropdown');
+    var options = dropdown.querySelectorAll('.store-option');
+    var switchName = document.getElementById('storeSwitchName');
+
+    function selectStore(name, persist) {
+      options.forEach(function(opt) {
+        var match = opt.dataset.name === name;
+        opt.classList.toggle('active', match);
+        var balance = opt.querySelector('.so-balance');
+        if (match) {
+          balance.dataset.addr = balance.textContent;
+          balance.textContent = '当前门店';
+        } else if (balance.dataset.addr) {
+          balance.textContent = balance.dataset.addr;
+        }
+      });
+      switchName.textContent = name;
+      if (persist) localStorage.setItem(STORE_KEY, name);
+    }
+
+    options.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        selectStore(opt.dataset.name, true);
+        dropdown.classList.remove('show');
+      });
+    });
+
+    var remembered = localStorage.getItem(STORE_KEY);
+    if (remembered) selectStore(remembered, false);
+  </script>
 </body>
 </html>

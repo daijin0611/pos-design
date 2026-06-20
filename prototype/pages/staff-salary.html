@@ -160,6 +160,19 @@
       font-weight: 600; color: #4A6CF7;
     }
 
+    /* ===== 当日小计 ===== */
+    .detail-subtotal {
+      display: flex; justify-content: flex-end; align-items: baseline;
+      gap: var(--space-sm);
+      padding: 2px var(--space-md) var(--space-md);
+      font: 500 12px / 1 var(--font-family);
+      color: var(--text-tertiary);
+    }
+    .detail-subtotal .ds-value {
+      font: 700 15px / 1 var(--font-family);
+      color: #4A6CF7;
+    }
+
     .page-nav {
       position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 6px;
     }
@@ -412,5 +425,47 @@
   </div>
 
   <script src="../js/prototype.js"></script>
+  <script>
+    /* ===== 按天计算当日小计 ===== */
+    function calcDaySubtotals() {
+      var container = document.querySelector('.detail-section');
+      if (!container) return;
+
+      container.querySelectorAll('.detail-date').forEach(function(dateEl) {
+        // 收集该日期之后、下一个日期/小节之前的所有明细项
+        var items = [];
+        var node = dateEl.nextElementSibling;
+        while (node && !node.classList.contains('detail-date') &&
+               !node.classList.contains('detail-subtotal')) {
+          if (node.classList.contains('detail-item')) items.push(node);
+          node = node.nextElementSibling;
+        }
+
+        // 累加可见项的提成（跳过 display:none，配合后续筛选）
+        var sum = 0;
+        items.forEach(function(it) {
+          if (it.offsetParent === null) return; // 不可见
+          var c = it.querySelector('.di-commission');
+          if (c) {
+            var num = parseFloat(c.textContent.replace(/[^\d.]/g, ''));
+            if (!isNaN(num)) sum += num;
+          }
+        });
+
+        // 移除旧小计，插入新小计到该日最后一项之后
+        var existing = items.length ? items[items.length - 1].nextElementSibling : null;
+        if (existing && existing.classList.contains('detail-subtotal')) existing.remove();
+
+        var subtotal = document.createElement('div');
+        subtotal.className = 'detail-subtotal';
+        subtotal.innerHTML = '当日小计 <span class="ds-value">¥' +
+          sum.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '</span>';
+        if (items.length) items[items.length - 1].after(subtotal);
+        else dateEl.after(subtotal);
+      });
+    }
+
+    calcDaySubtotals();
+  </script>
 </body>
 </html>
